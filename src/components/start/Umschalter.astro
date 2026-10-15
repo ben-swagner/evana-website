@@ -1,4 +1,9 @@
 ---
+// Anwendungsfälle auf der Startseite.
+// Desktop: sechs Kacheln als Reiter oben, darunter eine kompakte Vorschau (Text links, Szene rechts),
+// die ohne Scrollen auf einen Blick passt. Die Reiter wechseln automatisch, bis jemand selbst klickt.
+// Mobil: keine Reiter, alle Anwendungsfälle untereinander als Karten mit Link. Alle Inhalte stehen
+// immer im HTML, damit Suchmaschinen sie vollständig sehen.
 import DemoAnsicht from '../DemoAnsicht.astro';
 import { anwendungsfaelle } from '../../data/anwendungsfaelle';
 ---
@@ -10,7 +15,7 @@ import { anwendungsfaelle } from '../../data/anwendungsfaelle';
       <p class="lead">Sechs Aufgaben, die heute in vielen Teams Stunden kosten. Wählen Sie eine aus und sehen Sie, wie sie mit EVANA aussieht.</p>
     </div>
 
-    <div class="umschalter">
+    <div class="umschalter" data-auto="9000">
       <div class="tabs" role="tablist" aria-label="Anwendungsfälle">
         {anwendungsfaelle.map((a, i) => (
           <button
@@ -19,25 +24,30 @@ import { anwendungsfaelle } from '../../data/anwendungsfaelle';
             aria-controls={`panel-${a.slug}`}
             aria-selected={i === 0 ? 'true' : 'false'}
             tabindex={i === 0 ? 0 : -1}
-          >{a.tab}</button>
+          >
+            <span class="tab-titel">{a.tab}</span>
+            <span class="tab-produkt">{a.produkte[0]}</span>
+            <span class="fortschritt" aria-hidden="true"></span>
+          </button>
         ))}
       </div>
 
-      {anwendungsfaelle.map((a, i) => (
-        <article class="panel" role="tabpanel" id={`panel-${a.slug}`} aria-labelledby={`tab-${a.slug}`} hidden={i !== 0}>
-          <h3>{a.titel}</h3>
-          <p class="kurz">{a.kurz}</p>
-          <div class="vergleich">
-            <div><p class="vg-titel">Heute</p><p>{a.vorher}</p></div>
-            <div><p class="vg-titel mit">Mit EVANA</p><p>{a.mitEvana}</p></div>
-          </div>
-          <DemoAnsicht demo={a.demo} />
-          <div class="panel-fuss">
-            <a href={`/anwendungsfaelle/${a.slug}/`} class="btn btn-sekundaer">Mehr zu diesem Anwendungsfall</a>
-            <span class="beispiel-hinweis">Beispielhafte Darstellung</span>
-          </div>
-        </article>
-      ))}
+      <div class="panels">
+        {anwendungsfaelle.map((a, i) => (
+          <article class="panel" role="tabpanel" id={`panel-${a.slug}`} aria-labelledby={`tab-${a.slug}`} data-aktiv={i === 0 ? 'true' : 'false'}>
+            <div class="text">
+              <h3>{a.titel}</h3>
+              <p class="kurz">{a.kurz}</p>
+              <p class="mit"><strong>Mit EVANA:</strong> {a.mitEvana}</p>
+              <a href={`/anwendungsfaelle/${a.slug}/`} class="btn btn-sekundaer">Mehr zu diesem Anwendungsfall</a>
+            </div>
+            <div class="vorschau">
+              <DemoAnsicht demo={a.demo} />
+              <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   </div>
 </section>
@@ -45,52 +55,88 @@ import { anwendungsfaelle } from '../../data/anwendungsfaelle';
 <script>
   document.querySelectorAll<HTMLElement>('.umschalter').forEach((wurzel) => {
     const tabs = Array.from(wurzel.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
-    const waehle = (tab: HTMLButtonElement, fokus = false) => {
-      tabs.forEach((t) => {
-        const aktiv = t === tab;
+    const dauer = Number(wurzel.dataset.auto) || 0;
+    const ruhig = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer: number | undefined;
+
+    const waehle = (i: number, fokus = false) => {
+      index = (i + tabs.length) % tabs.length;
+      tabs.forEach((t, j) => {
+        const aktiv = j === index;
         t.setAttribute('aria-selected', String(aktiv));
         t.tabIndex = aktiv ? 0 : -1;
-        const panel = document.getElementById(t.getAttribute('aria-controls')!);
-        if (panel) panel.hidden = !aktiv;
+        document.getElementById(t.getAttribute('aria-controls')!)?.setAttribute('data-aktiv', String(aktiv));
       });
-      if (fokus) tab.focus();
+      if (fokus) tabs[index].focus();
     };
+    const stoppen = () => { window.clearInterval(timer); timer = undefined; wurzel.classList.remove('laeuft'); };
+    const starten = () => {
+      if (!dauer || ruhig) return;
+      wurzel.style.setProperty('--dauer', `${dauer}ms`);
+      wurzel.classList.add('laeuft');
+      timer = window.setInterval(() => {
+        wurzel.classList.remove('laeuft');
+        void wurzel.offsetWidth;
+        waehle(index + 1);
+        wurzel.classList.add('laeuft');
+      }, dauer);
+    };
+
     tabs.forEach((tab, i) => {
-      tab.addEventListener('click', () => waehle(tab));
+      tab.addEventListener('click', () => { stoppen(); waehle(i); });
       tab.addEventListener('keydown', (e) => {
-        const schritt = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
-        if (schritt) { e.preventDefault(); waehle(tabs[(i + schritt + tabs.length) % tabs.length], true); }
+        const schritt = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (schritt) { e.preventDefault(); stoppen(); waehle(index + schritt, true); }
       });
     });
+    wurzel.addEventListener('pointerenter', () => { if (timer) { window.clearInterval(timer); timer = undefined; wurzel.classList.add('pausiert'); } });
+    wurzel.addEventListener('pointerleave', () => { if (wurzel.classList.contains('pausiert')) { wurzel.classList.remove('pausiert'); starten(); } });
+
+    // Automatisch wechseln, sobald der Bereich sichtbar ist
+    const io = new IntersectionObserver((e) => { if (e[0].isIntersecting && !timer) starten(); else if (!e[0].isIntersecting) stoppen(); }, { threshold: .4 });
+    io.observe(wurzel);
   });
 </script>
 
 <style>
-  .umschalter { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
-  .tabs { display: grid; gap: 4px; position: sticky; top: 100px; }
+  .tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
   .tabs button {
-    text-align: left; font: 600 1.05rem/1.3 var(--font); color: var(--hilfsgrau);
-    background: none; border: 0; border-radius: 12px; padding: 12px 18px 12px 34px; cursor: pointer; position: relative;
+    position: relative; overflow: hidden; display: grid; gap: 4px; align-content: start; text-align: left;
+    font: 600 1rem/1.25 var(--font); color: var(--headline); background: var(--weiss);
+    border: 0; border-radius: 18px; padding: 16px 16px 20px; cursor: pointer; transition: background-color .15s, color .15s;
   }
-  .tabs button::before { content: ''; position: absolute; left: 16px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: transparent; }
-  .tabs button:hover { color: var(--headline); }
-  .tabs button[aria-selected='true'] { color: var(--petrol-dunkel); background: var(--weiss); box-shadow: var(--schatten-dokument); }
-  .tabs button[aria-selected='true']::before { background: var(--orange); }
+  .tabs button:hover { background: var(--tint-petrol); }
+  .tab-produkt { font-size: .78rem; font-weight: 600; color: var(--hilfsgrau); }
+  .tabs button[aria-selected='true'] { background: var(--petrol-dunkel); color: var(--weiss); }
+  .tabs button[aria-selected='true'] .tab-produkt { color: #9fc3ca; }
+  .fortschritt { position: absolute; left: 16px; right: 16px; bottom: 9px; height: 3px; border-radius: 2px; background: transparent; overflow: hidden; }
+  .tabs button[aria-selected='true'] .fortschritt { background: rgba(255,255,255,.15); }
+  .tabs button[aria-selected='true'] .fortschritt::after { content: ''; position: absolute; inset: 0; background: var(--orange); transform-origin: left; transform: scaleX(1); }
+  .laeuft .tabs button[aria-selected='true'] .fortschritt::after { animation: fortschritt var(--dauer, 9s) linear forwards; }
+  .pausiert .tabs button[aria-selected='true'] .fortschritt::after { animation-play-state: paused; }
+  @keyframes fortschritt { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-  .panel h3 { font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.15; }
-  .kurz { margin-top: 12px; font-size: 1.1rem; max-width: 62ch; }
-  .vergleich { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 28px 0 36px; font-size: .97rem; }
-  .vg-titel { font-weight: 700; color: var(--hilfsgrau); margin-bottom: 6px; }
-  .vg-titel.mit { color: var(--petrol); }
-  .panel-fuss { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
-  .panel-fuss .beispiel-hinweis { margin: 0; }
+  .panels { background: var(--weiss); border-radius: var(--radius-gross); padding: clamp(24px, 3.5vw, 44px); }
+  .panel { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(24px, 4vw, 56px); align-items: center; min-height: 380px; }
+  .panel[data-aktiv='false'] { display: none; }
+  .panel h3 { font-size: clamp(1.4rem, 2.2vw, 1.85rem); line-height: 1.15; }
+  .kurz { margin-top: 12px; font-size: 1.05rem; }
+  .mit { margin-top: 14px; font-size: .97rem; }
+  .mit strong { color: var(--petrol); }
+  .text .btn { margin-top: 24px; }
+  .vorschau .beispiel-hinweis { margin-top: 10px; text-align: right; }
 
+  @media (max-width: 1100px) {
+    .tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
   @media (max-width: 900px) {
-    .umschalter { grid-template-columns: 1fr; }
-    .tabs { position: static; display: flex; overflow-x: auto; gap: 8px; padding-bottom: 6px; scrollbar-width: thin; }
-    .tabs button { flex: none; border-radius: 999px; background: var(--weiss); padding: 10px 16px; font-size: .95rem; }
-    .tabs button::before { display: none; }
-    .tabs button[aria-selected='true'] { background: var(--petrol-dunkel); color: var(--weiss); border-radius: 999px; }
-    .vergleich { grid-template-columns: 1fr; gap: 16px; }
+    /* Mobil: alle Anwendungsfälle als Karten untereinander, ohne Reiter und ohne Szene */
+    .tabs { display: none; }
+    .panels { background: none; padding: 0; display: grid; gap: 12px; }
+    .panel, .panel[data-aktiv='false'] { display: grid; grid-template-columns: 1fr; min-height: 0; background: var(--weiss); border-radius: var(--radius); padding: 24px; }
+    .vorschau { display: none; }
+    .mit { display: none; }
+    .text .btn { margin-top: 14px; min-height: 0; padding: 0; border: 0; background: none; color: var(--petrol); text-transform: none; letter-spacing: 0; font-size: 1rem; }
   }
 </style>

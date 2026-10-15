@@ -112,7 +112,7 @@ a:hover { color: var(--petrol-dunkel); }
 .auf-dunkel .btn-sekundaer { color: var(--weiss); border-color: rgba(255,255,255,.55); }
 .auf-dunkel .btn-sekundaer:hover { background: var(--weiss); color: var(--petrol-dunkel); }
 
-.sektion { padding-block: clamp(72px, 10vw, 128px); }
+.sektion { padding-block: clamp(56px, 7vw, 96px); }
 .sektion-mist { background: var(--mist); }
 .auf-dunkel { background: var(--petrol-dunkel); color: #d6e6e9; }
 .auf-dunkel h2, .auf-dunkel h3 { color: var(--weiss); }
@@ -138,3 +138,8 @@ a:hover { color: var(--petrol-dunkel); }
 
 .beispiel-hinweis { font-size: 0.78rem; color: var(--hilfsgrau); margin-top: 12px; }
 .auf-dunkel .beispiel-hinweis { color: #8fb1b8; }
+
+/* Zwei weiße Sektionen hintereinander: kein doppelter Abstand */
+.sektion:not(.sektion-mist):not(.auf-dunkel) + .sektion:not(.sektion-mist):not(.auf-dunkel) { padding-top: 0; }
+/* Nach einer Bühne mit Szene direkt in die Definition, ohne großen Leerraum */
+section:not(.sektion) + .sektion.definition:not(.sektion-mist) { padding-top: clamp(16px, 2vw, 24px); }
