@@ -125,7 +125,7 @@ const maxEnden = demo.art === 'report' ? Math.max(...demo.vertragsenden.map((v) 
   .label { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--hilfsgrau); margin-bottom: 10px; }
   .unterlabel { font-size: .82rem; font-weight: 600; color: var(--hilfsgrau); margin: 14px 0 6px; }
   .eingang { display: grid; gap: 10px; }
-  .ergebnis { background: var(--weiss); border-radius: var(--radius); box-shadow: var(--schatten); padding: 22px; border: 1px solid var(--linie); }
+  .ergebnis { background: var(--weiss); border-radius: var(--radius); box-shadow: var(--schatten); padding: 22px; }
 
   .pfeil { position: relative; height: 4px; margin-inline: 6px; background: var(--verlauf); border-radius: 2px; }
   .pfeil::after { content: ''; position: absolute; right: -6px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 6px rgba(245,158,52,.18); }
@@ -141,9 +141,8 @@ const maxEnden = demo.art === 'report' ? Math.max(...demo.vertragsenden.map((v) 
   .doks .dok:nth-child(2) { transform: rotate(1deg); }
   .doks.kompakt .dok { padding: 10px 12px; }
   .doks.kompakt .dok-icon { width: 18px; height: 22px; }
-  .ablage { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-  .ablage li { display: grid; gap: 2px; padding-bottom: 12px; border-bottom: 1px solid var(--linie); }
-  .ablage li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .ablage { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .ablage li { display: grid; gap: 2px; padding: 10px 12px; background: var(--mist); border-radius: 12px; }
   .ablage strong { font-weight: 600; color: var(--headline); font-size: .92rem; word-break: break-word; }
   .ablage small { color: var(--hilfsgrau); font-size: .82rem; }
   .typ { justify-self: start; font-size: .74rem; font-weight: 700; color: var(--petrol); background: var(--tint-petrol); border-radius: 999px; padding: 2px 10px; }
@@ -154,8 +153,11 @@ const maxEnden = demo.art === 'report' ? Math.max(...demo.vertragsenden.map((v) 
   .seitenstapel span:nth-child(2) { inset: 6px 8px -6px; opacity: .8; }
   .seitenstapel span:nth-child(3) { inset: 12px 16px -12px; opacity: .6; }
   .felder { width: 100%; border-collapse: collapse; font-size: .92rem; }
-  .felder th { text-align: left; font-weight: 400; color: var(--hilfsgrau); padding: 7px 0; border-bottom: 1px solid var(--linie); }
-  .felder td { text-align: right; font-weight: 600; color: var(--headline); padding: 7px 0; border-bottom: 1px solid var(--linie); }
+  .felder th { text-align: left; font-weight: 400; color: var(--hilfsgrau); padding: 7px 10px; }
+  .felder td { text-align: right; font-weight: 600; color: var(--headline); padding: 7px 10px; }
+  .felder tr:nth-child(odd) th, .felder tr:nth-child(odd) td { background: var(--mist); }
+  .felder tr:nth-child(odd) th { border-radius: 8px 0 0 8px; }
+  .felder tr:nth-child(odd) td { border-radius: 0 8px 8px 0; }
 
   .entwurf { font-size: .94rem; line-height: 1.5; }
   .knoepfe { display: flex; gap: 8px; margin-top: 14px; }

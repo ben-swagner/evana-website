@@ -1,22 +1,46 @@
 ---
+// Logo-Laufband über die volle Seitenbreite. Die Liste steht zweimal im DOM,
+// damit die Animation nahtlos läuft; die zweite Kopie ist für Screenreader verborgen.
 import { kundenlogos } from '../../data/fakten';
 ---
-<section class="kunden" aria-labelledby="kunden-titel">
-  <div class="container">
-    <h2 id="kunden-titel">Mit EVANA arbeiten unter anderem</h2>
-    <ul>
-      {kundenlogos.map((k) => (
-        <li><img src={`/kunden/${k.datei}`} alt={k.name} loading="lazy" decoding="async" /></li>
-      ))}
-    </ul>
+<section class="kunden" aria-label="Kunden von EVANA">
+  <div class="band">
+    {[0, 1].map((kopie) => (
+      <ul aria-hidden={kopie === 1 ? 'true' : undefined}>
+        {kundenlogos.map((k) => (
+          <li><img src={`/kunden/${k.datei}`} alt={kopie === 0 ? k.name : ''} loading="lazy" decoding="async" /></li>
+        ))}
+      </ul>
+    ))}
   </div>
 </section>
 
 <style>
-  .kunden { padding-block: 28px 48px; border-bottom: 1px solid var(--linie); }
-  h2 { font-size: .95rem; font-weight: 600; color: var(--hilfsgrau); margin-bottom: 22px; }
-  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 28px 48px; }
-  li { display: flex; align-items: center; height: 44px; }
-  img { height: 100%; width: auto; max-width: 150px; object-fit: contain; opacity: .75; }
-  @media (max-width: 600px) { ul { gap: 22px 32px; } li { height: 34px; } img { max-width: 120px; } }
+  .kunden {
+    padding-block: 12px 64px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .band { display: flex; width: max-content; }
+  ul { list-style: none; margin: 0; padding: 0 36px; display: flex; align-items: center; gap: 72px; }
+  li { flex: none; display: flex; align-items: center; height: 46px; }
+  img { height: 100%; width: auto; max-width: 160px; object-fit: contain; opacity: .7; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .band { animation: laufen 45s linear infinite; }
+    .kunden:hover .band { animation-play-state: paused; }
+    @keyframes laufen { to { transform: translateX(-50%); } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kunden { -webkit-mask-image: none; mask-image: none; }
+    .band { width: auto; justify-content: center; }
+    ul { flex-wrap: wrap; justify-content: center; gap: 28px 48px; }
+    ul[aria-hidden='true'] { display: none; }
+  }
+  @media (max-width: 600px) {
+    ul { gap: 48px; padding-inline: 24px; }
+    li { height: 36px; }
+    img { max-width: 120px; }
+  }
 </style>

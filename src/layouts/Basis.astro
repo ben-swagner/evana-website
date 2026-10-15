@@ -10,7 +10,7 @@ interface Props {
   schema?: Record<string, unknown>[];
   ogBild?: string;
 }
-const { title, description, schema = [], ogBild = '/brand/evana-logo.png' } = Astro.props;
+const { title, description, schema = [], ogBild = '/brand/og-evana.png' } = Astro.props;
 
 // Staging (Cloudflare) setzt STAGING=true, dann wird nichts indexiert.
 const staging = import.meta.env.STAGING === 'true' || process.env.STAGING === 'true';
@@ -23,6 +23,7 @@ const organisation = {
   name: firma.name,
   url: firma.url,
   logo: `${firma.url}/brand/evana-logo.png`,
+  description: 'KI für Immobiliendokumente: Klassifizierung, Datenextraktion, Dokumentenmanagement und Transaktionsdatenräume.',
   foundingDate: String(firma.gegruendet),
   email: firma.email,
   address: {
@@ -51,8 +52,14 @@ const alleSchemas = [organisation, ...schema];
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(ogBild, firma.url).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="EVANA" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#00434f" />
     <link rel="icon" type="image/png" href="/brand/favicon-64.png" />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     {alleSchemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>

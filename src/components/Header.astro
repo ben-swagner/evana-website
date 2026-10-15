@@ -62,7 +62,7 @@ const pfad = Astro.url.pathname;
   .kopfzeile {
     position: sticky; top: 0; z-index: 50;
     background: rgba(255,255,255,.94); backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--linie);
+    box-shadow: 0 10px 30px -24px rgba(0, 67, 79, .45);
   }
   .leiste { display: flex; align-items: center; gap: 32px; height: 76px; }
   .logo img { width: 150px; height: auto; }
@@ -99,7 +99,7 @@ const pfad = Astro.url.pathname;
   .mobil summary span { display: block; width: 24px; height: 2px; background: var(--headline); border-radius: 2px; }
   .mobil-panel {
     position: absolute; left: 0; right: 0; top: 76px; background: var(--weiss);
-    padding: 16px var(--gutter) 28px; border-bottom: 1px solid var(--linie);
+    padding: 16px var(--gutter) 28px; box-shadow: 0 24px 40px -28px rgba(0, 67, 79, .5);
     max-height: calc(100vh - 76px); overflow-y: auto; display: grid; gap: 18px;
   }
   .mobil-titel { font-weight: 700; color: var(--headline); text-decoration: none; font-size: 1.1rem; }

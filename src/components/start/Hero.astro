@@ -27,7 +27,6 @@ const dokumente = [
 <section class="hero">
   <div class="container hero-raster">
     <div class="hero-text">
-      <p class="eyebrow">KI für Immobiliendokumente</p>
       <h1>Aus Ihren Dokumenten werden Antworten</h1>
       <p class="lead">
         EVANA liest Mietverträge, Grundbuchauszüge, Gutachten und Protokolle, ordnet sie dem richtigen Objekt zu
@@ -114,7 +113,7 @@ const dokumente = [
   .antwort {
     position: absolute; left: 14%; right: 0; top: 45%;
     background: var(--weiss); border-radius: var(--radius); box-shadow: var(--schatten);
-    padding: 22px; border: 1px solid var(--linie);
+    padding: 22px;
   }
   .frage {
     background: var(--mist); border-radius: 16px 16px 16px 4px; padding: 12px 16px;
@@ -145,6 +144,6 @@ const dokumente = [
     .linien, .knoten { display: none; }
     .stapel { display: grid; gap: 10px; }
     .stapel .dok { position: static; width: auto; transform: none; }
-    .antwort { position: static; border-top: 4px solid var(--orange); }
+    .antwort { position: static; }
   }
 </style>

@@ -67,15 +67,15 @@ const zeilen = [
 
 <style>
   .kopf h2 { max-width: 22ch; }
-  .tabelle { border-radius: var(--radius-gross); overflow: hidden; border: 1px solid var(--linie); }
-  .zeile { display: grid; grid-template-columns: 200px 1fr 1fr; }
-  .zeile > span { padding: 20px 24px; border-top: 1px solid var(--linie); }
-  .kopfzeile > span { border-top: 0; font-weight: 700; color: var(--hilfsgrau); padding-block: 16px; }
-  .kopfzeile .ev { color: var(--weiss); }
+  .tabelle { display: grid; gap: 8px; }
+  .zeile { display: grid; grid-template-columns: 200px 1fr 1fr; border-radius: 20px; overflow: hidden; background: var(--mist); }
+  .zeile > span { padding: 20px 24px; }
+  .kopfzeile { background: none; }
+  .kopfzeile > span { font-weight: 700; color: var(--hilfsgrau); padding-block: 4px; }
+  .kopfzeile .ev { background: none; color: var(--petrol); }
   .krit { font-weight: 700; color: var(--headline); }
   .allg { color: var(--hilfsgrau); }
   .ev { background: var(--petrol-dunkel); color: var(--weiss); }
-  .zeile:not(.kopfzeile) .ev { border-top-color: rgba(255,255,255,.12); }
 
   .bruecke { display: flex; gap: 22px; align-items: center; margin-top: 40px; padding: 26px 30px; background: var(--tint-orange); border-radius: var(--radius); }
   .bruecke img { width: 56px; height: auto; flex: none; }
@@ -87,7 +87,7 @@ const zeilen = [
     .kopfzeile { display: none; }
     .zeile { grid-template-columns: 1fr; }
     .zeile > span { padding: 12px 18px; }
-    .krit { padding-top: 20px !important; background: var(--mist); }
+    .krit { padding-top: 20px !important; }
     .allg::before { content: 'Allgemeine KI: '; font-weight: 700; }
     .zeile .ev::before { content: 'EVANA: '; font-weight: 700; color: var(--orange); }
     .bruecke { flex-direction: column; align-items: flex-start; }
