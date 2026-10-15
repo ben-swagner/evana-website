@@ -2,7 +2,6 @@
 import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import Faq from '../../components/Faq.astro';
-import Szene from '../../components/Szene.astro';
 import Abschluss from '../../components/Abschluss.astro';
 import DokIcon from '../../components/DokIcon.astro';
 import Definition from '../../components/produkt/Definition.astro';
@@ -311,9 +310,6 @@ const schema = nurGueltig([
         <a href={cta.demo} class="btn btn-primaer">Report live sehen</a>
       </div>
     </div>
-    <div class="container portfolio-szene">
-      <Szene name="report" titel="Interaktives Portfolio-Dashboard: Objekte auswählen und EVA fragen" hinweis="Wählen Sie links ein Objekt aus oder fragen Sie EVA. Beispieldaten." />
-    </div>
   </section>
 
   <section class="sektion sektion-mist">
@@ -456,7 +452,6 @@ const schema = nurGueltig([
   .export li { font-weight: 700; font-size: .85rem; color: var(--tint-orange-text); background: var(--tint-orange); border-radius: 999px; padding: 6px 16px; }
   .export-text { margin-top: 12px; }
   .portfolio .btn { margin-top: 28px; }
-  .portfolio-szene { margin-top: clamp(32px, 5vw, 56px); }
 
   /* Wege */
   .wege { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
