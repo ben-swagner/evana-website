@@ -1,0 +1,25 @@
+---
+// Bettet eine animierte Szene aus der Messe-Animation ein (public/szenen/<name>.html, erzeugt von scripts/build-szenen.mjs).
+// router: Document Router (Schleife), qa: Q&A mit EVA (Schleife), mcp: KI über MCP (Schleife), report: klickbarer Objektreport.
+interface Props {
+  name: 'router' | 'qa' | 'mcp' | 'report';
+  titel: string;
+  hinweis?: string;
+  rahmen?: boolean;
+}
+const { name, titel, hinweis, rahmen = true } = Astro.props;
+const breit = name === 'router' || name === 'report';
+const hintergrund = { router: '#00434F', qa: '#01748D', mcp: '#F2F8F9', report: '#F2F8F9' }[name];
+---
+<figure class:list={['szene', { rahmen }]} style={`--bg:${hintergrund};--ratio:${breit ? '920 / 690' : '820 / 690'}`}>
+  <iframe src={`/szenen/${name}.html`} title={titel} loading="lazy" scrolling="no"></iframe>
+  {hinweis && <figcaption>{hinweis}</figcaption>}
+</figure>
+
+<style>
+  .szene { margin: 0; }
+  .szene.rahmen { background: var(--bg); border-radius: var(--radius-gross); padding: clamp(12px, 2.5vw, 32px); }
+  iframe { display: block; width: 100%; max-width: 980px; margin-inline: auto; aspect-ratio: var(--ratio); border: 0; background: transparent; }
+  figcaption { margin-top: 14px; text-align: center; font-size: .9rem; color: var(--hilfsgrau); }
+  .szene.rahmen[style*='#00434F'] figcaption, .szene.rahmen[style*='#01748D'] figcaption { color: #cfe3e7; }
+</style>

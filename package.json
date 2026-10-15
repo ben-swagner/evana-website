@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/build-redirects.mjs && astro build",
+    "build": "node scripts/build-redirects.mjs && node scripts/build-szenen.mjs && astro build",
     "preview": "astro preview",
     "check:text": "node scripts/check-text.mjs"
   },

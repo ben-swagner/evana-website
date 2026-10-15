@@ -45,6 +45,9 @@ export const hauptnavigation: NavPunkt[] = [
     kinder: [
       { label: 'Fachbeiträge', href: '/wissen/', text: 'Ratgeber zu KI und Dokumentenmanagement' },
       { label: 'News und Presse', href: '/news/', text: 'Produktupdates und Pressemitteilungen' },
+      { label: 'Über uns', href: '/unternehmen/', text: 'Evaluation & Analytics seit 2015' },
+      { label: 'Karriere', href: '/karriere/', text: 'Offene Stellen in Saarbrücken und Frankfurt' },
+      { label: 'Kontakt', href: '/kontakt/', text: 'Vertrieb, Support und Presse' },
     ],
   },
 ];

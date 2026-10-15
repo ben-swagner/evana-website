@@ -2,6 +2,7 @@
 import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import Faq from '../../components/Faq.astro';
+import Szene from '../../components/Szene.astro';
 import Abschluss from '../../components/Abschluss.astro';
 import Fenster from '../../components/produkt/Fenster.astro';
 import Definition from '../../components/produkt/Definition.astro';
@@ -92,38 +93,9 @@ const schema = nurGueltig([
     zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
   />
 
-  <section class="sektion sektion-mist">
+  <section class="sektion" style="padding-top: 0">
     <div class="container">
-      <Fenster titel="Q&A · Bürozentrum Mainufer" meta="42 Fragen · 31 beantwortet · 3 offen">
-        <ul class="qa">
-          {fragen.map((f) => (
-            <li class={f.status}>
-              <div class="qa-frage">
-                <div class="qa-meta">
-                  <span class="qa-id">{f.id}</span>
-                  <span class={`status ${f.status}`}>{statusText[f.status]}</span>
-                  <span class="rolle">{f.rolle}</span>
-                </div>
-                <p>{f.frage}</p>
-              </div>
-              <div class="qa-antwort">
-                {f.quelle ? (
-                  <>
-                    <span class="absender"><span class="knoten" aria-hidden="true"></span>Antwortentwurf von EVA</span>
-                    <p>{f.eva}</p>
-                    <div class="zeile">
-                      <span class="fundstelle">{f.quelle}</span>
-                      {f.status === 'beantwortet' && <span class="knoepfe" aria-hidden="true"><span>Bearbeiten</span><span class="frei">Freigeben</span></span>}
-                    </div>
-                  </>
-                ) : (
-                  <p class="wartet">{f.eva}</p>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </Fenster>
+      <Szene name="qa" titel="Animation: EVA schreibt Antwortvorschläge auf Bieterfragen in mehreren Sprachen, mit Quelle, und erkennt gleiche Sachverhalte" hinweis="EVA im Q&A: Antwortvorschlag mit Fundstelle, Freigabe durch Ihr Team. Beispieldaten." />
     </div>
   </section>
 

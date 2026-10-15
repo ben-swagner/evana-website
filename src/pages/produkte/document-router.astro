@@ -1,4 +1,5 @@
 ---
+import Szene from '../../components/Szene.astro';
 import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import Faq from '../../components/Faq.astro';
@@ -77,32 +78,7 @@ const schema = nurGueltig([
 
   <section class="router-buehne">
     <div class="container">
-      <div class="router">
-        <div class="spalte">
-          <p class="label">Posteingang</p>
-          <ul class="eingang">
-            {eingang.map((d, i) => <li class="dok" style={`--i:${i}`}><DokIcon farbe="#7A7A7A" /><span>{d}</span></li>)}
-          </ul>
-        </div>
-        <div class="mitte" aria-hidden="true">
-          <span class="strang"></span>
-          <span class="kern">Router</span>
-          <span class="strang"></span>
-        </div>
-        <div class="spalte">
-          <p class="label">Abgelegt beim Objekt</p>
-          <ul class="ziele">
-            {ziele.map((z) => (
-              <li>
-                <strong>{z.objekt}</strong>
-                <span class="datei"><DokIcon />{z.datei}</span>
-                <span class="was">{z.was}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+      <Szene name="router" titel="Animation: Der Document Router ordnet eingehende Dokumente automatisch den Objekten zu und sortiert Duplikate aus" />
     </div>
   </section>
 

@@ -1,9 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
 import DemoAnsicht from '../../components/DemoAnsicht.astro';
+import Szene from '../../components/Szene.astro';
+import Faq from '../../components/Faq.astro';
 import Abschluss from '../../components/Abschluss.astro';
+import EvaKatalog from '../../components/start/Eva.astro';
 import { anwendungsfaelle, type Anwendungsfall } from '../../data/anwendungsfaelle';
-import { cta, firma } from '../../data/fakten';
+import { produkte } from '../../data/fakten';
+import { brotkrumen, faqSchema, nurGueltig } from '../../lib/schema';
 
 export function getStaticPaths() {
   return anwendungsfaelle.map((a) => ({ params: { slug: a.slug }, props: { fall: a } }));
@@ -11,45 +17,52 @@ export function getStaticPaths() {
 interface Props { fall: Anwendungsfall }
 const { fall } = Astro.props;
 const andere = anwendungsfaelle.filter((a) => a.slug !== fall.slug);
-
-const schema = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Start', item: `${firma.url}/` },
-      { '@type': 'ListItem', position: 2, name: 'Anwendungsfälle', item: `${firma.url}/anwendungsfaelle/` },
-      { '@type': 'ListItem', position: 3, name: fall.tab, item: `${firma.url}/anwendungsfaelle/${fall.slug}/` },
-    ],
-  },
-];
+const referenzen = (await getCollection('referenzen'))
+  .filter((r) => r.data.anwendungsfaelle.includes(fall.slug))
+  .sort((a, b) => Number(a.data.anonym) - Number(b.data.anonym))
+  .slice(0, 3);
+const produktLinks = fall.produkte.map((n) => ({ name: n, p: produkte.find((p) => p.name === n) }));
+const pfad = [{ label: 'Anwendungsfälle', href: '/anwendungsfaelle/' }, { label: fall.tab, href: `/anwendungsfaelle/${fall.slug}/` }];
+const szenenTitel: Record<string, string> = {
+  router: 'Animation: Eingehende Dokumente werden automatisch dem richtigen Objekt zugeordnet',
+  qa: 'Animation: EVA schreibt Antwortvorschläge auf Bieterfragen mit Quelle',
+  mcp: 'Animation: Ihre KI fragt über den MCP-Server von EVANA',
+  report: 'Interaktives Portfolio-Dashboard mit EVA',
+};
+const szenenHinweis: Record<string, string> = {
+  router: '',
+  qa: 'Beispieldaten',
+  mcp: 'Tippen Sie auf eine KI, um den Abgleich neu zu starten. Beispieldaten.',
+  report: 'Wählen Sie links ein Objekt aus oder fragen Sie EVA. Beispieldaten.',
+};
 ---
-<Basis title={fall.seo.title} description={fall.seo.description} schema={schema}>
-  <section class="kopfbereich">
-    <div class="container">
-      <nav class="pfad" aria-label="Brotkrumen"><a href="/">Start</a> / <a href="/anwendungsfaelle/">Anwendungsfälle</a></nav>
-      <h1>{fall.titel}</h1>
-      <p class="lead">{fall.kurz}</p>
-      <div class="aktionen">
-        <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
-      </div>
-    </div>
-  </section>
+<Basis
+  title={fall.seo.title}
+  description={fall.seo.description}
+  schema={nurGueltig([brotkrumen(pfad), faqSchema(fall.faq ?? [])])}
+>
+  <Seitenkopf titel={fall.titel} lead={fall.kurz} pfad={[pfad[0]]} />
 
-  <section class="sektion sektion-mist">
+  <section class="sektion sektion-mist buehne">
     <div class="container">
-      <DemoAnsicht demo={fall.demo} />
-      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+      {fall.szene ? (
+        <Szene name={fall.szene} titel={szenenTitel[fall.szene]} hinweis={szenenHinweis[fall.szene] || undefined} rahmen={fall.szene !== 'report' && fall.szene !== 'mcp'} />
+      ) : (
+        <>
+          <DemoAnsicht demo={fall.demo} />
+          <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+        </>
+      )}
     </div>
   </section>
 
   <section class="sektion">
     <div class="container zwei">
-      <div>
+      <div class="karte heute">
         <h2>Heute</h2>
         <p>{fall.vorher}</p>
       </div>
-      <div class="mit">
+      <div class="karte mit">
         <h2>Mit EVANA</h2>
         <p>{fall.mitEvana}</p>
       </div>
@@ -61,6 +74,45 @@ const schema = [
     </div>
   </section>
 
+  {fall.fragen && (
+    <section class="sektion sektion-mist">
+      <div class="container">
+        <div class="kopf">
+          <p class="eyebrow">Beispiele</p>
+          <h2>Fragen, die EVA jeden Tag beantwortet</h2>
+          <p class="lead">Sie fragen so, wie Sie eine Kollegin fragen würden. EVA antwortet aus Ihren Dokumenten und nennt die Fundstelle.</p>
+        </div>
+        <ul class="fragen">{fall.fragen.map((f) => <li>{f}</li>)}</ul>
+      </div>
+    </section>
+  )}
+
+  {fall.schritte && (
+    <section class="sektion">
+      <div class="container">
+        <div class="kopf">
+          <p class="eyebrow">So funktioniert es</p>
+          <h2>Von der Frage zur belegten Antwort</h2>
+        </div>
+        <ol class="schritte">{fall.schritte.map((s) => <li><strong>{s.titel}</strong><p>{s.text}</p></li>)}</ol>
+      </div>
+    </section>
+  )}
+
+  {fall.slug === 'dokumente-befragen' && <EvaKatalog />}
+
+  {fall.abgrenzung && (
+    <section class="sektion">
+      <div class="container abgrenzung">
+        <div>
+          <h2>{fall.abgrenzung.titel}</h2>
+          <p>{fall.abgrenzung.text}</p>
+        </div>
+        <a href={fall.abgrenzung.link.href} class="btn btn-sekundaer">{fall.abgrenzung.link.label}</a>
+      </div>
+    </section>
+  )}
+
   {fall.referenz && (
     <section class="sektion auf-dunkel">
       <div class="container referenz">
@@ -71,7 +123,20 @@ const schema = [
     </section>
   )}
 
-  <section class="sektion">
+  {referenzen.length > 0 && (
+    <section class="sektion">
+      <div class="container">
+        <h2 class="t">Referenzen zu diesem Anwendungsfall</h2>
+        <ul class="refs">
+          {referenzen.map((r) => (
+            <li><a href={`/referenzen/${r.id}/`}><span>{r.data.anonym ? r.data.branche : r.data.kunde}</span><strong>{r.data.titel}</strong></a></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="sektion sektion-mist">
     <div class="container meta">
       <div>
         <h2 class="klein">Besonders gefragt bei</h2>
@@ -79,11 +144,18 @@ const schema = [
       </div>
       <div>
         <h2 class="klein">Dahinter steckt</h2>
-        <ul class="pillen petrol">{fall.produkte.map((p) => <li>{p}</li>)}</ul>
+        <ul class="pillen petrol">
+          {produktLinks.map(({ name, p }) => <li>{p ? <a href={`/produkte/${p.slug}/`}>{name}</a> : name}</li>)}
+        </ul>
       </div>
     </div>
+  </section>
+
+  <Faq eintraege={fall.faq ?? []} hell />
+
+  <section class="sektion">
     <div class="container weitere">
-      <h2 class="klein">Weitere Anwendungsfälle</h2>
+      <h2 class="t">Weitere Anwendungsfälle</h2>
       <ul>{andere.map((a) => <li><a href={`/anwendungsfaelle/${a.slug}/`}><strong>{a.tab}</strong><span>{a.titel}</span></a></li>)}</ul>
     </div>
   </section>
@@ -92,32 +164,49 @@ const schema = [
 </Basis>
 
 <style>
-  .kopfbereich { padding-block: clamp(40px, 7vw, 88px) clamp(40px, 6vw, 72px); }
-  .pfad { font-size: .9rem; color: var(--hilfsgrau); margin-bottom: 28px; }
-  .pfad a { color: var(--hilfsgrau); }
-  .kopfbereich h1 { max-width: 18ch; font-size: clamp(2.1rem, 4.6vw, 3.6rem); }
-  .kopfbereich .lead { margin-top: 22px; }
-  .aktionen { margin-top: 30px; }
-
-  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); }
-  .zwei h2 { font-size: 1.5rem; margin-bottom: 12px; color: var(--hilfsgrau); }
-  .zwei .mit h2 { color: var(--petrol); }
-  .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 56px 0 0; }
+  .buehne { padding-block: clamp(40px, 6vw, 80px); }
+  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .karte { border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); }
+  .karte h2 { font-size: 1.4rem; margin-bottom: 12px; }
+  .heute { background: var(--mist); }
+  .heute h2 { color: var(--hilfsgrau); }
+  .mit { background: var(--petrol-dunkel); color: #d6e6e9; }
+  .mit h2 { color: var(--orange); }
+  .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 14px 0 0; }
   .details div { background: var(--mist); border-radius: var(--radius); padding: 24px 26px; }
   .details dt { font-weight: 700; color: var(--headline); font-size: 1.1rem; margin-bottom: 6px; }
   .details dd { margin: 0; }
 
+  .fragen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .fragen li { background: var(--weiss); border-radius: 18px 18px 18px 4px; padding: 18px 20px; font-weight: 600; color: var(--headline); line-height: 1.4; box-shadow: var(--schatten-dokument); }
+  .schritte { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; counter-reset: s; }
+  .schritte li { counter-increment: s; background: var(--mist); border-radius: var(--radius); padding: 24px; }
+  .schritte li::before { content: counter(s); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--orange); color: var(--weiss); font-weight: 700; margin-bottom: 14px; }
+  .schritte strong { display: block; color: var(--headline); font-size: 1.1rem; margin-bottom: 6px; }
+  .schritte p { font-size: .97rem; }
+
+  .abgrenzung { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; background: var(--tint-orange); border-radius: var(--radius-gross); padding: clamp(26px, 4vw, 48px); }
+  .abgrenzung h2 { font-size: 1.5rem; margin-bottom: 10px; }
+  .abgrenzung p { max-width: 70ch; }
+
   .referenz .lead { margin-top: 14px; }
+  .t { font-size: 1.6rem; margin-bottom: 20px; }
+  .refs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .refs a { display: grid; gap: 6px; padding: 22px 24px; border-radius: 20px; background: var(--mist); text-decoration: none; color: var(--headline); height: 100%; }
+  .refs a:hover { background: var(--tint-petrol); }
+  .refs span { font-size: .85rem; font-weight: 700; color: var(--petrol); }
+
   .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
   .klein { font-size: 1rem; color: var(--hilfsgrau); margin-bottom: 12px; }
   .pillen { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .pillen li { padding: 8px 16px; border-radius: 999px; background: var(--mist); font-weight: 600; color: var(--headline); }
+  .pillen li { padding: 8px 16px; border-radius: 999px; background: var(--weiss); font-weight: 600; color: var(--headline); }
   .pillen.petrol li { background: var(--tint-petrol); color: var(--petrol-dunkel); }
-  .weitere { margin-top: 56px; }
+  .pillen a { text-decoration: none; }
   .weitere ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
   .weitere a { display: grid; gap: 4px; padding: 18px 20px; text-decoration: none; color: var(--text); background: var(--mist); border-radius: 18px; height: 100%; }
   .weitere a:hover { background: var(--tint-petrol); }
   .weitere strong { color: var(--petrol); }
   .weitere span { font-size: .92rem; }
-  @media (max-width: 760px) { .zwei, .meta, .details { grid-template-columns: 1fr; } }
+  @media (max-width: 1000px) { .fragen { grid-template-columns: 1fr 1fr; } .schritte { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 760px) { .zwei, .meta, .details, .fragen, .schritte { grid-template-columns: 1fr; } }
 </style>

@@ -25,6 +25,12 @@ export type Anwendungsfall = {
   produkte: string[];
   referenz?: { name: string; ergebnis: string };
   demo: Demo;
+  // Animierte Szene aus der Messe-Animation statt statischer Demo (siehe src/components/Szene.astro)
+  szene?: 'router' | 'qa' | 'mcp' | 'report';
+  fragen?: string[];
+  schritte?: { titel: string; text: string }[];
+  abgrenzung?: { titel: string; text: string; link: { label: string; href: string } };
+  faq?: { frage: string; antwort: string }[];
   seo: { title: string; description: string };
 };
 
@@ -57,6 +63,25 @@ export const anwendungsfaelle: Anwendungsfall[] = [
         { datei: 'Angebot_Dach_0926.pdf', stelle: 'S. 1' },
       ],
     },
+    fragen: [
+      'Welche Mietverträge haben Verlängerungsoptionen, die in den nächsten 24 Monaten auslaufen?',
+      'Bei welchen Objekten fehlt ein gültiger Energieausweis?',
+      'Welche Wartungsmängel sind offen, und wie dringend sind sie?',
+      'Gibt es Sonderkündigungsrechte einzelner Mieter?',
+      'Welche Indexklauseln führen im nächsten Jahr zu einer Mietanpassung?',
+      'Fasse mir das Bewertungsgutachten in fünf Sätzen zusammen.',
+    ],
+    schritte: [
+      { titel: 'Frage stellen', text: 'Sie fragen in normaler Sprache, zu einem Dokument, einem Objekt oder dem ganzen Bestand.' },
+      { titel: 'EVA sucht', text: 'EVA durchsucht alle Unterlagen, auch Scans, Bilder und fremdsprachige Verträge.' },
+      { titel: 'Antwort mit Fundstelle', text: 'Sie erhalten die Antwort mit Datei, Seite und Absatz, auf Wunsch als Tabelle.' },
+      { titel: 'Prüfen und weiterarbeiten', text: 'Ein Klick führt zur Stelle im Original. Ergebnisse exportieren Sie als Excel oder übernehmen sie in den Report.' },
+    ],
+    faq: [
+      { frage: 'Welche Dokumente kann EVA befragen?', antwort: 'Alle Unterlagen in EVANA 360 und EVANA TDR, etwa Mietverträge, Nachträge, Grundbuchauszüge, Gutachten, Energieausweise und Wartungsprotokolle, auch als Scan, Bild oder in fremder Sprache.' },
+      { frage: 'Woher weiß ich, dass eine Antwort stimmt?', antwort: 'Jede Antwort nennt die Fundstelle im Originaldokument mit Datei und Seite. Ein Klick führt direkt zur Stelle, sodass Sie jede Aussage prüfen können.' },
+      { frage: 'Kann EVA mehrere Fragen auf einmal beantworten?', antwort: 'Ja. Sie können ganze Fragenkataloge übergeben, etwa eine Due-Diligence-Checkliste. EVA beantwortet jede Frage aus dem gesamten Datenraum, jeweils mit Fundstellen.' },
+    ],
     seo: {
       title: 'Immobiliendokumente mit KI befragen, mit Fundstelle | EVANA',
       description: 'Mit der KI-Assistentin EVA fragen Sie Mietverträge, Gutachten und Protokolle in normaler Sprache ab. Jede Antwort mit Fundstelle im Originaldokument.',
@@ -90,6 +115,17 @@ export const anwendungsfaelle: Anwendungsfall[] = [
         { objekt: 'Bürozentrum Mainufer', ordner: 'Energie / Ausweise', neuerName: 'Energieausweis_Verbrauch_2024.pdf' },
       ],
     },
+    szene: 'router',
+    abgrenzung: {
+      titel: 'Anwendungsfall und Document Router',
+      text: 'Der Anwendungsfall beschreibt die Aufgabe: Ordnung in Ihre Dokumente bringen, ob einmalig beim Übernehmen eines ganzen Bestands oder laufend im Alltag. Der Document Router ist das Werkzeug für den laufenden Posteingang. Für die Übernahme großer Bestände klassifiziert EVANA AI tausende Dokumente in einem Durchgang, wie bei Wirtgen Invest.',
+      link: { label: 'Document Router ansehen', href: '/produkte/document-router/' },
+    },
+    faq: [
+      { frage: 'Wie erkennt EVANA, zu welchem Objekt ein Dokument gehört?', antwort: 'EVANA liest Dokumenttyp, Adresse, Mieter und weitere Angaben aus dem Inhalt und ordnet das Dokument dem passenden Objekt zu. Was unsicher ist, landet zur Prüfung bei Ihrem Team.' },
+      { frage: 'Was passiert mit doppelten Dateien?', antwort: 'EVANA erkennt Dubletten und Versionen, bevor sie die Akte füllen, und sortiert sie aus.' },
+      { frage: 'Funktioniert das auch für bestehende Bestände?', antwort: 'Ja. Bei Wirtgen Invest hat EVANA rund 25.000 Dokumente aus vier Objekten klassifiziert und umbenannt, in wenigen Tagen statt Monaten.' },
+    ],
     seo: {
       title: 'Dokumente automatisch klassifizieren und ablegen | EVANA',
       description: 'EVANA erkennt Dokumenttyp und Objekt, benennt Dateien um und legt sie automatisch ab. KI-Dokumentenmanagement für die Immobilienwirtschaft.',
@@ -122,6 +158,11 @@ export const anwendungsfaelle: Anwendungsfall[] = [
         { feld: 'Restnutzungsdauer', wert: '41 Jahre' },
       ],
     },
+    faq: [
+      { frage: 'Welche Dokumente kann EVANA auslesen?', antwort: 'Zum Beispiel Bewertungsgutachten, Grundbuchauszüge, Energieausweise, Mietverträge und Wartungsprotokolle, auch als Scan oder Bild und in fremder Sprache.' },
+      { frage: 'Wie kommen die Daten weiter?', antwort: 'Als CSV oder Excel oder per REST- und GraphQL-API, etwa an SAP RE-FX oder Ihre BI-Tools.' },
+      { frage: 'Kann ich prüfen, woher ein Wert stammt?', antwort: 'Ja. Jeder extrahierte Wert bleibt mit seiner Stelle im Dokument verknüpft.' },
+    ],
     seo: {
       title: 'KI-Datenextraktion aus Immobiliendokumenten | EVANA',
       description: 'Gutachten, Grundbuchauszüge und Energieausweise automatisch auslesen. EVANA extrahiert Datenfelder und übergibt sie an Excel, API oder SAP.',
@@ -148,6 +189,12 @@ export const anwendungsfaelle: Anwendungsfall[] = [
       entwurf: 'Yes. Two lease agreements in building C contain special termination rights: the tenant on floor 3 may terminate as of 31.12.2027 with six months notice, the tenant on floor 5 in the event of a change of control.',
       quelle: 'MV_Gebaeude-C_OG3.pdf, § 9 · MV_Gebaeude-C_OG5.pdf, § 11',
     },
+    szene: 'qa',
+    faq: [
+      { frage: 'Gibt EVA Antworten automatisch an Bieter weiter?', antwort: 'Nein. EVA schreibt Antwortentwürfe mit Quelle, Ihr Team bearbeitet und gibt sie frei.' },
+      { frage: 'Was passiert, wenn EVA keine passende Stelle findet?', antwort: 'Dann sagt EVA das offen und meldet die Lücke, damit Ihr Team gezielt nachliefern kann.' },
+      { frage: 'Kann EVA Fragen in anderen Sprachen beantworten?', antwort: 'Ja. EVA antwortet in der Sprache der Frage und beantwortet gleiche Sachverhalte konsistent, auch wenn sie unterschiedlich formuliert sind.' },
+    ],
     seo: {
       title: 'KI im Transaktionsdatenraum: Q&A und Due Diligence | EVANA',
       description: 'EVANA TDR mit der KI-Assistentin EVA: Antwortentwürfe auf Bieterfragen mit Quelle, ganze Fragenkataloge in einem Durchgang.',
@@ -182,6 +229,12 @@ export const anwendungsfaelle: Anwendungsfall[] = [
         { jahr: '2030', anzahl: 6 },
       ],
     },
+    szene: 'report',
+    faq: [
+      { frage: 'Woher kommen die Daten im Report?', antwort: 'Aus Ihren eigenen Dokumenten, etwa Mietverträgen, Prüfprotokollen und Energieausweisen. Zu jedem Wert sehen Sie die Quelle.' },
+      { frage: 'Wie bleibt der Report aktuell?', antwort: 'Neue Dokumente fließen automatisch ein. Fristen und fällige Prüfungen erscheinen, bevor sie kritisch werden.' },
+      { frage: 'Kann ich die Daten exportieren?', antwort: 'Ja, als CSV oder Excel oder per API, etwa für Ihre BI-Tools.' },
+    ],
     seo: {
       title: 'Objektreport aus Immobiliendokumenten | EVANA',
       description: 'EVANA erstellt Objektreports direkt aus Ihren Dokumenten: Kennzahlen, Vertragsenden und Fristen auf einen Blick, mit Export als CSV, Excel oder API.',
@@ -206,6 +259,12 @@ export const anwendungsfaelle: Anwendungsfall[] = [
       modelle: ['Claude', 'Microsoft Copilot', 'ChatGPT', 'Eigenes LLM'],
       schnittstellen: ['MCP-Server', 'REST und GraphQL', 'Power Automate', 'SAP RE-FX'],
     },
+    szene: 'mcp',
+    faq: [
+      { frage: 'Welche KI-Modelle lassen sich anbinden?', antwort: 'Claude, ChatGPT, Microsoft Copilot, DeutschlandGPT oder Ihr eigenes Sprachmodell, über den MCP-Server von EVANA.' },
+      { frage: 'Wie kommen Daten in SAP und andere Systeme?', antwort: 'Über REST- und GraphQL-APIs, den Power-Automate-Connector und die zertifizierte Anbindung an SAP S/4HANA und SAP RE-FX.' },
+      { frage: 'Binden wir uns damit an einen KI-Anbieter?', antwort: 'Nein. EVANA ist modelloffen, Sie behalten die Kontrolle über Modellwahl und Datenfluss.' },
+    ],
     seo: {
       title: 'Claude, Copilot und SAP an Immobiliendokumente anbinden | EVANA',
       description: 'EVANA stellt Ihre Immobiliendokumente als strukturierte Datenbasis bereit: per MCP für Claude und Copilot, per API für SAP und Fachsysteme.',

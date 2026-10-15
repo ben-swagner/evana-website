@@ -2,6 +2,7 @@
 import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import Faq from '../../components/Faq.astro';
+import Szene from '../../components/Szene.astro';
 import Abschluss from '../../components/Abschluss.astro';
 import DokIcon from '../../components/DokIcon.astro';
 import Definition from '../../components/produkt/Definition.astro';
@@ -31,7 +32,7 @@ const kacheln = [
     zeilen: [['Energieausweis', 'abgelaufen seit 24 Monaten'], ['Grundbuchauszug', 'älter als 96 Monate'], ['Mieterliste', 'älter als 4 Monate']],
   },
   {
-    titel: 'Mängel an Anlagen', zahl: 9, ton: 'handeln',
+    titel: 'Mängel an Anlagen', zahl: 4, ton: 'handeln',
     zeilen: [['Brandmeldeanlage', '1 offener Mangel'], ['Personenaufzug', '1 offener Mangel'], ['Sprinkleranlage', '2 offene Mängel']],
   },
   {
@@ -39,6 +40,49 @@ const kacheln = [
     zeilen: [['Mieterhöhung EG', 'möglich ab 01.11.2026'], ['Kanzlei Berger & Partner', 'Kündigung zum 31.12.2026'], ['Café Lindner', 'Festlaufzeit endet 31.03.2027']],
   },
 ];
+
+// Weitere Reiter des klickbaren Objektberichts (Beispieldaten)
+const dokumente = [
+  { name: 'Energieausweis', stand: 'abgelaufen seit 24 Monaten', ton: 'kritisch', quelle: 'Energieausweis_2014.pdf' },
+  { name: 'Grundbuchauszug', stand: 'älter als 96 Monate', ton: 'kritisch', quelle: 'Grundbuch_Blatt-4417.pdf' },
+  { name: 'Mieterliste', stand: 'älter als 4 Monate', ton: 'handeln', quelle: 'Mieterliste_2026.xlsx' },
+  { name: 'Brandschutzgutachten', stand: 'aktuell, 03/2025', ton: 'ok', quelle: 'Brandschutz_2025.pdf' },
+  { name: 'Teilungserklärung', stand: 'aktuell', ton: 'ok', quelle: 'Teilungserklaerung.pdf' },
+];
+const anlagen = [
+  { name: 'Brandmeldeanlage', stand: '1 offener Mangel, Prüfung fällig seit 01.09.2026', ton: 'kritisch', quelle: 'Pruefprotokoll_BMA_2025.pdf' },
+  { name: 'Personenaufzug', stand: '1 offener Mangel, TÜV-Prüfung in 9 Tagen', ton: 'handeln', quelle: 'Pruefbericht_Aufzug.pdf' },
+  { name: 'Sprinkleranlage', stand: '2 offene Mängel, nächste Wartung 01/2027', ton: 'handeln', quelle: 'Wartung_Sprinkler_Q3.pdf' },
+  { name: 'Lüftungsanlage', stand: 'ohne Mängel, Wartung am 03.11.2026', ton: 'ok', quelle: 'Wartung_RLT_Q3.pdf' },
+];
+const vertraege = [
+  { name: 'Kanzlei Berger & Partner', stand: 'Kündigung zum 31.12.2026', ton: 'kritisch', quelle: 'Kuendigung_Berger.pdf' },
+  { name: 'Café Lindner', stand: 'Festlaufzeit endet 31.03.2027', ton: 'handeln', quelle: 'MV_Cafe_Lindner.pdf, § 3' },
+  { name: 'Mieter EG', stand: 'Mieterhöhung möglich ab 01.11.2026', ton: 'handeln', quelle: 'MV_EG_Nachtrag-2.pdf, § 5' },
+  { name: 'Praxis Dr. Haas', stand: 'Verlängerungsoption bis 30.06.2029', ton: 'ok', quelle: 'MV_Praxis_Haas.pdf, § 4' },
+];
+const historie = [
+  { name: '13.10.2026', stand: 'Prüfprotokoll Brandmeldeanlage eingelesen, 1 Mangel erkannt', ton: 'ok', quelle: 'Document Router' },
+  { name: '02.10.2026', stand: 'Kündigung Kanzlei Berger erkannt und Frist gesetzt', ton: 'ok', quelle: 'Posteingang' },
+  { name: '15.09.2026', stand: 'Neue Mieterliste übernommen, 14 Mieteinheiten abgeglichen', ton: 'ok', quelle: 'Upload' },
+];
+const reiter = [
+  { id: 'uebersicht', label: 'Übersicht' },
+  { id: 'dokumente', label: 'Dokumente', liste: dokumente },
+  { id: 'maengel', label: 'Mängel und Maßnahmen', liste: anlagen },
+  { id: 'vertraege', label: 'Verträge und Mieter', liste: vertraege },
+  { id: 'keyfacts', label: 'Key Facts' },
+  { id: 'historie', label: 'Historie', liste: historie },
+];
+const keyFactsVoll = [
+  { label: 'WALT', wert: '6,2 Jahre', quelle: '14 Mietverträge' },
+  { label: 'Vermietungsquote', wert: '96 %', quelle: 'Mieterliste_2026.xlsx' },
+  { label: 'Mietfläche', wert: '8.450 m²', quelle: 'Flaechenaufstellung.pdf' },
+  { label: 'Grundbuch, Blatt', wert: '4417', quelle: 'Grundbuch_Blatt-4417.pdf' },
+  { label: 'Baujahr / Sanierung', wert: '1998 / 2016', quelle: 'Verkehrswertgutachten.pdf' },
+  { label: 'Energieeffizienz', wert: 'Klasse D', quelle: 'Energieausweis_2014.pdf' },
+];
+const statusText: Record<string, string> = { kritisch: 'kritisch', handeln: 'Handlungsbedarf', ok: 'in Ordnung' };
 
 const ablage = ['Energieausweis.pdf', 'Wartung_BMA_Q3.pdf', 'Kündigung_Berger.pdf', 'Mieterliste_2026.xlsx', 'Prüfbericht_Aufzug.pdf'];
 
@@ -115,31 +159,93 @@ const schema = nurGueltig([
               <h2>Objektbericht · Bürohaus Mitte</h2>
               <span class="ton handeln">Handlungsbedarf</span>
             </div>
-            <ul class="reiter" aria-hidden="true">
-              <li class="aktiv">Übersicht</li><li>Dokumente</li><li>Mängel und Maßnahmen</li><li>Verträge und Mieter</li><li>Key Facts</li><li>Historie</li>
-            </ul>
-            <dl class="stamm">
-              {stamm.map((s) => <div><dt>{s.label}</dt><dd>{s.wert}</dd></div>)}
-            </dl>
-            <div class="kacheln">
-              {kacheln.map((k) => (
-                <section class={`kachel ${k.ton}`}>
-                  <header><h3>{k.titel}</h3><span class="zahl">{k.zahl}</span></header>
-                  <ul>{k.zeilen.map(([a, b]) => <li><strong>{a}</strong><span>{b}</span></li>)}</ul>
-                </section>
+            <div class="reiter" role="tablist" aria-label="Bereiche des Objektberichts">
+              {reiter.map((r, i) => (
+                <button type="button" role="tab" id={`tab-${r.id}`} aria-controls={`panel-${r.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{r.label}</button>
               ))}
             </div>
-            <div class="eva-zeile">
+            <div class="panel" role="tabpanel" id="panel-uebersicht" aria-labelledby="tab-uebersicht">
+              <dl class="stamm">
+                {stamm.map((s) => <div><dt>{s.label}</dt><dd>{s.wert}</dd></div>)}
+              </dl>
+              <div class="kacheln">
+                {kacheln.map((k, i) => (
+                  <button type="button" class={`kachel ${k.ton}`} data-ziel={['dokumente', 'maengel', 'vertraege'][i]}>
+                    <span class="kachel-kopf"><span class="kachel-titel">{k.titel}</span><span class="zahl">{k.zahl}</span></span>
+                    <span class="kachel-liste">{k.zeilen.map(([a, b]) => <span class="zeile"><strong>{a}</strong><span>{b}</span></span>)}</span>
+                    <span class="kachel-mehr">Details ansehen</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            {reiter.filter((r) => r.liste).map((r) => (
+              <div class="panel" role="tabpanel" id={`panel-${r.id}`} aria-labelledby={`tab-${r.id}`} hidden>
+                <ul class="eintraege">
+                  {r.liste!.map((e) => (
+                    <li>
+                      <strong>{e.name}</strong>
+                      <span class="zustand">{e.stand}</span>
+                      <span class={`ton ${e.ton}`}>{statusText[e.ton]}</span>
+                      <span class="fundstelle">{e.quelle}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <div class="panel" role="tabpanel" id="panel-keyfacts" aria-labelledby="tab-keyfacts" hidden>
+              <dl class="kf">
+                {keyFactsVoll.map((f) => <div><dt>{f.label}</dt><dd>{f.wert}</dd><span class="fundstelle">Quelle: {f.quelle}</span></div>)}
+              </dl>
+            </div>
+            <button type="button" class="eva-zeile" aria-expanded="false" aria-controls="eva-antwort">
               <span class="knoten" aria-hidden="true"></span>
-              <p><strong>EVA</strong> Für Bürohaus Mitte sind 3 Nachweise veraltet und 4 Prüfungen überfällig.</p>
-              <span class="fundstelle">aus 214 Dokumenten</span>
+              <span class="eva-text"><strong>EVA</strong> Für Bürohaus Mitte sind 3 Nachweise veraltet und 4 Mängel an Anlagen offen.</span>
+              <span class="fundstelle">Was ist zuerst zu tun?</span>
+            </button>
+            <div class="eva-antwort" id="eva-antwort" hidden>
+              <p><strong>EVA:</strong> Am dringendsten ist die Prüfung der Brandmeldeanlage, sie ist seit dem 01.09.2026 fällig. Danach folgen die TÜV-Prüfung des Aufzugs in 9 Tagen und der Energieausweis, der seit 24 Monaten abgelaufen ist.</p>
+              <span class="fundstelle">Pruefprotokoll_BMA_2025.pdf · S. 2</span>
+              <span class="fundstelle">Pruefbericht_Aufzug.pdf · S. 1</span>
+              <span class="fundstelle">Energieausweis_2014.pdf · S. 1</span>
             </div>
           </div>
         </div>
       </figure>
-      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+      <p class="beispiel-hinweis">Beispielhafte Darstellung. Klicken Sie sich durch die Reiter, die Kacheln und die Frage an EVA.</p>
     </div>
   </section>
+
+  <script>
+    const app = document.querySelector('.app');
+    if (app) {
+      const tabs = Array.from(app.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+      const waehle = (id: string, fokus = false) => {
+        tabs.forEach((t) => {
+          const aktiv = t.id === `tab-${id}`;
+          t.setAttribute('aria-selected', String(aktiv));
+          t.tabIndex = aktiv ? 0 : -1;
+          const p = document.getElementById(t.getAttribute('aria-controls')!);
+          if (p) p.hidden = !aktiv;
+          if (aktiv && fokus) t.focus();
+        });
+      };
+      tabs.forEach((t, i) => {
+        t.addEventListener('click', () => waehle(t.id.slice(4)));
+        t.addEventListener('keydown', (e) => {
+          const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+          if (d) { e.preventDefault(); waehle(tabs[(i + d + tabs.length) % tabs.length].id.slice(4), true); }
+        });
+      });
+      app.querySelectorAll<HTMLButtonElement>('[data-ziel]').forEach((k) => k.addEventListener('click', () => waehle(k.dataset.ziel!, true)));
+      const eva = app.querySelector<HTMLButtonElement>('.eva-zeile')!;
+      const antwort = document.getElementById('eva-antwort')!;
+      eva.addEventListener('click', () => {
+        const offen = eva.getAttribute('aria-expanded') === 'true';
+        eva.setAttribute('aria-expanded', String(!offen));
+        antwort.hidden = offen;
+      });
+    }
+  </script>
 
   <Definition frage="Was ist der EVANA Report?" kern={definition.kern} text={definition.text} />
 
@@ -205,6 +311,9 @@ const schema = nurGueltig([
         <a href={cta.demo} class="btn btn-primaer">Report live sehen</a>
       </div>
     </div>
+    <div class="container portfolio-szene">
+      <Szene name="report" titel="Interaktives Portfolio-Dashboard: Objekte auswählen und EVA fragen" hinweis="Wählen Sie links ein Objekt aus oder fragen Sie EVA. Beispieldaten." />
+    </div>
   </section>
 
   <section class="sektion sektion-mist">
@@ -259,28 +368,48 @@ const schema = nurGueltig([
   .ton.kritisch { background: var(--tint-magenta); color: var(--magenta); }
   .ton.handeln { background: var(--tint-orange); color: var(--tint-orange-text); }
   .ton.ok { background: var(--tint-petrol); color: var(--petrol); }
-  .reiter { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; font-size: .85rem; }
-  .reiter li { padding: 7px 14px; border-radius: 999px; background: var(--mist); color: var(--hilfsgrau); font-weight: 600; }
-  .reiter .aktiv { background: var(--magenta); color: var(--weiss); }
+  .reiter { display: flex; flex-wrap: wrap; gap: 6px; }
+  .reiter button { font: 600 .85rem/1 var(--font); padding: 9px 14px; border-radius: 999px; border: 0; background: var(--mist); color: var(--hilfsgrau); cursor: pointer; }
+  .reiter button:hover { color: var(--headline); }
+  .reiter button[aria-selected='true'] { background: var(--magenta); color: var(--weiss); }
+  .panel { display: grid; gap: 18px; min-height: 290px; align-content: start; }
+  .panel[hidden] { display: none; }
+  .eintraege { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .eintraege li { display: grid; grid-template-columns: minmax(150px, .9fr) minmax(0, 1.6fr) auto; grid-template-areas: 'n s t' 'n q q'; gap: 4px 14px; align-items: center; padding: 14px 16px; border-radius: 14px; background: var(--mist); font-size: .9rem; }
+  .eintraege strong { grid-area: n; color: var(--headline); }
+  .eintraege .zustand { grid-area: s; }
+  .eintraege .ton { grid-area: t; justify-self: end; }
+  .eintraege .fundstelle { grid-area: q; justify-self: start; background: var(--weiss); }
+  .kf { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .kf div { background: var(--mist); border-radius: 14px; padding: 14px 16px; display: grid; gap: 4px; }
+  .kf dt { font-size: .8rem; color: var(--hilfsgrau); }
+  .kf dd { margin: 0; font-size: 1.35rem; font-weight: 700; color: var(--petrol-dunkel); }
+  .kf .fundstelle { justify-self: start; background: var(--weiss); font-size: .72rem; }
   .stamm { margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
   .stamm div { background: var(--mist); border-radius: 12px; padding: 10px 12px; }
   .stamm dt { font-size: .74rem; color: var(--hilfsgrau); }
   .stamm dd { margin: 2px 0 0; font-weight: 700; color: var(--headline); font-size: .92rem; line-height: 1.3; }
   .kacheln { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-  .kachel { border-radius: 18px; padding: 16px 18px; background: var(--mist); }
-  .kachel header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .kachel h3 { font-size: .98rem; }
+  .kachel { display: grid; gap: 10px; align-content: start; text-align: left; font: inherit; color: inherit; border: 0; cursor: pointer; border-radius: 18px; padding: 16px 18px; background: var(--mist); transition: background-color .15s; }
+  .kachel:hover { background: var(--tint-petrol); }
+  .kachel-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .kachel-titel { font-size: .98rem; font-weight: 700; color: var(--headline); }
+  .kachel-liste { display: grid; gap: 6px; }
+  .kachel-mehr { font-size: .8rem; font-weight: 700; color: var(--petrol); }
   .zahl { display: grid; place-items: center; min-width: 38px; height: 38px; border-radius: 12px; font-weight: 700; font-size: 1.2rem; }
   .kachel.kritisch .zahl { background: var(--tint-magenta); color: var(--magenta); }
   .kachel.handeln .zahl { background: var(--tint-orange); color: var(--tint-orange-text); }
-  .kachel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-  .kachel li { display: grid; gap: 1px; padding: 9px 11px; border-radius: 10px; background: var(--weiss); font-size: .84rem; line-height: 1.3; }
-  .kachel li strong { color: var(--headline); font-weight: 600; }
-  .kachel li span { color: var(--hilfsgrau); }
-  .eva-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 14px 18px; border-radius: 16px; background: var(--tint-petrol); }
-  .eva-zeile p { flex: 1 1 260px; color: var(--petrol-dunkel); }
-  .eva-zeile p strong { margin-right: 6px; }
-  .eva-zeile .fundstelle { background: var(--weiss); }
+  .kachel .zeile { display: grid; gap: 1px; padding: 9px 11px; border-radius: 10px; background: var(--weiss); font-size: .84rem; line-height: 1.3; }
+  .kachel .zeile strong { color: var(--headline); font-weight: 600; }
+  .kachel .zeile span { color: var(--hilfsgrau); }
+  .eva-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 14px 18px; border-radius: 16px; background: var(--tint-petrol); border: 0; font: inherit; text-align: left; cursor: pointer; }
+  .eva-zeile:hover { background: #d3e8ec; }
+  .eva-text { flex: 1 1 260px; color: var(--petrol-dunkel); }
+  .eva-text strong { margin-right: 6px; }
+  .eva-zeile .fundstelle { background: var(--orange); color: var(--weiss); }
+  .eva-antwort { display: flex; flex-wrap: wrap; gap: 8px; padding: 18px 20px; border-radius: 16px; background: var(--weiss); box-shadow: var(--schatten); }
+  .eva-antwort[hidden] { display: none; }
+  .eva-antwort p { flex: 1 1 100%; color: var(--headline); }
   .knoten { width: 14px; height: 14px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 5px rgba(245,158,52,.22); }
   .buehne .beispiel-hinweis { margin-top: 14px; }
 
@@ -327,6 +456,7 @@ const schema = nurGueltig([
   .export li { font-weight: 700; font-size: .85rem; color: var(--tint-orange-text); background: var(--tint-orange); border-radius: 999px; padding: 6px 16px; }
   .export-text { margin-top: 12px; }
   .portfolio .btn { margin-top: 28px; }
+  .portfolio-szene { margin-top: clamp(32px, 5vw, 56px); }
 
   /* Wege */
   .wege { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -340,6 +470,7 @@ const schema = nurGueltig([
   @media (max-width: 1000px) {
     .stamm { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .kacheln { grid-template-columns: 1fr 1fr; }
+    .kf { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 860px) {
     .app-koerper { grid-template-columns: 1fr; }
@@ -352,6 +483,8 @@ const schema = nurGueltig([
   }
   @media (max-width: 600px) {
     .stamm { grid-template-columns: 1fr 1fr; }
+    .eintraege li { grid-template-columns: 1fr; grid-template-areas: 'n' 's' 't' 'q'; }
+    .eintraege .ton { justify-self: start; }
     .kacheln, .wege { grid-template-columns: 1fr; }
     .stand { margin-left: 0; }
     .facts li { grid-template-columns: minmax(0, 1fr) auto; }

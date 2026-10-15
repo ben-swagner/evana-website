@@ -2,6 +2,7 @@
 import Basis from '../../layouts/Basis.astro';
 import Seitenkopf from '../../components/Seitenkopf.astro';
 import Faq from '../../components/Faq.astro';
+import Szene from '../../components/Szene.astro';
 import Abschluss from '../../components/Abschluss.astro';
 import Definition from '../../components/produkt/Definition.astro';
 import Anwendungen from '../../components/produkt/Anwendungen.astro';
@@ -80,7 +81,6 @@ const schema = nurGueltig([
           <ul class="pillen petrol">{systemeHub.map((m) => <li>{m}</li>)}</ul>
         </div>
       </div>
-      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
     </div>
   </section>
 
@@ -99,6 +99,9 @@ const schema = nurGueltig([
         <ul>{modelle.map((m) => <li><span class="knoten" aria-hidden="true"></span>{m}</li>)}</ul>
         <p class="hinweis">Sie behalten die Kontrolle über Modellwahl und Datenfluss.</p>
       </div>
+    </div>
+    <div class="container mcp-szene">
+      <Szene name="mcp" titel="Animation: Claude, ChatGPT, DeutschlandGPT oder Copilot fragen über den MCP-Server von EVANA und gleichen ERP-Daten mit Mietverträgen ab" hinweis="Tippen Sie auf eine KI, um den Abgleich neu zu starten. Beispieldaten." />
     </div>
   </section>
 
@@ -169,6 +172,12 @@ const schema = nurGueltig([
   .pillen li { background: var(--weiss); border-radius: 999px; padding: 10px 16px; font-weight: 600; color: var(--headline); box-shadow: var(--schatten-dokument); text-align: center; }
   .pillen.petrol li { background: var(--tint-petrol); color: var(--petrol-dunkel); box-shadow: none; }
   .draht { position: relative; height: 4px; border-radius: 2px; }
+  .draht::after { content: ''; position: absolute; top: 50%; left: 0; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--weiss); box-shadow: 0 0 0 4px rgba(245,158,52,.45); opacity: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .draht::after { animation: fluss 2.4s ease-in-out infinite; }
+    .draht.rechts::after { animation-delay: 1.2s; }
+    @keyframes fluss { 0% { left: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { left: calc(100% - 12px); opacity: 0; } }
+  }
   .draht.links { background: linear-gradient(90deg, var(--petrol), var(--magenta)); }
   .draht.rechts { background: linear-gradient(90deg, var(--magenta), var(--orange)); }
   .draht span {
@@ -188,6 +197,7 @@ const schema = nurGueltig([
 
   .mcp { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(32px, 6vw, 80px); align-items: center; }
   .mcp .lead { margin-top: 18px; }
+  .mcp-szene { margin-top: clamp(32px, 5vw, 56px); }
   .absatz { margin-top: 14px; }
   .modell-karte { padding: clamp(24px, 3vw, 36px); border-radius: var(--radius-gross); background: var(--weiss); box-shadow: var(--schatten); }
   .modell-karte ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
