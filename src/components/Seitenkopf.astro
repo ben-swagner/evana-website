@@ -1,0 +1,44 @@
+---
+// Einheitlicher Seitenkopf für Unterseiten: Brotkrumen, H1 (ohne Eyebrow), Lead, optionale Aktionen.
+// Erzeugt auch das BreadcrumbList-Schema, wenn die Seite es über Basis.astro einbindet (siehe brotkrumenSchema).
+import { cta } from '../data/fakten';
+interface Krume { label: string; href: string }
+interface Props {
+  titel: string;
+  lead?: string;
+  pfad?: Krume[];
+  demo?: boolean;
+  zweitLink?: Krume;
+  schmal?: boolean;
+}
+const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false } = Astro.props;
+---
+<section class:list={['seitenkopf', { schmal }]}>
+  <div class="container">
+    {pfad.length > 0 && (
+      <nav class="pfad" aria-label="Brotkrumen">
+        <a href="/">Start</a>
+        {pfad.map((k) => <> <span aria-hidden="true">/</span> <a href={k.href}>{k.label}</a></>)}
+      </nav>
+    )}
+    <h1>{titel}</h1>
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+    {(demo || zweitLink) && (
+      <div class="aktionen">
+        {demo && <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>}
+        {zweitLink && <a href={zweitLink.href} class="btn btn-sekundaer">{zweitLink.label}</a>}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .seitenkopf { padding-block: clamp(40px, 7vw, 88px) clamp(36px, 5vw, 64px); }
+  .pfad { font-size: .9rem; color: var(--hilfsgrau); margin-bottom: 28px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .pfad a { color: var(--hilfsgrau); }
+  h1 { max-width: 20ch; font-size: clamp(2.1rem, 4.6vw, 3.6rem); }
+  .schmal h1 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); max-width: 26ch; }
+  .lead { margin-top: 22px; }
+  .aktionen { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+</style>

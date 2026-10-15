@@ -9,7 +9,8 @@ const regeln = [
   { name: '"nicht ..., sondern" Konstruktion', muster: /\bnicht\b[^.!?]{0,80}\bsondern\b/gi },
   { name: 'Schreibweise "EVANA KI"', muster: /EVANA KI\b/g },
   { name: 'Schreibweise "EVANA360" oder "EVANA-TDR"', muster: /EVANA360|EVANA-TDR/g },
-  { name: 'Veraltete Zahl Dokumenttypen', muster: /\b(360|400)\+?\s*Dokumenttypen/g },
+  { name: 'Veraltete Zahl Dokumenttypen', muster: /\b(360|400)\+?\s*(verschiedene\s+)?Dokumenttypen/g },
+  { name: 'Veraltete Trefferquote', muster: /\b98\s*(%|Prozent)/g },
   { name: 'Verbotene Farbe', muster: /#(0B1F3A|07444B|F2A104|147B8C|DB8C32|990066)\b/gi },
 ];
 
@@ -26,7 +27,10 @@ sammle('dist');
 let fehler = 0;
 for (const datei of dateien) {
   const text = readFileSync(datei, 'utf8').replace(/<script[\s\S]*?<\/script>/g, '');
+  // Datierte Pressemitteilungen behalten ihre damaligen Zahlen (mit Hinweis auf der Seite).
+  const pressetext = datei.includes('/news/') && text.includes('Angaben zu Zahlen, Produkten und Personen entsprechen dem damaligen Stand');
   for (const r of regeln) {
+    if (pressetext && r.name.startsWith('Veraltete')) continue;
     const treffer = text.match(r.muster);
     if (treffer) {
       fehler += treffer.length;

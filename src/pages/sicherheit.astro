@@ -1,0 +1,95 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import Faq from '../components/Faq.astro';
+import Abschluss from '../components/Abschluss.astro';
+import { sicherheit, siegel } from '../data/fakten';
+import { brotkrumen, faqSchema, nurGueltig } from '../lib/schema';
+
+const schwerpunkte = sicherheit.slice(0, 4);
+const weiteres = sicherheit.slice(4);
+const regulierung = [
+  { titel: 'DORA', text: 'Der Digital Operational Resilience Act verpflichtet Finanzunternehmen, die digitale Widerstandsfähigkeit ihrer IKT-Dienstleister zu prüfen. EVANA ist darauf ausgelegt, diese Anforderungen zu erfüllen, und unterstützt Sie mit den nötigen Nachweisen.' },
+  { titel: 'BaFin', text: 'Für Kapitalverwaltungsgesellschaften, Banken und Versicherer gelten aufsichtsrechtliche Vorgaben an Auslagerung und Informationssicherheit. EVANA ist BaFin-ready und wird bereits von regulierten Häusern eingesetzt.' },
+  { titel: 'DSGVO', text: 'Personenbezogene Daten in Mietverträgen und Akten verarbeitet EVANA nach europäischem Datenschutzrecht, mit Auftragsverarbeitung, Rechte- und Löschkonzept.' },
+];
+const faq = [
+  { frage: 'Wo werden meine Dokumente gespeichert?', antwort: 'In der EVANA Secure-Cloud auf Microsoft Azure. Ihre Daten bleiben in der EU.' },
+  { frage: 'Ist EVANA nach ISO 27001 zertifiziert?', antwort: 'Ja. Das Informationssicherheits-Managementsystem der EVANA AG ist nach ISO 27001 zertifiziert und wird von TÜV Saarland auditiert.' },
+  { frage: 'Erfüllt EVANA die Anforderungen von DORA und BaFin?', antwort: 'EVANA ist DORA-konform und BaFin-ready. Die Plattform wird bereits von Kapitalverwaltungsgesellschaften und Versicherungs-Asset-Managern eingesetzt.' },
+  { frage: 'Wie wird die Sicherheit regelmäßig überprüft?', antwort: 'Durch regelmäßige unabhängige Audits und Penetrationstests, jährlich durch TÜV Austria.' },
+  { frage: 'Wer sieht welche Dokumente?', antwort: 'Rollen und Zugriffsrechte lassen sich granular von der Gesellschaft über das Objekt bis zum einzelnen Dokument festlegen. Die Anmeldung kann über Ihre bestehende Identity-Lösung per SSO erfolgen, Benutzer werden per SCIM verwaltet.' },
+  { frage: 'Können wir eigene KI-Modelle nutzen?', antwort: 'Ja. Sie können Claude, Microsoft Copilot oder Ihr eigenes Sprachmodell anbinden und behalten die Kontrolle über Modellwahl und Datenfluss.' },
+];
+---
+<Basis
+  title="Sicherheit: ISO 27001, DORA, BaFin und DSGVO | EVANA"
+  description="EVANA ist ISO 27001 zertifiziert durch TÜV Saarland, DORA-konform, BaFin-ready und DSGVO-konform. Hosting in der EU, jährliche Penetrationstests."
+  schema={nurGueltig([brotkrumen([{ label: 'Sicherheit', href: '/sicherheit/' }]), faqSchema(faq)])}
+>
+  <Seitenkopf
+    titel="Sicherheit für regulierte Bestände"
+    lead="Banken, Versicherer, Kapitalverwaltungsgesellschaften und öffentliche Auftraggeber vertrauen EVANA ihre Dokumente an. Hier finden Sie, worauf sich dieses Vertrauen stützt."
+    pfad={[{ label: 'Produkt', href: '/produkte/' }, { label: 'Sicherheit', href: '/sicherheit/' }]}
+  />
+
+  <section class="sektion" style="padding-top: 0">
+    <div class="container">
+      <ul class="kacheln">
+        {schwerpunkte.map((s) => <li><strong>{s.titel}</strong><p>{s.text}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion auf-dunkel">
+    <div class="container zwei">
+      <div>
+        <p class="eyebrow">Regulierung</p>
+        <h2>Was DORA, BaFin und DSGVO für Ihre Dokumente bedeuten</h2>
+      </div>
+      <dl class="reg">
+        {regulierung.map((r) => <div><dt>{r.titel}</dt><dd>{r.text}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container zwei">
+      <div>
+        <p class="eyebrow">Betrieb</p>
+        <h2>Geprüft, gehostet, abgesichert</h2>
+        <div class="siegel">
+          <img src="/brand/evana-partner-2026-weiss.png" alt={`Siegel und Partnerschaften: ${siegel.join(', ')}`} width="1500" height="275" loading="lazy" />
+        </div>
+      </div>
+      <ul class="liste">
+        {weiteres.map((s) => <li><strong>{s.titel}</strong><p>{s.text}</p></li>)}
+        <li><strong>Modelloffen</strong><p>Claude, Microsoft Copilot oder ein eigenes Modell: Sie entscheiden, welche KI mit Ihren Dokumenten arbeitet.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <Faq eintraege={faq} titel="Fragen zu Sicherheit und Compliance" />
+  <Abschluss titel="Sprechen Sie mit uns über Ihre Anforderungen" text="Ihre IT-Sicherheit oder Compliance braucht Unterlagen für die Prüfung? Wir stellen Ihnen Nachweise und Ansprechpartner für Ihr Auslagerungs- und DORA-Assessment zur Verfügung." />
+</Basis>
+
+<style>
+  .kacheln { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .kacheln li { background: var(--mist); border-radius: var(--radius); padding: 28px 24px; }
+  .kacheln strong { display: block; font-size: 1.5rem; color: var(--petrol-dunkel); margin-bottom: 10px; line-height: 1.15; }
+  .kacheln p { font-size: .97rem; }
+  .zwei { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+  .reg { margin: 0; display: grid; gap: 12px; }
+  .reg div { background: rgba(255,255,255,.06); border-radius: var(--radius); padding: 24px 26px; }
+  .reg dt { font-size: 1.3rem; font-weight: 700; color: var(--orange); margin-bottom: 6px; }
+  .reg dd { margin: 0; }
+  .siegel { margin-top: 28px; background: var(--petrol-dunkel); border-radius: var(--radius); padding: 24px; }
+  .siegel img { width: 100%; height: auto; }
+  .liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .liste li { background: var(--mist); border-radius: 20px; padding: 22px; }
+  .liste strong { display: block; color: var(--headline); margin-bottom: 4px; }
+  .liste p { font-size: .95rem; }
+  @media (max-width: 1000px) { .kacheln { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 860px) { .zwei { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .kacheln, .liste { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,28 @@
+---
+// GEO-Definition: ein kurzer, zitierfähiger Absatz (40 bis 60 Wörter) mit Frage als H2.
+interface Props { frage: string; kern: string; text: string; mist?: boolean }
+const { frage, kern, text, mist = false } = Astro.props;
+---
+<section class:list={['sektion definition', { 'sektion-mist': mist }]}>
+  <div class="container raster">
+    <div class="marke" aria-hidden="true"><span></span></div>
+    <div>
+      <h2>{frage}</h2>
+      <p class="def"><strong>{kern}</strong> {text}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .definition { padding-block: clamp(56px, 8vw, 96px); }
+  .raster { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: clamp(16px, 3vw, 40px); align-items: start; }
+  .marke { padding-top: 10px; }
+  .marke span {
+    display: block; width: 22px; height: 22px; border-radius: 50%; background: var(--orange);
+    box-shadow: 0 0 0 10px rgba(245,158,52,.16);
+  }
+  h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; color: var(--eyebrow); margin-bottom: 14px; }
+  .def { font-size: clamp(1.25rem, 2.2vw, 1.6rem); line-height: 1.45; color: var(--headline); max-width: 54ch; }
+  .def strong { color: var(--petrol-dunkel); }
+  @media (max-width: 640px) { .raster { grid-template-columns: 1fr; } .marke { display: none; } }
+</style>

@@ -1,0 +1,128 @@
+---
+// Cookie-Consent mit Google Consent Mode v2 und Google Tag Manager.
+// Prinzip: Alles ist standardmäßig abgelehnt. Der Tag Manager wird erst geladen, wenn die Person
+// Statistik oder Marketing zustimmt ("Basic Consent Mode"). In GTM steuern die Consent-Signale,
+// welche Tags feuern (z. B. GA4 nur mit analytics_storage, LinkedIn Insight Tag nur mit ad_storage).
+// Die Wahl wird 12 Monate gespeichert und ist über jeden Link mit data-consent-oeffnen änderbar.
+import { tracking } from '../data/fakten';
+const gtmId = import.meta.env.PUBLIC_GTM_ID || tracking.gtmId;
+---
+<script is:inline define:vars={{ gtmId }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  window.gtag = gtag;
+  gtag('consent', 'default', {
+    ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+    analytics_storage: 'denied', functionality_storage: 'granted', security_storage: 'granted',
+    wait_for_update: 500,
+  });
+  window.__evanaConsent = {
+    schluessel: 'evana-consent-v1',
+    lesen() {
+      try {
+        const w = JSON.parse(localStorage.getItem(this.schluessel) || 'null');
+        if (w && Date.now() - w.zeit < 365 * 864e5) return w;
+      } catch (e) {}
+      return null;
+    },
+    anwenden(w) {
+      gtag('consent', 'update', {
+        analytics_storage: w.statistik ? 'granted' : 'denied',
+        ad_storage: w.marketing ? 'granted' : 'denied',
+        ad_user_data: w.marketing ? 'granted' : 'denied',
+        ad_personalization: w.marketing ? 'granted' : 'denied',
+      });
+      if ((w.statistik || w.marketing) && gtmId && !window.__gtmGeladen) {
+        window.__gtmGeladen = true;
+        dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+        const s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(gtmId);
+        document.head.appendChild(s);
+      }
+      dataLayer.push({ event: 'consent_aktualisiert', consent_statistik: !!w.statistik, consent_marketing: !!w.marketing });
+    },
+    speichern(w) {
+      w.zeit = Date.now();
+      try { localStorage.setItem(this.schluessel, JSON.stringify(w)); } catch (e) {}
+      this.anwenden(w);
+    },
+  };
+  const gespeichert = window.__evanaConsent.lesen();
+  if (gespeichert) window.__evanaConsent.anwenden(gespeichert);
+</script>
+
+<div class="consent" id="consent" role="dialog" aria-modal="false" aria-labelledby="consent-titel" hidden>
+  <div class="karte">
+    <h2 id="consent-titel">Ihre Privatsphäre</h2>
+    <p>
+      Wir nutzen Cookies und ähnliche Technologien, um zu verstehen, wie unsere Website genutzt wird, und um unsere Kampagnen
+      zu messen. Notwendige Funktionen sind immer aktiv. Alles andere setzen wir nur mit Ihrer Einwilligung ein, die Sie jederzeit
+      widerrufen können. Mehr dazu in der <a href="/datenschutz/">Datenschutzerklärung</a>.
+    </p>
+    <form class="optionen" hidden>
+      <label><input type="checkbox" checked disabled /> <span><strong>Notwendig</strong> Speichert Ihre Auswahl. Immer aktiv.</span></label>
+      <label><input type="checkbox" name="statistik" /> <span><strong>Statistik</strong> Anonyme Auswertung der Nutzung, etwa mit Google Analytics.</span></label>
+      <label><input type="checkbox" name="marketing" /> <span><strong>Marketing</strong> Messung von Kampagnen, etwa mit dem LinkedIn Insight Tag.</span></label>
+    </form>
+    <div class="knoepfe">
+      <button type="button" class="btn btn-sekundaer" data-aktion="ablehnen">Nur notwendige</button>
+      <button type="button" class="btn btn-sekundaer" data-aktion="einstellungen">Einstellungen</button>
+      <button type="button" class="btn btn-sekundaer" data-aktion="speichern" hidden>Auswahl speichern</button>
+      <button type="button" class="btn btn-primaer" data-aktion="alle">Alle akzeptieren</button>
+    </div>
+    <p class="klein"><a href="/impressum/">Impressum</a></p>
+  </div>
+</div>
+
+<script>
+  const c = (window as any).__evanaConsent;
+  const box = document.getElementById('consent') as HTMLElement;
+  const form = box.querySelector('form') as HTMLFormElement;
+  const btn = (a: string) => box.querySelector(`[data-aktion="${a}"]`) as HTMLButtonElement;
+
+  const oeffnen = (mitEinstellungen = false) => {
+    const w = c.lesen();
+    (form.elements.namedItem('statistik') as HTMLInputElement).checked = !!w?.statistik;
+    (form.elements.namedItem('marketing') as HTMLInputElement).checked = !!w?.marketing;
+    form.hidden = !mitEinstellungen;
+    btn('einstellungen').hidden = mitEinstellungen;
+    btn('speichern').hidden = !mitEinstellungen;
+    box.hidden = false;
+  };
+  const schliessen = (w: { statistik: boolean; marketing: boolean }) => { c.speichern(w); box.hidden = true; };
+
+  btn('alle').addEventListener('click', () => schliessen({ statistik: true, marketing: true }));
+  btn('ablehnen').addEventListener('click', () => schliessen({ statistik: false, marketing: false }));
+  btn('einstellungen').addEventListener('click', () => oeffnen(true));
+  btn('speichern').addEventListener('click', () => schliessen({
+    statistik: (form.elements.namedItem('statistik') as HTMLInputElement).checked,
+    marketing: (form.elements.namedItem('marketing') as HTMLInputElement).checked,
+  }));
+  document.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest('[data-consent-oeffnen]');
+    if (t) { e.preventDefault(); oeffnen(true); }
+  });
+  if (!c.lesen()) oeffnen(false);
+</script>
+
+<style>
+  .consent { position: fixed; inset: auto 16px 16px 16px; z-index: 100; display: flex; justify-content: flex-end; pointer-events: none; }
+  .consent[hidden] { display: none; }
+  .karte {
+    pointer-events: auto; width: min(520px, 100%); background: var(--weiss); border-radius: var(--radius);
+    box-shadow: 0 30px 80px -20px rgba(0, 67, 79, .45); padding: 26px 26px 18px; max-height: calc(100vh - 32px); overflow-y: auto;
+  }
+  h2 { font-size: 1.25rem; margin-bottom: 8px; }
+  p { font-size: .93rem; line-height: 1.5; }
+  .optionen { display: grid; gap: 8px; margin-top: 16px; }
+  .optionen[hidden] { display: none; }
+  .optionen label { display: flex; gap: 12px; align-items: flex-start; background: var(--mist); border-radius: 14px; padding: 12px 14px; font-size: .9rem; cursor: pointer; }
+  .optionen input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--petrol); flex: none; }
+  .optionen strong { display: block; color: var(--headline); }
+  .knoepfe { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .knoepfe .btn { min-height: 44px; padding: 10px 16px; font-size: .82rem; flex: 1 1 auto; }
+  .knoepfe [hidden] { display: none; }
+  .klein { margin-top: 12px; font-size: .82rem; }
+  .klein a { color: var(--hilfsgrau); }
+</style>

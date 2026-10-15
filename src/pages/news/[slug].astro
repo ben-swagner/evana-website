@@ -1,0 +1,56 @@
+---
+import { getCollection, render } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Prosa from '../../components/Prosa.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import { artikelSchema, brotkrumen } from '../../lib/schema';
+import { datumLang } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const alle = (await getCollection('news')).sort((a, b) => +b.data.datum - +a.data.datum);
+  return alle.map((n) => ({ params: { slug: n.id }, props: { n, alle } }));
+}
+const { n, alle } = Astro.props;
+const d = n.data;
+const { Content } = await render(n);
+const url = `/news/${n.id}/`;
+const weitere = alle.filter((x) => x.id !== n.id).slice(0, 3);
+const datiert = d.datum < new Date('2026-01-01');
+---
+<Basis
+  title={d.seoTitle ?? `${d.titel} | EVANA`}
+  description={d.seoDescription ?? d.kurz}
+  schema={[
+    brotkrumen([{ label: 'News und Presse', href: '/news/' }, { label: d.titel, href: url }]),
+    { ...artikelSchema({ titel: d.titel, beschreibung: d.kurz, datum: d.datum, autor: 'EVANA Redaktion', url }), '@type': 'NewsArticle' },
+  ]}
+>
+  <Seitenkopf titel={d.titel} lead={d.kurz} pfad={[{ label: 'News und Presse', href: '/news/' }]} demo={false} schmal>
+    <p class="meta">{d.kategorie} · {datumLang(d.datum)}</p>
+  </Seitenkopf>
+  <section class="sektion" style="padding-top: 0">
+    <div class="container">
+      {datiert && d.kategorie === 'Pressemitteilung' && (
+        <p class="hinweis">Pressemitteilung vom {datumLang(d.datum)}. Angaben zu Zahlen, Produkten und Personen entsprechen dem damaligen Stand.</p>
+      )}
+      <Prosa><Content /></Prosa>
+    </div>
+  </section>
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <h2 class="t">Weitere Meldungen</h2>
+      <ul class="weitere">{weitere.map((x) => <li><a href={`/news/${x.id}/`}><span>{datumLang(x.data.datum)}</span><strong>{x.data.titel}</strong></a></li>)}</ul>
+    </div>
+  </section>
+  <Abschluss />
+</Basis>
+
+<style>
+  .meta { margin-top: 18px; font-weight: 700; color: var(--petrol); }
+  .hinweis { max-width: 72ch; background: var(--tint-orange); color: var(--tint-orange-text); border-radius: 16px; padding: 14px 18px; font-size: .92rem; margin-bottom: 32px; }
+  .t { font-size: 1.6rem; margin-bottom: 20px; }
+  .weitere { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .weitere a { display: grid; gap: 6px; padding: 22px 24px; border-radius: 20px; background: var(--weiss); text-decoration: none; color: var(--headline); height: 100%; }
+  .weitere span { font-size: .85rem; font-weight: 700; color: var(--petrol); }
+</style>

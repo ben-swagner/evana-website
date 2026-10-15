@@ -1,0 +1,30 @@
+---
+// Typografie für Fließtext aus Markdown (Referenzen, News, Wissen, Rechtstexte).
+interface Props { breit?: boolean }
+const { breit = false } = Astro.props;
+---
+<div class:list={['prosa', { breit }]}><slot /></div>
+
+<style>
+  .prosa { max-width: 72ch; font-size: 1.08rem; line-height: 1.7; }
+  .prosa.breit { max-width: 86ch; }
+  .prosa :global(h2) { font-size: clamp(1.5rem, 2.4vw, 1.9rem); margin: 2.2em 0 .6em; line-height: 1.2; }
+  .prosa :global(h3) { font-size: 1.25rem; margin: 1.8em 0 .5em; }
+  .prosa :global(h4) { font-size: 1.08rem; margin: 1.5em 0 .4em; }
+  .prosa :global(> :first-child) { margin-top: 0; }
+  .prosa :global(p) { margin: 0 0 1.05em; }
+  .prosa :global(ul), .prosa :global(ol) { margin: 0 0 1.2em; padding-left: 1.3em; display: grid; gap: .45em; }
+  .prosa :global(li::marker) { color: var(--orange); }
+  .prosa :global(strong) { color: var(--headline); }
+  .prosa :global(blockquote) {
+    margin: 1.8em 0; padding: 26px 30px; border-radius: var(--radius);
+    background: var(--petrol-dunkel); color: #e3eef0; font-size: 1.15rem; line-height: 1.55;
+  }
+  .prosa :global(blockquote p:last-child) { margin-bottom: 0; }
+  .prosa :global(table) { width: 100%; border-collapse: separate; border-spacing: 0 6px; margin: 1.2em 0 1.6em; font-size: .98rem; }
+  .prosa :global(th) { text-align: left; color: var(--hilfsgrau); font-weight: 600; padding: 6px 14px; }
+  .prosa :global(td) { background: var(--mist); padding: 12px 14px; }
+  .prosa :global(td:first-child) { border-radius: 12px 0 0 12px; }
+  .prosa :global(td:last-child) { border-radius: 0 12px 12px 0; }
+  .prosa :global(img) { border-radius: var(--radius); margin: 1.5em 0; }
+</style>

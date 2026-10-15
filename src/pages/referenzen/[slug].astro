@@ -1,0 +1,103 @@
+---
+import { getCollection, render } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Prosa from '../../components/Prosa.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import { anwendungsfaelle } from '../../data/anwendungsfaelle';
+import { produkte } from '../../data/fakten';
+import { artikelSchema, brotkrumen } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const alle = await getCollection('referenzen');
+  return alle.map((r) => ({ params: { slug: r.id }, props: { ref: r, alle } }));
+}
+const { ref, alle } = Astro.props;
+const d = ref.data;
+const { Content } = await render(ref);
+const faelle = anwendungsfaelle.filter((a) => d.anwendungsfaelle.includes(a.slug));
+const produktLinks = d.produkte.map((n) => ({ name: n, p: produkte.find((p) => p.name === n) }));
+const weitere = alle.filter((r) => r.id !== ref.id && r.data.branche !== 'Technologie').slice(0, 3);
+const url = `/referenzen/${ref.id}/`;
+---
+<Basis
+  title={d.seoTitle ?? `${d.titel} | EVANA`}
+  description={d.seoDescription ?? d.kurz}
+  schema={[
+    brotkrumen([{ label: 'Referenzen', href: '/referenzen/' }, { label: d.anonym ? d.branche : d.kunde, href: url }]),
+    artikelSchema({ titel: d.titel, beschreibung: d.kurz, datum: d.datum, autor: 'EVANA Redaktion', url }),
+  ]}
+>
+  <Seitenkopf titel={d.titel} lead={d.kurz} pfad={[{ label: 'Referenzen', href: '/referenzen/' }]} schmal>
+    <p class="kunde">{d.anonym ? `${d.branche}, anonymisiert` : `${d.kunde} · ${d.branche}`}</p>
+  </Seitenkopf>
+
+  {d.kennzahlen.length > 0 && (
+    <section class="kennzahlen-band">
+      <div class="container">
+        <dl>{d.kennzahlen.map((k) => <div><dt>{k.label}</dt><dd>{k.wert}</dd></div>)}</dl>
+      </div>
+    </section>
+  )}
+
+  <section class="sektion">
+    <div class="container raster">
+      <Prosa><Content /></Prosa>
+      <aside>
+        {d.zitat && (
+          <figure class="zitat">
+            <blockquote>{d.zitat.text}</blockquote>
+            <figcaption><strong>{d.zitat.person}</strong><span>{d.zitat.rolle}</span></figcaption>
+          </figure>
+        )}
+        {produktLinks.length > 0 && (
+          <div class="box">
+            <h2>Eingesetzt</h2>
+            <ul>{produktLinks.map(({ name, p }) => <li>{p ? <a href={`/produkte/${p.slug}/`}>{name}</a> : name}</li>)}</ul>
+          </div>
+        )}
+        {faelle.length > 0 && (
+          <div class="box">
+            <h2>Anwendungsfall</h2>
+            <ul>{faelle.map((a) => <li><a href={`/anwendungsfaelle/${a.slug}/`}>{a.tab}</a></li>)}</ul>
+          </div>
+        )}
+      </aside>
+    </div>
+  </section>
+
+  {weitere.length > 0 && (
+    <section class="sektion sektion-mist">
+      <div class="container">
+        <h2 class="weitere-titel">Weitere Referenzen</h2>
+        <ul class="weitere">
+          {weitere.map((r) => <li><a href={`/referenzen/${r.id}/`}><span>{r.data.anonym ? r.data.branche : r.data.kunde}</span><strong>{r.data.titel}</strong></a></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+  <Abschluss />
+</Basis>
+
+<style>
+  .kunde { margin-top: 18px; font-weight: 700; color: var(--petrol); }
+  .kennzahlen-band dl { display: flex; flex-wrap: wrap; gap: 12px; margin: 0; }
+  .kennzahlen-band dl > div { background: var(--petrol-dunkel); color: #d6e6e9; border-radius: var(--radius); padding: 22px 28px; min-width: 220px; display: flex; flex-direction: column-reverse; gap: 4px; }
+  .kennzahlen-band dd { margin: 0; font-size: 2rem; font-weight: 700; color: var(--orange); line-height: 1.1; }
+  .kennzahlen-band dt { font-size: .95rem; }
+  .raster { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: clamp(32px, 5vw, 72px); align-items: start; }
+  aside { display: grid; gap: 14px; position: sticky; top: 100px; }
+  .zitat { margin: 0; background: var(--mist); border-radius: var(--radius); padding: 26px; }
+  .zitat blockquote { margin: 0; font-size: 1.05rem; line-height: 1.55; color: var(--headline); }
+  .zitat blockquote::before { content: '„'; display: block; font-size: 3rem; line-height: .6; color: var(--orange); font-weight: 700; margin-bottom: 8px; }
+  .zitat figcaption { margin-top: 16px; display: grid; font-size: .9rem; }
+  .zitat strong { color: var(--headline); }
+  .box { background: var(--mist); border-radius: var(--radius); padding: 22px 26px; }
+  .box h2 { font-size: .95rem; color: var(--hilfsgrau); margin-bottom: 8px; }
+  .box ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-weight: 600; }
+  .weitere-titel { font-size: 1.6rem; margin-bottom: 20px; }
+  .weitere { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .weitere a { display: grid; gap: 6px; padding: 22px 24px; border-radius: 20px; background: var(--weiss); text-decoration: none; color: var(--headline); height: 100%; }
+  .weitere span { font-size: .85rem; font-weight: 700; color: var(--petrol); }
+  @media (max-width: 900px) { .raster { grid-template-columns: 1fr; } aside { position: static; } }
+</style>

@@ -1,0 +1,406 @@
+---
+// Landingpage für Filialisten und Franchise-Systeme. Einzige Seite mit Preisangabe (siehe CLAUDE.md).
+// Quelle: docs/migration/roi-sprint.md. Ohne Hauptnavigations-Eintrag.
+import { getEntry } from 'astro:content';
+import Basis from '../layouts/Basis.astro';
+import DemoAnsicht from '../components/DemoAnsicht.astro';
+import Faq from '../components/Faq.astro';
+import type { Demo } from '../data/anwendungsfaelle';
+import { cta, firma, zahlen } from '../data/fakten';
+import { brotkrumen, faqSchema, nurGueltig } from '../lib/schema';
+
+const preis = 990;
+const calendly = 'https://calendly.com/d/dtkc-wwd-thk/evana-vorstellung';
+const mailUnterlagen = `mailto:${firma.email}?subject=${encodeURIComponent('Unterlagen zum ROI-Sprint')}`;
+
+const mann = await getEntry('referenzen', 'mann-immobilien');
+const zitat = mann?.data.zitat;
+
+const siegel = ['ISO 27001 (TÜV Saarland)', 'DSGVO-konform', 'BaFin-ready', 'DORA-konform'];
+
+const szene: Demo = {
+  art: 'antwort',
+  frage: 'Welche Standortmietverträge haben eine Indexklausel ohne Kappungsgrenze?',
+  antwort: [
+    'Filiale Kassel, Königsstraße: Indexmiete nach VPI, keine Kappungsgrenze',
+    'Filiale Erfurt, Anger: Anpassung bei 5 % Indexänderung, keine Kappungsgrenze',
+    'Filiale Halle, Leipziger Straße: Staffel bis 2027, danach Indexmiete ohne Kappung',
+  ],
+  fundstellen: [
+    { datei: 'MV_Kassel_Koenigsstr.pdf', stelle: '§ 4 Abs. 2' },
+    { datei: 'MV_Erfurt_Anger.pdf', stelle: 'Nachtrag 2, § 1' },
+    { datei: 'MV_Halle_Leipziger.pdf', stelle: '§ 5' },
+  ],
+};
+
+const aufgaben = [
+  {
+    titel: 'Mietverträge: alle Konditionen mit Fundstelle',
+    text: 'EVANA liest Nettokaltmiete, Nebenkosten, Indexklausel, Laufzeiten, Kündigungsfristen, Verlängerungsoptionen und Vermieterdaten automatisch aus, jeweils mit Verweis auf die Stelle im Originalvertrag.',
+    zusatz: 'EVA beantwortet auch Fragen, deren Antwort in keiner Tabelle steht.',
+    dokumente: ['Gewerbemietverträge', 'Nachträge'],
+  },
+  {
+    titel: 'Genehmigungen: Fristen im Blick, bevor sie ablaufen',
+    text: 'EVANA erkennt Baugenehmigung, Nutzungsänderung, Betriebsgenehmigung, Energieausweis und Brandschutznachweis und meldet sich vor Ablauf. Eine abgelaufene Genehmigung kostet Bußgeld, im schlechten Fall die Schließung des Standorts.',
+    zusatz: `${zahlen.erkennungsrate} Erkennungsrate, trainiert auf Immobiliendokumenten seit ${firma.gegruendet}.`,
+    dokumente: ['Betriebsgenehmigungen', 'Brandschutznachweise', 'Energieausweise'],
+  },
+  {
+    titel: 'Revision: Unterlagen vollständig, bevor die Prüfung kommt',
+    text: 'Wartungsprotokolle, Prüfberichte, Versicherungspolicen und TÜV-Nachweise landen je Standort in einem Vollständigkeitsreport. Fehlende Dokumente sind markiert, bevor die Prüfung beginnt.',
+    dokumente: ['Wartungsprotokolle', 'Prüfberichte', 'Versicherungspolicen'],
+  },
+];
+
+const leistungen = [
+  '14 Tage Laufzeit mit vollem Funktionsumfang',
+  'Persönlicher Onboarding-Support, ohne IT-Projekt und ohne Schulungsaufwand',
+  'Strukturierte Auswertung von Mietkonditionen, Laufzeiten, Vermietern und Fristen',
+  'ROI-Messreport am Ende: was EVANA gefunden hat und was gefehlt hat',
+];
+
+const schritte = [
+  { titel: 'Starten', text: 'Ihr Zugang steht am selben Tag. In einem Kickoff von 20 Minuten legen wir gemeinsam fest, welche Unterlagen in den Sprint gehen und woran Sie den Erfolg messen.' },
+  { titel: 'Testen', text: 'EVANA arbeitet 14 Tage lang mit Ihren echten Unterlagen. Verträge, Nachträge und Nachweise ziehen Sie per Drag-and-drop hinein, auch als alte Scans. EVA beantwortet ab dem ersten Dokument Ihre Fragen.' },
+  { titel: 'Entscheiden', text: 'Im Abschlussgespräch gehen wir gemeinsam durch, was EVANA gefunden hat und was in Ihren Unterlagen gefehlt hat. Danach entscheiden Sie. Wenn Sie nichts weiter veranlassen, läuft der Sprint einfach aus.' },
+];
+
+const faq = [
+  {
+    frage: 'Wir haben SharePoint, Teams oder ein DMS. Wozu brauchen wir EVANA?',
+    antwort: 'EVANA liest die Inhalte Ihrer Dokumente und arbeitet parallel zu Ihrer bestehenden Ablage. Welche Verträge in 60 Tagen auslaufen und zu welchen Konditionen sie sich verlängern, beantwortet Ihnen EVA direkt aus den Verträgen. Ersetzen müssen Sie dafür nichts.',
+  },
+  {
+    frage: 'Wie zuverlässig liest die KI alte Scans, und was passiert bei einem Fehler?',
+    antwort: `Die Erkennungsrate liegt bei ${zahlen.erkennungsrate}, trainiert auf Immobiliendokumenten seit ${firma.gegruendet}. Jeder ausgelesene Wert ist mit der Fundstelle im Originaldokument verbunden. Sie sehen zu jeder Zahl ihre Herkunft und können sie im Zweifel in Sekunden prüfen und korrigieren.`,
+  },
+  {
+    frage: 'Muss die IT eingebunden werden?',
+    antwort: 'Für den Sprint ist das nicht nötig. EVANA ist eine Cloud-Lösung ohne Server, Installation oder Schnittstelle. Sie melden sich im Browser an und laden Dokumente hoch. Erst wenn Sie später Systeme anbinden wollen, kommt die IT ins Spiel.',
+  },
+  {
+    frage: 'Wie viel Aufwand haben wir in den 14 Tagen?',
+    antwort: 'Sie stellen Dokumente zusammen und laden sie hoch. Planen Sie dafür ein bis zwei Stunden ein, verteilt über die zwei Wochen, dazu Kickoff und Abschlussgespräch. Onboarding-Support ist enthalten.',
+  },
+  {
+    frage: 'Welche Dokumente brauchen Sie von uns?',
+    antwort: 'Gewerbemietverträge samt Nachträgen, dazu Betriebsgenehmigungen, Energieausweise und Brandschutznachweise, soweit vorhanden. PDF genügt, auch eingescannte Altverträge. Fehlende Unterlagen sind kein Problem, denn Lücken sichtbar zu machen ist Teil des Ergebnisses.',
+  },
+  {
+    frage: 'Wir sind ein Franchise-System. Müssen unsere Partner ihre Konditionen offenlegen?',
+    antwort: 'Das müssen sie nicht. Franchisenehmer laden ihre Verträge für sich selbst hoch und haben sofort einen eigenen Nutzen: Fristenwarnung, Vollständigkeit und Zeitersparnis. Der Nehmer bestimmt selbst, was die Zentrale sieht. So entsteht Transparenz freiwillig und ohne Anweisung.',
+  },
+  {
+    frage: 'Was passiert mit unseren Daten, wenn wir nach dem Sprint nicht weitermachen?',
+    antwort: 'Ihre Dokumente und die daraus gewonnenen Daten werden auf Ihren Wunsch gelöscht. EVANA ist nach ISO 27001 zertifiziert und DSGVO-konform. Den Auftragsverarbeitungsvertrag erhalten Sie vor dem Start.',
+  },
+  {
+    frage: 'Und wenn wir keinen ROI sehen?',
+    antwort: `Dann erstattet EVANA die ${preis} €. Woran der Erfolg gemessen wird, legen wir beim Kickoff gemeinsam fest, damit am Ende beide Seiten über dieselbe Messlatte sprechen.`,
+  },
+];
+
+const pfad = [{ label: 'ROI-Sprint', href: '/roi-sprint/' }];
+const angebot = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'EVANA ROI-Sprint',
+  description: '14 Tage EVANA mit Ihren eigenen Standortunterlagen, mit Onboarding-Support und ROI-Messreport.',
+  provider: { '@id': `${firma.url}/#organisation` },
+  offers: { '@type': 'Offer', price: String(preis), priceCurrency: 'EUR', url: `${firma.url}/roi-sprint/` },
+};
+const schema = nurGueltig<Record<string, unknown>>([brotkrumen(pfad), angebot, faqSchema(faq)]);
+
+const euro = (n: number) => `${n.toLocaleString('de-DE')} €`;
+---
+<Basis
+  title="ROI-Sprint: Standortdokumente in 14 Tagen prüfen | EVANA"
+  description="Mietverträge, Genehmigungen und Nachweise Ihrer Standorte automatisch auswerten. Der ROI-Sprint: 14 Tage mit Ihren echten Unterlagen, 990 € Festpreis."
+  schema={schema}
+>
+  <section class="kopfbereich">
+    <div class="container kopfraster">
+      <div>
+        <nav class="pfad" aria-label="Brotkrumen"><a href="/">Start</a> <span aria-hidden="true">/</span> <a href="/loesungen/filialnetze-franchise/">Filialnetze und Franchise</a></nav>
+        <h1>EVANA kennt jede Frist Ihrer Standorte, bevor sie zum Problem wird</h1>
+        <p class="lead">EVANA liest und klassifiziert Ihre Standortdokumente automatisch. Unsere KI-Assistentin EVA beantwortet Ihre Fragen zu jedem Standort in {zahlen.evaAntwortzeit}, mit Fundstelle im Originalvertrag. Im ROI-Sprint sehen Sie das in 14 Tagen an Ihren eigenen Verträgen.</p>
+        <p class="preiszeile"><strong>{preis} € Festpreis</strong>, kein Abo, keine Kündigungsfrist.</p>
+        <div class="aktionen">
+          <a href="#buchen" class="btn btn-primaer">ROI-Sprint buchen</a>
+          <a href="#rechner" class="btn btn-sekundaer">Aufwand berechnen</a>
+        </div>
+        <ul class="siegel" aria-label="Sicherheit und Zertifizierungen">
+          {siegel.map((s) => <li>{s}</li>)}
+        </ul>
+      </div>
+      <div class="kopfszene">
+        <DemoAnsicht demo={szene} />
+        <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion sektion-mist" id="rechner">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Rechner</p>
+        <h2>Was Sie die Standortverwaltung im Jahr kostet</h2>
+        <p class="lead">Suchen, prüfen, nachfragen und Fristen im Blick behalten: Diese Arbeit taucht in keiner Kostenstelle auf und kostet trotzdem jeden Monat Stunden. Hier sehen Sie, wie viel Aufwand heute in der Verwaltung Ihrer Standorte steckt.</p>
+      </div>
+      <div class="rechner" data-rechner data-preis={preis}>
+        <form class="eingaben" onsubmit="return false">
+          <label class="regler">
+            <span class="frage">Wie viele Standorte betreuen Sie?</span>
+            <span class="wert"><output data-aus="standorte">50</output> Standorte</span>
+            <input type="range" name="standorte" min="5" max="500" step="5" value="50" />
+          </label>
+          <details>
+            <summary>Annahmen anpassen</summary>
+            <div class="annahmen">
+              <label>
+                <span>Stunden Verwaltung je Standort und Monat</span>
+                <input type="number" name="stunden" min="0.5" max="20" step="0.5" value="5" inputmode="decimal" />
+              </label>
+              <label>
+                <span>Interner Stundensatz in Euro</span>
+                <input type="number" name="satz" min="20" max="400" step="5" value="25" inputmode="decimal" />
+              </label>
+            </div>
+          </details>
+        </form>
+        <dl class="ergebnisse" aria-live="polite">
+          <div class="haupt">
+            <dt>Aufwand pro Jahr über alle Standorte</dt>
+            <dd data-aus="kosten">{euro(75000)}</dd>
+          </div>
+          <div>
+            <dt>Stunden, die dafür jedes Jahr aufgewendet werden</dt>
+            <dd data-aus="jahresstunden">3.000</dd>
+          </div>
+          <div>
+            <dt>Tage, bis sich der Sprint amortisiert</dt>
+            <dd data-aus="tage">5</dd>
+          </div>
+        </dl>
+      </div>
+      <p class="rechner-hinweis">Nicht eingerechnet sind die Kosten übersehener Indexklauseln, stillschweigender Verlängerungen oder abgelaufener Genehmigungen. Im ROI-Sprint prüfen wir an Ihren echten Standorten nach, wie viel davon EVANA übernimmt.</p>
+      <div class="aktionen"><a href="#buchen" class="btn btn-primaer">ROI-Sprint buchen</a></div>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Was EVANA übernimmt</p>
+        <h2>Was EVANA aus Ihren Standortdokumenten herausholt</h2>
+        <p class="lead">Mietverträge, Genehmigungen und Prüfunterlagen machen Standort-Compliance heute zur Handarbeit. Diese drei Aufgaben übernimmt EVANA ab dem ersten hochgeladenen Dokument.</p>
+      </div>
+      <ul class="aufgaben">
+        {aufgaben.map((a) => (
+          <li>
+            <h3>{a.titel}</h3>
+            <p>{a.text}</p>
+            {a.zusatz && <p class="zusatz">{a.zusatz}</p>}
+            <ul class="doktypen">{a.dokumente.map((d) => <li>{d}</li>)}</ul>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion sektion-mist">
+    <div class="container angebot">
+      <div>
+        <p class="eyebrow">Das Angebot</p>
+        <h2>Testen Sie es an Ihren eigenen Verträgen: der ROI-Sprint</h2>
+        <p class="lead">Zwei Wochen lang arbeitet EVANA mit Ihren echten Standortunterlagen, mit Onboarding-Support und einem Messreport am Ende. Sie sehen, welche Arbeit EVANA in Ihrem Alltag übernimmt.</p>
+        <ol class="schritte">
+          {schritte.map((s, i) => (
+            <li>
+              <span class="nr" aria-hidden="true">{i + 1}</span>
+              <div><h3>{s.titel}</h3><p>{s.text}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="preiskarte">
+        <p class="preis"><span>{preis} €</span> Festpreis, einmalig</p>
+        <p class="preis-zusatz">Kein Abo, keine Folgekosten, keine Kündigungsfrist.</p>
+        <ul class="leistungen">
+          {leistungen.map((l) => <li>{l}</li>)}
+        </ul>
+        <div class="garantie">
+          <strong>Geld-zurück-Zusage</strong>
+          <p>Woran der Erfolg gemessen wird, legen wir beim Kickoff gemeinsam fest. Lässt sich daran kein ROI nachweisen, erstattet EVANA die {preis} €.</p>
+        </div>
+        <a href="#buchen" class="btn btn-primaer">ROI-Sprint buchen</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion" id="buchen">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Buchen</p>
+        <h2>Starten Sie diese Woche mit EVANA</h2>
+        <p class="lead">Vor dem Start steht ein kurzes Gespräch. Sie können direkt einen Termin buchen oder sich vorher alle Unterlagen schicken lassen.</p>
+      </div>
+      <div class="buchung">
+        <div class="wege">
+          <div class="weg haupt">
+            <h3>Termin wählen</h3>
+            <p>In 15 Minuten klären wir, ob EVANA zu Ihrer Standortstruktur passt, welche Unterlagen sich für den Sprint eignen und was in den 14 Tagen konkret passiert.</p>
+            <a href={calendly} class="btn btn-primaer" target="_blank" rel="noopener">Termin buchen</a>
+            <p class="klein">Die Terminbuchung öffnet sich bei unserem Dienstleister Calendly.</p>
+          </div>
+          <div class="weg">
+            <h3>Sie möchten erst intern abstimmen</h3>
+            <p>Wir schicken Ihnen die Unterlagen zum Weitergeben: Leistungsumfang, Ablauf der 14 Tage, Datenschutz und Preise für den Rollout. Sie erhalten innerhalb eines Werktags eine Antwort.</p>
+            <a href={mailUnterlagen} class="btn btn-sekundaer">Unterlagen anfordern</a>
+            <p class="klein">Oder direkt an <a href={`mailto:${firma.email}`}>{firma.email}</a></p>
+          </div>
+        </div>
+        {zitat && (
+          <figure class="zitat">
+            <blockquote><p>„{zitat.text}“</p></blockquote>
+            <figcaption><strong>{zitat.person}</strong><span>{zitat.rolle}</span></figcaption>
+          </figure>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <Faq eintraege={faq} titel="Was uns vor dem Start meistens gefragt wird" />
+
+  <section class="sektion schluss">
+    <div class="container">
+      <div class="schlusskarte">
+        <h2>Sie können EVANA auch zuerst in einer Demo kennenlernen</h2>
+        <p>In der Demo zeigen wir Ihnen die Plattform an Beispielen und beantworten Ihre Fragen.</p>
+        <div class="aktionen">
+          <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+          <a href="/loesungen/filialnetze-franchise/" class="btn btn-sekundaer">EVANA für Filialnetze</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<script>
+  const fmt = (n: number, d = 0) => n.toLocaleString('de-DE', { maximumFractionDigits: d });
+  document.querySelectorAll<HTMLElement>('[data-rechner]').forEach((el) => {
+    const preis = Number(el.dataset.preis) || 990;
+    const feld = (name: string) => el.querySelector<HTMLInputElement>(`[name="${name}"]`)!;
+    const aus = (name: string) => el.querySelector<HTMLElement>(`[data-aus="${name}"]`)!;
+    const zahl = (input: HTMLInputElement) => {
+      const v = parseFloat(input.value.replace(',', '.'));
+      const min = parseFloat(input.min);
+      const max = parseFloat(input.max);
+      if (!Number.isFinite(v)) return min;
+      return Math.min(max, Math.max(min, v));
+    };
+    const rechne = () => {
+      const standorte = zahl(feld('standorte'));
+      const stunden = zahl(feld('stunden'));
+      const satz = zahl(feld('satz'));
+      const jahresstunden = standorte * stunden * 12;
+      const kosten = jahresstunden * satz;
+      const tage = kosten > 0 ? Math.max(1, Math.round(preis / (kosten / 365))) : 0;
+      aus('standorte').textContent = fmt(standorte);
+      aus('jahresstunden').textContent = fmt(jahresstunden, 1);
+      aus('kosten').textContent = `${fmt(Math.round(kosten))} €`;
+      aus('tage').textContent = tage ? fmt(tage) : 'nicht berechenbar';
+    };
+    el.addEventListener('input', rechne);
+    rechne();
+  });
+</script>
+
+<style>
+  .kopfbereich { padding-block: clamp(40px, 6vw, 80px) clamp(56px, 7vw, 96px); }
+  .kopfraster { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .pfad { font-size: .9rem; color: var(--hilfsgrau); margin-bottom: 28px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .pfad a { color: var(--hilfsgrau); }
+  h1 { font-size: clamp(2rem, 4.2vw, 3.3rem); max-width: 20ch; }
+  .kopfbereich .lead { margin-top: 22px; }
+  .preiszeile { margin-top: 18px; font-size: 1.1rem; color: var(--headline); }
+  .preiszeile strong { color: var(--tint-orange-text); background: var(--tint-orange); border-radius: 8px; padding: 2px 8px; }
+  .aktionen { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+  .siegel { list-style: none; margin: 28px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .siegel li { font-size: .8rem; font-weight: 700; color: var(--petrol-dunkel); background: var(--mist); border-radius: 999px; padding: 5px 12px; }
+  .kopfszene { background: var(--mist); border-radius: var(--radius-gross); padding: clamp(20px, 3vw, 36px); }
+  .kopfszene :global(.szene) { grid-template-columns: 1fr; }
+  .kopfszene :global(.pfeil) { width: 4px; height: 32px; margin: 6px auto; background: linear-gradient(180deg, var(--petrol), var(--magenta) 55%, var(--orange)); }
+  .kopfszene :global(.pfeil::after) { right: auto; left: 50%; top: auto; bottom: -6px; margin: 0 0 0 -7px; }
+
+  .rechner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+  .eingaben, .ergebnisse { background: var(--weiss); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); box-shadow: var(--schatten-dokument); margin: 0; }
+  .regler { display: grid; gap: 10px; }
+  .regler .frage { font-weight: 700; color: var(--headline); font-size: 1.1rem; }
+  .regler .wert { font-size: 2rem; font-weight: 700; color: var(--petrol); line-height: 1.1; }
+  input[type='range'] { width: 100%; accent-color: var(--orange); height: 28px; }
+  details { margin-top: 22px; }
+  summary { cursor: pointer; font-weight: 600; color: var(--petrol); }
+  .annahmen { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .annahmen label { display: grid; gap: 6px; font-size: .9rem; color: var(--hilfsgrau); }
+  .annahmen input {
+    font: 600 1.05rem var(--font); color: var(--headline); width: 100%;
+    background: var(--mist); border: 0; border-radius: var(--radius-klein); padding: 12px 14px;
+  }
+  .ergebnisse { display: grid; gap: 12px; align-content: start; background: var(--petrol-dunkel); color: #d6e6e9; }
+  .ergebnisse div { display: grid; gap: 4px; }
+  .ergebnisse dt { font-size: .92rem; color: #9fc3ca; }
+  .ergebnisse dd { margin: 0; font-size: 1.6rem; font-weight: 700; color: var(--weiss); line-height: 1.15; }
+  .ergebnisse .haupt dd { font-size: clamp(2.2rem, 4vw, 3rem); color: var(--orange); }
+  .rechner-hinweis { margin-top: 20px; max-width: 75ch; font-size: .95rem; color: var(--hilfsgrau); }
+
+  .aufgaben { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .aufgaben > li { display: flex; flex-direction: column; gap: 12px; padding: 28px; background: var(--mist); border-radius: var(--radius); }
+  .aufgaben h3 { font-size: 1.2rem; }
+  .zusatz { font-weight: 600; color: var(--petrol-dunkel); }
+  .doktypen { list-style: none; margin: auto 0 0; padding: 6px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .doktypen li { font-size: .8rem; font-weight: 600; color: var(--petrol-dunkel); background: var(--weiss); border-radius: 999px; padding: 4px 10px; }
+
+  .angebot { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
+  .angebot .lead { margin-top: 18px; }
+  .schritte { list-style: none; margin: 36px 0 0; padding: 0; display: grid; gap: 12px; }
+  .schritte li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; background: var(--weiss); border-radius: var(--radius); padding: 22px 24px; }
+  .nr { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--orange); color: var(--weiss); font-weight: 700; font-size: 1.1rem; }
+  .schritte h3 { font-size: 1.1rem; margin-bottom: 4px; }
+  .preiskarte { background: var(--weiss); border-radius: var(--radius-gross); padding: clamp(28px, 4vw, 44px); box-shadow: var(--schatten); display: grid; gap: 16px; }
+  .preis { color: var(--hilfsgrau); }
+  .preis span { display: block; font-size: clamp(2.8rem, 5vw, 3.6rem); font-weight: 700; color: var(--headline); line-height: 1; margin-bottom: 6px; }
+  .preis-zusatz { font-weight: 600; color: var(--headline); }
+  .leistungen { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .leistungen li { position: relative; padding-left: 28px; }
+  .leistungen li::before { content: ''; position: absolute; left: 0; top: .45em; width: 16px; height: 9px; border-left: 3px solid var(--petrol); border-bottom: 3px solid var(--petrol); transform: rotate(-45deg); }
+  .garantie { background: var(--tint-orange); border-radius: var(--radius-klein); padding: 16px 18px; }
+  .garantie strong { color: var(--tint-orange-text); }
+  .garantie p { margin-top: 4px; font-size: .95rem; }
+  .preiskarte .btn { justify-self: start; }
+
+  .buchung { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+  .wege { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .weg { display: flex; flex-direction: column; gap: 14px; background: var(--mist); border-radius: var(--radius); padding: 28px; }
+  .weg.haupt { background: var(--tint-petrol); }
+  .weg .btn { align-self: flex-start; margin-top: auto; }
+  .klein { font-size: .85rem; color: var(--hilfsgrau); }
+  .zitat { margin: 0; background: var(--petrol-dunkel); color: #d6e6e9; border-radius: var(--radius); padding: 32px; display: flex; flex-direction: column; gap: 20px; }
+  .zitat blockquote { margin: 0; }
+  .zitat p { font-size: 1.08rem; line-height: 1.55; color: var(--weiss); }
+  .zitat figcaption { display: grid; gap: 2px; margin-top: auto; }
+  .zitat figcaption strong { color: var(--weiss); }
+  .zitat figcaption span { color: #9fc3ca; font-size: .92rem; }
+
+  .schluss { padding-top: clamp(56px, 8vw, 96px); }
+  .schlusskarte { background: var(--mist); border-radius: var(--radius-gross); padding: clamp(32px, 5vw, 64px); }
+  .schlusskarte h2 { font-size: clamp(1.5rem, 2.6vw, 2.1rem); max-width: 26ch; margin-bottom: 12px; }
+
+  @media (max-width: 960px) {
+    .kopfraster, .rechner, .angebot, .buchung, .aufgaben { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .wege, .annahmen { grid-template-columns: 1fr; }
+  }
+</style>

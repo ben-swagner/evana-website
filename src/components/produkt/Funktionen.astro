@@ -1,0 +1,95 @@
+---
+// Funktionsliste in drei Varianten: Karten im Raster, nummerierte Schritte oder zweispaltige Zeilen.
+interface Eintrag { titel: string; text: string }
+interface Props {
+  eyebrow?: string;
+  titel: string;
+  lead?: string;
+  eintraege: Eintrag[];
+  variante?: 'karten' | 'schritte' | 'zeilen';
+  mist?: boolean;
+  spalten?: 2 | 3;
+}
+const { eyebrow, titel, lead, eintraege, variante = 'karten', mist = false, spalten = 3 } = Astro.props;
+---
+<section class:list={['sektion', { 'sektion-mist': mist }]}>
+  <div class:list={['container', variante === 'zeilen' && 'zeilen-raster']}>
+    <div class="kopf">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2>{titel}</h2>
+      {lead && <p class="lead">{lead}</p>}
+      <slot name="nach-kopf" />
+    </div>
+
+    {variante === 'karten' && (
+      <ul class:list={['karten', `s${spalten}`, { aufMist: mist }]}>
+        {eintraege.map((e) => (
+          <li>
+            <h3>{e.titel}</h3>
+            <p>{e.text}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {variante === 'schritte' && (
+      <ol class="schritte">
+        {eintraege.map((e, i) => (
+          <li>
+            <span class="nr" aria-hidden="true">{i + 1}</span>
+            <h3>{e.titel}</h3>
+            <p>{e.text}</p>
+          </li>
+        ))}
+      </ol>
+    )}
+
+    {variante === 'zeilen' && (
+      <dl class:list={['zeilen', { aufMist: mist }]}>
+        {eintraege.map((e) => (
+          <div>
+            <dt>{e.titel}</dt>
+            <dd>{e.text}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .karten { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .karten.s3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .karten.s2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .karten li { background: var(--mist); border-radius: var(--radius); padding: 26px 28px; }
+  .karten.aufMist li { background: var(--weiss); box-shadow: var(--schatten); }
+  .karten h3 { margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  .karten h3::before { content: ''; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+  .karten p { font-size: .98rem; }
+
+  .schritte { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; counter-reset: s; position: relative; }
+  .schritte li { position: relative; background: var(--weiss); border-radius: var(--radius); padding: 26px 26px 28px; box-shadow: var(--schatten); }
+  .nr {
+    display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--petrol-dunkel); color: var(--weiss); font-weight: 700; margin-bottom: 16px;
+  }
+  .schritte li:last-child .nr { background: var(--orange); }
+  .schritte h3 { margin-bottom: 6px; }
+  .schritte p { font-size: .97rem; }
+
+  .zeilen-raster { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .zeilen-raster .kopf { margin-bottom: 0; position: sticky; top: 110px; }
+  .zeilen { margin: 0; display: grid; gap: 10px; }
+  .zeilen div { background: var(--mist); border-radius: 20px; padding: 20px 24px; }
+  .zeilen.aufMist div { background: var(--weiss); }
+  .zeilen dt { font-weight: 700; color: var(--headline); font-size: 1.1rem; }
+  .zeilen dd { margin: 4px 0 0; }
+
+  @media (max-width: 960px) {
+    .karten.s3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .zeilen-raster { grid-template-columns: 1fr; }
+    .zeilen-raster .kopf { position: static; }
+  }
+  @media (max-width: 620px) { .karten.s3, .karten.s2 { grid-template-columns: 1fr; } }
+</style>

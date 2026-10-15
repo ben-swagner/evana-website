@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import { brotkrumen } from '../../lib/schema';
+
+const alle = (await getCollection('referenzen')).sort((a, b) => Number(a.data.anonym) - Number(b.data.anonym) || +b.data.datum - +a.data.datum);
+const technik = alle.filter((r) => r.data.branche === 'Technologie');
+const kunden = alle.filter((r) => r.data.branche !== 'Technologie');
+---
+<Basis
+  title="Referenzen: KI-Dokumentenmanagement in der Praxis | EVANA"
+  description="Wie Ampega, Aachener Grundvermögen, TÜV Saarland, Mann Immobilien und Wirtgen Invest ihre Dokumente mit EVANA auswerten, ordnen und nutzen."
+  schema={[brotkrumen([{ label: 'Referenzen', href: '/referenzen/' }])]}
+>
+  <Seitenkopf
+    titel="Was Kunden mit EVANA erreichen"
+    lead="Echte Projekte aus Bestand, Bewertung und Transaktion. Jede Geschichte zeigt die Ausgangslage, was EVANA übernommen hat und was am Ende dabei herauskam."
+    pfad={[{ label: 'Referenzen', href: '/referenzen/' }]}
+  />
+  <section class="sektion" style="padding-top: 0">
+    <div class="container">
+      <ul class="karten">
+        {kunden.map((r) => (
+          <li>
+            <a href={`/referenzen/${r.id}/`}>
+              <span class="kunde">{r.data.anonym ? r.data.branche : r.data.kunde}</span>
+              <strong>{r.data.titel}</strong>
+              <span class="kurz">{r.data.kurz}</span>
+              {r.data.kennzahlen.length > 0 && (
+                <span class="zahlen">
+                  {r.data.kennzahlen.slice(0, 2).map((k) => <span><b>{k.wert}</b> {k.label}</span>)}
+                </span>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+      {technik.length > 0 && (
+        <div class="technik">
+          <h2>Technologie hinter EVANA</h2>
+          <ul class="karten">
+            {technik.map((r) => (
+              <li><a href={`/referenzen/${r.id}/`}><span class="kunde">{r.data.kunde}</span><strong>{r.data.titel}</strong><span class="kurz">{r.data.kurz}</span></a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </section>
+  <Abschluss />
+</Basis>
+
+<style>
+  .karten { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .karten a { display: grid; align-content: start; gap: 10px; height: 100%; padding: 28px; border-radius: var(--radius); background: var(--mist); color: var(--text); text-decoration: none; transition: background-color .15s; }
+  .karten a:hover { background: var(--tint-petrol); }
+  .kunde { font-size: .85rem; font-weight: 700; color: var(--petrol); }
+  .karten strong { font-size: 1.25rem; line-height: 1.25; color: var(--headline); }
+  .kurz { font-size: .97rem; }
+  .zahlen { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .zahlen span { background: var(--weiss); border-radius: 12px; padding: 8px 12px; font-size: .85rem; }
+  .zahlen b { color: var(--petrol-dunkel); }
+  .technik { margin-top: 64px; }
+  .technik h2 { font-size: 1.5rem; margin-bottom: 20px; }
+</style>

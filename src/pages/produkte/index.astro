@@ -1,0 +1,250 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Faq from '../../components/Faq.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import Definition from '../../components/produkt/Definition.astro';
+import Kennzahlen from '../../components/produkt/Kennzahlen.astro';
+import SicherheitKurz from '../../components/produkt/SicherheitKurz.astro';
+import { produkte, zahlen } from '../../data/fakten';
+import { brotkrumen, faqSchema, produktSchema, nurGueltig } from '../../lib/schema';
+
+const pfad = [{ label: 'Produkt', href: '/produkte/' }];
+const typen = zahlen.dokumenttypen.replace('+', '');
+
+const definition = {
+  kern: 'EVANA ist die KI-Plattform für Immobiliendokumente.',
+  text: `Die KI-Engine EVANA AI klassifiziert mehr als ${typen} Dokumenttypen und macht daraus strukturierte Daten. Darauf bauen EVANA 360 für den Bestand, EVANA TDR für Transaktionen, der Report, der Document Router und die KI-Assistentin EVA auf. Über offene Schnittstellen nutzen auch Ihre KI und Ihre Systeme diese Daten.`,
+};
+
+const ebenen = [
+  {
+    titel: 'Als Plattform',
+    ton: 'magenta',
+    text: 'Ihr Team arbeitet direkt in EVANA: im Bestandsdatenraum, im Transaktionsdatenraum, mit Objektbericht und automatischer Ablage. Für alle Fragen ist EVA da.',
+    links: [
+      { label: 'EVA', href: '/produkte/eva/' },
+      { label: 'EVANA 360', href: '/produkte/evana-360/' },
+      { label: 'EVANA TDR', href: '/produkte/evana-tdr/' },
+      { label: 'Report', href: '/produkte/report/' },
+      { label: 'Document Router', href: '/produkte/document-router/' },
+    ],
+  },
+  {
+    titel: 'Als Datenbasis für Ihre KI',
+    ton: 'orange',
+    text: 'Claude, ChatGPT, Microsoft Copilot, DeutschlandGPT oder Ihr eigenes LLM greifen über den MCP-Server auf die Immobiliendaten zu, die EVANA bereits sauber aufbereitet hat.',
+    links: [{ label: 'MCP-Server', href: '/produkte/integrationen/' }],
+  },
+  {
+    titel: 'Im Hintergrund',
+    ton: 'petrol',
+    text: 'EVANA liest Dokumente aus und liefert die Daten per REST, GraphQL oder Power Automate an SAP S/4HANA, SAP RE-FX und Ihre Fachsysteme. Ihre Prozesse bleiben, wie sie sind.',
+    links: [
+      { label: 'EVANA AI', href: '/produkte/evana-ai/' },
+      { label: 'Integrationen', href: '/produkte/integrationen/' },
+    ],
+  },
+];
+
+const zusatz: Record<string, { rolle: string; neu?: boolean }> = {
+  eva: { rolle: 'KI-Assistentin' },
+  'evana-360': { rolle: 'Bestandsdatenraum' },
+  'evana-tdr': { rolle: 'Transaktionsdatenraum' },
+  'evana-ai': { rolle: 'KI-Engine' },
+  report: { rolle: 'Objektbericht' },
+  'document-router': { rolle: 'Automatische Ablage', neu: true },
+};
+const eva = produkte.find((p) => p.slug === 'eva')!;
+const weitere = produkte.filter((p) => p.slug !== 'eva');
+
+const faq = [
+  { frage: 'Welche Produkte gehören zur EVANA-Plattform?', antwort: 'Zur Plattform gehören die KI-Assistentin EVA, der Bestandsdatenraum EVANA 360, der Transaktionsdatenraum EVANA TDR, der Report als Objektbericht, der Document Router für die automatische Ablage eingehender Dokumente und die KI-Engine EVANA AI darunter. Über offene Schnittstellen und einen MCP-Server binden Sie zusätzlich Ihre eigenen Systeme und KI-Modelle an.' },
+  { frage: 'Wie hängen EVANA AI, EVANA 360, EVANA TDR und EVA zusammen?', antwort: 'EVANA AI ist die KI-Engine darunter, die Klassifizierung und Extraktion liefert. Darauf setzt EVANA 360 als zentraler Bestandsdatenraum auf. Der Transaktionsdatenraum EVANA TDR ergänzt das als Add-on oder eigenständige SaaS, und die KI-Assistentin EVA macht die Inhalte aus EVANA 360 und EVANA TDR in natürlicher Sprache befragbar.' },
+  { frage: 'Kann ich EVANA TDR ohne EVANA 360 nutzen?', antwort: 'Ja. EVANA TDR ist als Add-on zu EVANA 360 erhältlich oder als eigenständige SaaS-Anwendung nutzbar. Wer EVANA 360 bereits nutzt, übernimmt Inhalte aus dem Bestand direkt in einen Deal.' },
+  { frage: 'Kann ich EVANA mit meiner eigenen KI nutzen?', antwort: 'Ja. Über den MCP-Server binden Sie Claude, ChatGPT, Microsoft Copilot, DeutschlandGPT oder Ihr eigenes LLM an Ihre Immobiliendokumente an. Es gibt keinen Vendor-Lock-in, Sie behalten die Kontrolle über Modellwahl und Datenfluss.' },
+  { frage: 'Welche Systeme lassen sich an EVANA anbinden?', antwort: 'EVANA bietet öffentliche REST- und GraphQL-APIs, einen Power-Automate-Connector und eine zertifizierte Schnittstelle zu SAP S/4HANA und SAP RE-FX. Microsoft 365, Azure und Power BI sind eingebunden, Identitäten laufen über SCIM und SSO.' },
+  { frage: 'Wie sicher ist die EVANA-Plattform?', antwort: 'EVANA läuft in der EVANA Secure-Cloud auf Microsoft Azure, Ihre Daten bleiben in der EU. Die Plattform ist ISO 27001-zertifiziert, DSGVO-konform, BaFin-ready und DORA-konform und wird jährlich durch unabhängige Penetrationstests geprüft.' },
+];
+
+const schema = nurGueltig([
+  produktSchema({ name: 'EVANA', beschreibung: `${definition.kern} ${definition.text}`, url: '/produkte/' }),
+  faqSchema(faq),
+  brotkrumen(pfad),
+]);
+---
+<Basis
+  title="Die EVANA-Plattform: EVA, EVANA 360, TDR und AI"
+  description="EVANA liest, ordnet und strukturiert Immobiliendokumente. Nutzen Sie die Daten in der Plattform, in Ihrer eigenen KI oder in SAP und Ihren Fachsystemen."
+  schema={schema}
+>
+  <Seitenkopf
+    titel={"Eine Plattform für alle Immobilien\u00ADdokumente"}
+    lead="EVANA liest, ordnet und strukturiert Ihre Dokumente einmal und stellt die Daten dort bereit, wo Sie sie brauchen: in der Plattform, in Ihrer KI und in Ihren Systemen."
+    pfad={pfad}
+  />
+
+  <section class="sektion sektion-mist ebenen-sektion">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Drei Nutzungsebenen</p>
+        <h2>So setzen Sie EVANA ein</h2>
+        <p class="lead">Jede KI ist nur so gut wie die Datenbasis darunter. EVANA schafft diese Basis einmal, und Sie entscheiden, auf welcher Ebene Sie sie nutzen.</p>
+      </div>
+      <ol class="ebenen">
+        {ebenen.map((e, i) => (
+          <li class={e.ton}>
+            <span class="nr">Ebene {i + 1}</span>
+            <h3>{e.titel}</h3>
+            <p>{e.text}</p>
+            <ul class="links">{e.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+          </li>
+        ))}
+      </ol>
+      <div class="fundament">
+        <div class="engine">
+          <strong>EVANA AI</strong>
+          <span>klassifiziert {zahlen.dokumenttypen} Dokumenttypen mit {zahlen.erkennungsrate} Erkennungsrate</span>
+        </div>
+        <div class="dokumente">
+          <strong>Ihre Dokumente</strong>
+          <span>Mietverträge, Grundbuchauszüge, Gutachten, Protokolle, Pläne und Scans</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Definition frage="Was ist EVANA?" kern={definition.kern} text={definition.text} />
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Alle Bausteine</p>
+        <h2>Sechs Bausteine, eine gemeinsame Datenbasis</h2>
+      </div>
+      <div class="bento">
+        <a class="kachel eva" href={`/produkte/${eva.slug}/`}>
+          <span class="rolle">{zusatz.eva.rolle}</span>
+          <strong class="name">{eva.name}</strong>
+          <span class="kurz">{eva.kurz} Antwort in {zahlen.evaAntwortzeit}.</span>
+          <span class="frage" aria-hidden="true">Welche Wartungsmängel sind offen?</span>
+          <span class="fundstelle" aria-hidden="true">Wartungsprotokoll.pdf · S. 7</span>
+          <span class="weiter">EVA kennenlernen</span>
+        </a>
+        {weitere.map((p) => (
+          <a class:list={['kachel', { breit: zusatz[p.slug]?.neu }]} href={`/produkte/${p.slug}/`}>
+            <span class="rolle">{zusatz[p.slug]?.rolle}{zusatz[p.slug]?.neu && <em>Neu</em>}</span>
+            <strong class="name">{p.name}</strong>
+            <span class="kurz">{p.kurz}</span>
+            <span class="weiter">Mehr erfahren</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container integ">
+      <div>
+        <p class="eyebrow">Integrationen</p>
+        <h2>Offen für Ihre KI und Ihre Systeme</h2>
+        <p class="lead">EVANA fügt sich in Ihre Systemlandschaft ein. Es gibt keinen Vendor-Lock-in, Sie behalten die Kontrolle über Modellwahl und Datenfluss.</p>
+        <a href="/produkte/integrationen/" class="btn btn-sekundaer">Alle Integrationen</a>
+      </div>
+      <div class="integ-wolke">
+        <div>
+          <p class="label">Ihre KI über MCP</p>
+          <ul class="pillen">
+            <li>Claude</li><li>ChatGPT</li><li>Microsoft Copilot</li><li>DeutschlandGPT</li><li>Eigenes LLM</li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Ihre Systeme über API</p>
+          <ul class="pillen petrol">
+            <li>REST und GraphQL</li><li>Power Automate</li><li>SAP S/4HANA</li><li>SAP RE-FX</li><li>Power BI</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="zahlen">
+    <div class="container">
+      <Kennzahlen
+        eintraege={[
+          { wert: zahlen.dokumenttypen, label: 'Dokumenttypen automatisch klassifiziert' },
+          { wert: zahlen.erkennungsrate, label: 'Erkennungsrate bei der Klassifizierung' },
+          { wert: zahlen.datenpunkte, label: 'Datenpunkte, auf denen die KI trainiert ist' },
+          { wert: zahlen.betreutesVermoegen, label: 'Vermögen verwalten unsere Kunden zusammen' },
+        ]}
+      />
+    </div>
+  </section>
+
+  <SicherheitKurz />
+
+  <Faq eintraege={faq} />
+
+  <Abschluss />
+</Basis>
+
+<style>
+  .ebenen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .ebenen > li { display: flex; flex-direction: column; gap: 10px; padding: 28px; border-radius: var(--radius); background: var(--weiss); box-shadow: var(--schatten); }
+  .nr { align-self: flex-start; font-size: .76rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-radius: 999px; padding: 4px 12px; }
+  .magenta .nr { background: var(--tint-magenta); color: var(--magenta); }
+  .orange .nr { background: var(--tint-orange); color: var(--tint-orange-text); }
+  .petrol .nr { background: var(--tint-petrol); color: var(--petrol); }
+  .ebenen h3 { font-size: 1.4rem; }
+  .links { list-style: none; margin: auto 0 0; padding: 10px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .links a { display: inline-block; padding: 6px 12px; border-radius: 999px; background: var(--mist); font-weight: 600; font-size: .88rem; text-decoration: none; }
+  .links a:hover { background: var(--tint-petrol); }
+  .fundament { display: grid; gap: 10px; margin-top: 16px; }
+  .fundament > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; padding: 20px 28px; border-radius: var(--radius); }
+  .engine { background: var(--petrol-dunkel); color: #b9d3d8; position: relative; }
+  .engine strong { color: var(--weiss); font-size: 1.15rem; }
+  .engine::before { content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 6px rgba(245,158,52,.2); align-self: center; }
+  .dokumente { background: var(--tint-petrol); color: var(--petrol-dunkel); }
+  .dokumente strong { font-size: 1.15rem; }
+
+  .bento { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: minmax(200px, auto); gap: 14px; }
+  .kachel {
+    display: flex; flex-direction: column; gap: 8px; padding: 26px 28px; border-radius: var(--radius);
+    background: var(--weiss); text-decoration: none; color: var(--text); transition: transform .15s;
+  }
+  .kachel:hover { transform: translateY(-3px); }
+  .rolle { display: flex; align-items: center; gap: 8px; font-size: .8rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--hilfsgrau); }
+  .rolle em { font-style: normal; color: var(--tint-orange-text); background: var(--tint-orange); border-radius: 999px; padding: 2px 9px; letter-spacing: .03em; }
+  .name { font-size: 1.6rem; line-height: 1.1; color: var(--petrol-dunkel); }
+  .kurz { font-size: .98rem; }
+  .weiter { margin-top: auto; padding-top: 8px; font-weight: 700; font-size: .9rem; color: var(--petrol); }
+  .kachel.breit { grid-column: 1 / -1; min-height: 0; }
+  .kachel.eva { grid-row: span 2; background: var(--petrol-dunkel); color: #d6e6e9; }
+  .kachel.eva .rolle { color: #9fc3ca; }
+  .kachel.eva .name { color: var(--weiss); font-size: 2.6rem; }
+  .kachel.eva .kurz { font-size: 1.1rem; }
+  .kachel.eva .frage { margin-top: 18px; align-self: flex-end; max-width: 90%; background: var(--weiss); color: var(--headline); font-weight: 600; border-radius: 16px 16px 4px 16px; padding: 10px 14px; font-size: .92rem; }
+  .kachel.eva .fundstelle { align-self: flex-start; margin-top: 4px; }
+  .kachel.eva .weiter { color: var(--orange); }
+
+  .integ { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .integ .lead { margin-top: 18px; }
+  .integ .btn { margin-top: 28px; }
+  .integ-wolke { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: clamp(22px, 3vw, 36px); border-radius: var(--radius-gross); background: var(--mist); }
+  .label { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--hilfsgrau); margin-bottom: 12px; }
+  .pillen { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pillen li { background: var(--weiss); border-radius: 999px; padding: 9px 16px; font-weight: 600; color: var(--headline); box-shadow: var(--schatten-dokument); }
+  .pillen.petrol li { background: var(--tint-petrol); color: var(--petrol-dunkel); box-shadow: none; }
+
+  .zahlen { padding-top: clamp(24px, 4vw, 48px); }
+
+  @media (max-width: 960px) {
+    .ebenen { grid-template-columns: 1fr; }
+    .bento { grid-template-columns: 1fr 1fr; }
+    .kachel.eva { grid-column: 1 / -1; grid-row: auto; }
+    .integ { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .bento, .integ-wolke { grid-template-columns: 1fr; }
+  }
+</style>

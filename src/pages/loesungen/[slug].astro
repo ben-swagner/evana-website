@@ -1,0 +1,301 @@
+---
+import { getCollection } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import DemoAnsicht from '../../components/DemoAnsicht.astro';
+import DokIcon from '../../components/DokIcon.astro';
+import Faq from '../../components/Faq.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import { zielgruppen, type Zielgruppe } from '../../data/zielgruppen';
+import { anwendungsfaelle } from '../../data/anwendungsfaelle';
+import { produkte } from '../../data/fakten';
+import { brotkrumen, faqSchema, nurGueltig } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return zielgruppen.map((z) => ({ params: { slug: z.slug }, props: { zg: z } }));
+}
+interface Props { zg: Zielgruppe }
+const { zg } = Astro.props;
+
+const pfad = [
+  { label: 'Lösungen', href: '/loesungen/' },
+  { label: zg.navLabel, href: `/loesungen/${zg.slug}/` },
+];
+
+const faelle = zg.anwendungsfaelle
+  .map((a) => ({ ...a, fall: anwendungsfaelle.find((f) => f.slug === a.slug) }))
+  .filter((a) => a.fall);
+const hauptfall = faelle[0]?.fall;
+
+const produktLinks = zg.produkte.map((name) => {
+  const p = produkte.find((x) => x.name === name);
+  return { name, kurz: p?.kurz, href: p ? `/produkte/${p.slug}/` : undefined };
+});
+
+const referenzen = (await getCollection('referenzen'))
+  .filter((r) => r.data.zielgruppen.includes(zg.slug))
+  .sort((a, b) => Number(a.data.anonym) - Number(b.data.anonym) || b.data.datum.getTime() - a.data.datum.getTime())
+  .slice(0, 4);
+
+const wissen = (await getCollection('wissen'))
+  .filter((w) => zg.wissen?.includes(w.id))
+  .sort((a, b) => (zg.wissen ?? []).indexOf(a.id) - (zg.wissen ?? []).indexOf(b.id));
+
+const andere = zielgruppen.filter((z) => z.slug !== zg.slug);
+
+const schema = nurGueltig<Record<string, unknown>>([brotkrumen(pfad), faqSchema(zg.faq)]);
+---
+<Basis title={zg.seo.title} description={zg.seo.description} schema={schema}>
+  <Seitenkopf
+    titel={zg.titel}
+    lead={zg.lead}
+    pfad={pfad}
+    zweitLink={zg.slug === 'filialnetze-franchise' ? { label: 'ROI-Sprint ansehen', href: '/roi-sprint/' } : undefined}
+  />
+
+  {zg.hinweis && (
+    <section class="hinweis-bereich">
+      <div class="container">
+        <div class:list={['hinweis', { sprint: zg.hinweis.href === '/roi-sprint/' }]}>
+          <div>
+            <p class="eyebrow">{zg.hinweis.eyebrow}</p>
+            <h2>{zg.hinweis.titel}</h2>
+            <p>{zg.hinweis.text}</p>
+          </div>
+          <a href={zg.hinweis.href} class:list={['btn', zg.hinweis.href === '/roi-sprint/' ? 'btn-primaer' : 'btn-sekundaer']}>{zg.hinweis.label}</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Ihr Alltag</p>
+        <h2>Aufgaben, bei denen EVANA Ihnen Arbeit abnimmt</h2>
+      </div>
+      <ul class="aufgaben">
+        {zg.herausforderungen.map((h) => (
+          <li>
+            <h3>{h.titel}</h3>
+            <p>{h.text}</p>
+            {h.dokumente && (
+              <ul class="doktypen" aria-label="Typische Dokumente">
+                {h.dokumente.map((d) => <li><DokIcon class="mini" />{d}</li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {hauptfall && (
+    <section class="sektion">
+      <div class="container">
+        <div class="kopf">
+          <p class="eyebrow">So sieht es aus</p>
+          <h2>Fragen Sie Ihre Dokumente so, wie Sie eine Kollegin fragen würden</h2>
+          <p class="lead">Unsere KI-Assistentin EVA kennt die Unterlagen Ihres Bestands und antwortet mit Fundstelle. Typische Fragen aus Ihrem Alltag:</p>
+        </div>
+        <ul class="fragen">
+          {zg.fragen.map((f) => <li>{f}</li>)}
+        </ul>
+        <div class="buehne">
+          <DemoAnsicht demo={hauptfall.demo} />
+          <p class="beispiel-hinweis">Beispielhafte Darstellung: {hauptfall.tab}</p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Anwendungsfälle</p>
+        <h2>Was EVANA in Ihrer Rolle übernimmt</h2>
+      </div>
+      <ol class="faelle">
+        {faelle.map((a) => (
+          <li>
+            <a href={`/anwendungsfaelle/${a.slug}/`}>
+              <span class="tab">{a.fall!.tab}</span>
+              <strong>{a.fall!.titel}</strong>
+              <span class="satz">{a.satz}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container zwei">
+      <div>
+        <h2 class="h3">Dokumente, die EVANA für Sie liest</h2>
+        <ul class="dokliste">
+          {zg.dokumente.map((d) => <li class="dok"><DokIcon />{d}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h2 class="h3">Dahinter steckt</h2>
+        <ul class="produkte">
+          {produktLinks.map((p) => (
+            <li>
+              {p.href ? <a href={p.href}><strong>{p.name}</strong>{p.kurz && <span>{p.kurz}</span>}</a> : <strong>{p.name}</strong>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {(referenzen.length > 0 || zg.zitat) && (
+    <section class="sektion auf-dunkel" id="referenzen">
+      <div class="container">
+        <div class="kopf">
+          <p class="eyebrow">Aus der Praxis</p>
+          <h2>{referenzen.length > 0 ? 'Wie andere in Ihrer Rolle mit EVANA arbeiten' : 'Was unsere Partner sagen'}</h2>
+        </div>
+        {zg.zitat && (
+          <figure class="zitat">
+            <blockquote><p>„{zg.zitat.text}“</p></blockquote>
+            <figcaption><strong>{zg.zitat.person}</strong>, {zg.zitat.rolle}</figcaption>
+          </figure>
+        )}
+        {referenzen.length > 0 && (
+          <ul class="referenzen">
+            {referenzen.map((r) => (
+              <li>
+                <a href={`/referenzen/${r.id}/`}>
+                  <span class="kunde">{r.data.anonym ? r.data.branche : r.data.kunde}</span>
+                  {r.data.kennzahlen[0] && (
+                    <span class="kennzahl"><b>{r.data.kennzahlen[0].wert}</b> {r.data.kennzahlen[0].label}</span>
+                  )}
+                  <span class="text">{r.data.kurz}</span>
+                  <span class="mehr">Zur Referenz</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+        {referenzen.length > 0 && <p class="alle"><a href="/referenzen/">Alle Referenzen ansehen</a></p>}
+      </div>
+    </section>
+  )}
+
+  {wissen.length > 0 && (
+    <section class="sektion">
+      <div class="container">
+        <div class="kopf">
+          <p class="eyebrow">Wissen</p>
+          <h2>Zum Weiterlesen</h2>
+        </div>
+        <ul class="wissen">
+          {wissen.map((w) => (
+            <li>
+              <a href={`/wissen/${w.id}/`}>
+                <span class="thema">{w.data.thema}</span>
+                <strong>{w.data.titel}</strong>
+                <span>{w.data.kurz}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <Faq eintraege={zg.faq} />
+
+  <section class="sektion weitere-bereich">
+    <div class="container">
+      <h2 class="h3">Weitere Bereiche</h2>
+      <ul class="andere">
+        {andere.map((z) => <li><a href={`/loesungen/${z.slug}/`}>{z.navLabel}</a></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <Abschluss />
+</Basis>
+
+<style>
+  .h3 { font-size: 1.3rem; line-height: 1.25; margin-bottom: 18px; }
+
+  .hinweis-bereich { padding-bottom: clamp(40px, 6vw, 72px); }
+  .hinweis {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: end;
+    background: var(--tint-petrol); border-radius: var(--radius); padding: clamp(28px, 4vw, 44px);
+  }
+  .hinweis.sprint { background: var(--tint-orange); }
+  .hinweis .eyebrow { margin-bottom: 10px; }
+  .hinweis.sprint .eyebrow { color: var(--tint-orange-text); }
+  .hinweis h2 { font-size: clamp(1.4rem, 2.4vw, 1.9rem); margin-bottom: 10px; }
+  .hinweis p:last-child { max-width: 64ch; }
+
+  .aufgaben { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .aufgaben > li { display: flex; flex-direction: column; gap: 10px; background: var(--weiss); border-radius: var(--radius); padding: 26px; box-shadow: var(--schatten-dokument); }
+  .aufgaben h3 { font-size: 1.15rem; }
+  .aufgaben p { font-size: .97rem; }
+  .doktypen { list-style: none; margin: auto 0 0; padding: 8px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .doktypen li { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 600; color: var(--petrol-dunkel); background: var(--mist); border-radius: 999px; padding: 4px 10px 4px 8px; }
+  .doktypen :global(.mini) { width: 11px; height: 14px; flex: none; }
+
+  .fragen { list-style: none; margin: 0 0 32px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .fragen li {
+    background: var(--tint-petrol); color: var(--petrol-dunkel); font-weight: 600; line-height: 1.4;
+    padding: 16px 18px; border-radius: 18px 18px 18px 4px;
+  }
+  .buehne { background: var(--mist); border-radius: var(--radius-gross); padding: clamp(22px, 4vw, 48px); }
+
+  .faelle { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; counter-reset: fall; }
+  .faelle a { display: grid; align-content: start; gap: 8px; height: 100%; padding: 24px 26px; background: var(--weiss); border-radius: var(--radius); text-decoration: none; color: var(--text); box-shadow: var(--schatten-dokument); }
+  .faelle a:hover { box-shadow: var(--schatten); }
+  .faelle a:hover strong { color: var(--petrol); }
+  .tab { justify-self: start; font-size: .76rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--tint-orange-text); background: var(--tint-orange); border-radius: 999px; padding: 3px 10px; }
+  .faelle strong { font-size: 1.12rem; line-height: 1.3; color: var(--headline); }
+  .satz { font-size: .97rem; }
+
+  .zwei { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
+  .dokliste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .dokliste .dok { height: 100%; }
+  .produkte { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .produkte a, .produkte > li > strong { display: grid; gap: 4px; padding: 16px 20px; background: var(--mist); border-radius: 18px; text-decoration: none; color: var(--text); }
+  .produkte a:hover { background: var(--tint-petrol); }
+  .produkte strong { color: var(--petrol-dunkel); font-size: 1.05rem; }
+  .produkte span { font-size: .93rem; }
+
+  .zitat { margin: 0 0 32px; max-width: 860px; }
+  .zitat blockquote { margin: 0; }
+  .zitat p { font-size: clamp(1.15rem, 1.8vw, 1.4rem); line-height: 1.5; color: var(--weiss); }
+  .zitat figcaption { margin-top: 16px; color: #9fc3ca; }
+  .zitat strong { color: var(--weiss); }
+  .referenzen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .referenzen a { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 26px; border-radius: var(--radius); background: rgba(255, 255, 255, .07); color: #d6e6e9; text-decoration: none; }
+  .referenzen a:hover { background: rgba(255, 255, 255, .12); }
+  .kunde { font-weight: 700; color: var(--weiss); font-size: 1.1rem; }
+  .kennzahl { color: #9fc3ca; font-size: .92rem; }
+  .kennzahl b { display: block; font-size: 1.8rem; line-height: 1.1; color: var(--orange); }
+  .referenzen .text { font-size: .95rem; }
+  .alle { margin-top: 28px; }
+  .alle a { color: var(--orange); font-weight: 600; }
+  .mehr { margin-top: auto; font-weight: 600; color: var(--orange); }
+
+  .wissen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .wissen a { display: grid; align-content: start; gap: 8px; height: 100%; padding: 26px; background: var(--mist); border-radius: var(--radius); text-decoration: none; color: var(--text); }
+  .wissen a:hover { background: var(--tint-petrol); }
+  .thema { font-size: .78rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--eyebrow); }
+  .wissen strong { font-size: 1.12rem; line-height: 1.3; color: var(--headline); }
+  .wissen span:last-child { font-size: .95rem; }
+
+  .weitere-bereich { padding-block: clamp(48px, 6vw, 72px) 0; }
+  .andere { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .andere a { display: inline-block; padding: 8px 16px; border-radius: 999px; background: var(--mist); font-weight: 600; text-decoration: none; color: var(--petrol-dunkel); }
+  .andere a:hover { background: var(--tint-petrol); }
+
+  @media (max-width: 860px) {
+    .hinweis, .zwei { grid-template-columns: 1fr; }
+    .hinweis .btn { justify-self: start; }
+  }
+</style>

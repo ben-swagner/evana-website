@@ -1,0 +1,286 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Faq from '../../components/Faq.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import Fenster from '../../components/produkt/Fenster.astro';
+import Definition from '../../components/produkt/Definition.astro';
+import Funktionen from '../../components/produkt/Funktionen.astro';
+import Anwendungen from '../../components/produkt/Anwendungen.astro';
+import Referenzen from '../../components/produkt/Referenzen.astro';
+import Zitat from '../../components/produkt/Zitat.astro';
+import Zusammenspiel from '../../components/produkt/Zusammenspiel.astro';
+import SicherheitKurz from '../../components/produkt/SicherheitKurz.astro';
+import { cta, zahlen } from '../../data/fakten';
+import { brotkrumen, faqSchema, produktSchema, nurGueltig } from '../../lib/schema';
+
+const pfad = [{ label: 'Produkt', href: '/produkte/' }, { label: 'EVANA TDR', href: '/produkte/evana-tdr/' }];
+
+const definition = {
+  kern: 'EVANA TDR ist der KI-gestützte Transaktionsdatenraum für Immobilien.',
+  text: 'Käufer, Verkäufer und Berater arbeiten in einem geschützten Raum zusammen, mit Rollen- und Rechtesystem und zentralem Q&A-Modul. Die KI-Assistentin EVA wertet die Unterlagen aus und beantwortet Fragenkataloge mit Beleg. EVANA TDR gibt es als Add-on zu EVANA 360 oder als eigenständige SaaS.',
+};
+
+type Status = 'frei' | 'beantwortet' | 'offen';
+const fragen: { id: string; status: Status; rolle: string; frage: string; eva: string; quelle?: string }[] = [
+  { id: 'Q-014', status: 'frei', rolle: 'Käufer / Recht', frage: 'Liegen für alle Mietverträge gültige Unterschriften vor?', eva: 'Ja. 14 Verträge geprüft, alle Unterschriften vorhanden. Zwei Verträge haben einen Nachtrag, beide sind unterzeichnet.', quelle: '14 Fundstellen verlinkt' },
+  { id: 'Q-019', status: 'beantwortet', rolle: 'Verkäufer / Technik', frage: 'Sind alle Energieausweise aktuell und gültig?', eva: '9 Ausweise vorhanden, davon 8 gültig. Einer läuft am 31.07. ab.', quelle: '9 Fundstellen verlinkt' },
+  { id: 'Q-027', status: 'offen', rolle: 'Berater / Steuern', frage: 'Bestehen Sonderkündigungsrechte einzelner Mieter, und zu welchen Konditionen?', eva: 'Wartet auf Freigabe durch die Verkäuferseite, Frist 02.07.' },
+];
+const statusText: Record<Status, string> = { frei: 'Freigegeben', beantwortet: 'Beantwortet', offen: 'Offen' };
+
+const aktivitaeten = [
+  { zeit: '09:42', text: 'EVA hat 14 Mietverträge ausgewertet (Frage Q-014).', rolle: 'KI-Analyse', farbe: 'orange' },
+  { zeit: '10:15', text: 'L. Becker hat 3 Wartungsprotokolle bereitgestellt.', rolle: 'Verkäufer', farbe: 'petrol' },
+  { zeit: '11:03', text: 'M. Renz hat Frage Q-027 an die Steuerberatung zugewiesen.', rolle: 'Käufer', farbe: 'magenta' },
+  { zeit: '14:31', text: 'Dr. Vogel hat Antwort Q-019 freigegeben.', rolle: 'Berater', farbe: 'petrol' },
+  { zeit: '16:08', text: 'Das System hat die Frist für Q-027 auf 02.07. gesetzt.', rolle: 'Audit', farbe: 'grau' },
+];
+
+const evaQa = [
+  { titel: 'Nur mit Quelle', text: 'Zu jedem Vorschlag sehen Sie, aus welchem Dokument und von welcher Seite die Information stammt. Findet EVA nichts Belastbares, sagt sie es offen.' },
+  { titel: 'In der Sprache der Frage', text: 'Ob ein Bieter auf Deutsch, Englisch oder Französisch fragt, EVA antwortet in seiner Sprache.' },
+  { titel: 'Konsistent über alle Bieter', text: 'Wenn zwei Bieter dasselbe wissen wollen, stützen sich beide Antworten auf dieselben Dokumente.' },
+  { titel: 'Freigabe bleibt beim Team', text: 'Ohne Ihre Freigabe geht keine Antwort an einen Bieter. EVA liefert den Entwurf, Ihr Team entscheidet.' },
+];
+
+const merkmale = [
+  { titel: 'Intelligente Rollen und Rechte', text: 'Käufer-, Verkäufer- und Beraterseite sind sauber getrennt, der Zugriff ist bis auf Dokument- und Feldebene konfigurierbar.' },
+  { titel: 'Zentrales Q&A-Modul', text: 'Konfigurierbare Frage- und Antwortprozesse mit Status, Fristen und Zuweisungen pro Rolle. Lose Mail-Threads entfallen.' },
+  { titel: 'Aktivitätstransparenz', text: 'Jede Aktion ist protokolliert und auswertbar. Benachrichtigungen halten alle Beteiligten ohne manuelles Nachfragen auf Stand.' },
+  { titel: 'KI-Analyse mit EVA', text: 'EVA durchsucht den Datenraum, fasst zusammen, extrahiert Daten und beantwortet Fragen, jede Aussage mit Fundstelle belegt.' },
+  { titel: 'Automatische Klassifizierung', text: `Eingehende Unterlagen werden mit ${zahlen.erkennungsrate} Erkennungsrate den richtigen Typen zugeordnet und strukturiert abgelegt.` },
+  { titel: 'Audit-fähige Dokumentation', text: 'Jeder Zugriff, jede Freigabe und jeder Stand ist nachvollziehbar, für interne Reviews, für Prüfer und für die Closing-Akte.' },
+];
+
+const rollen = [
+  { titel: 'Ankauf', text: 'Risiken früh erkennen und Datenräume strukturiert prüfen. EVA beantwortet ganze Fragenkataloge und belegt jede Aussage mit der Fundstelle.' },
+  { titel: 'Verkauf', text: 'Bestandsdaten aus EVANA 360 in einen sauberen Verkaufsdatenraum überführen. Käufer erleben einen professionell vorbereiteten Deal.' },
+  { titel: 'Berater und Prüfer', text: 'Mandantendaten geschützt verwalten, Rollen klar trennen, Fragen strukturiert beantworten. Der Datenraum ist vom ersten Klick an auditfähig.' },
+  { titel: 'Asset Management', text: 'Mehrere Transaktionen parallel führen, mit zentralem Stand zu Fragen, Fristen und Freigaben pro Deal.' },
+  { titel: 'Versicherer und Banken', text: 'Großportfolios und Einzeltransaktionen revisionssicher abwickeln, mit nachvollziehbarer Dokumentation für Aufsicht und Compliance.' },
+  { titel: 'Family Offices', text: 'Ein diskreter, geschützter Raum für An- und Verkäufe, mit klaren Rechten für externe Berater und vollständigem Aktivitätsprotokoll.' },
+];
+
+const faq = [
+  { frage: 'Was ist EVANA TDR?', antwort: 'EVANA TDR ist der KI-gestützte Transaktionsdatenraum für Immobilien. Käufer, Verkäufer und Berater arbeiten in einem geschützten Raum zusammen, mit intelligentem Rollen- und Rechtesystem, zentralem Q&A-Modul und der KI-Assistentin EVA, die Unterlagen auswertet und ganze Fragenkataloge übergreifend beantwortet, jede Antwort mit Beleg.' },
+  { frage: 'Wie ist EVANA TDR verfügbar?', antwort: 'EVANA TDR ist als Add-on zu EVANA 360 erhältlich oder als eigenständige SaaS-Anwendung nutzbar. Die Lösung eignet sich für alle Arten von Immobilientransaktionen, vom Einzelobjekt bis zum Portfolio.' },
+  { frage: 'Wie funktioniert das Q&A-Modul?', antwort: 'Das zentrale Kommunikations- und Q&A-Modul ermöglicht konfigurierbare Frage- und Antwortprozesse. Fragen werden strukturiert erfasst, eindeutig der zuständigen Rolle zugewiesen, mit Fristen versehen und nach Freigabe veröffentlicht. EVA erzeugt auf Wunsch einen Antwortvorschlag auf Basis der Datenraum-Inhalte, der vor der Freigabe geprüft wird.' },
+  { frage: 'Wie steuert EVANA TDR Rollen und Rechte?', antwort: 'Ein intelligentes Rollen- und Rechtesystem regelt den Zugriff auf den Datenraum bis auf Dokument- und Feldebene. Käufer-, Verkäufer- und Beraterseite lassen sich sauber trennen und bleiben dabei im gemeinsamen Arbeitsraum. Identitäten und Gruppen können über SSO angebunden werden.' },
+  { frage: 'Wie wird Transparenz über Aktivitäten gewährleistet?', antwort: 'Jede Aktion im Datenraum wird protokolliert, vom Dokumenten-Upload über die Freigabe einer Antwort bis zum letzten Login. Benachrichtigungen halten alle Beteiligten auf Stand. Auswertungen liefern den Nachweis für interne Reviews, Aufsichten und die Closing-Akte.' },
+  { frage: 'Wie unterstützt EVA die Due Diligence im TDR?', antwort: 'EVA wertet die Unterlagen im Datenraum aus, fasst zusammen, extrahiert Daten und beantwortet Fragen. Auch ganze Fragenkataloge können in einem Durchgang übergreifend bearbeitet werden, jede Antwort mit Verweis auf die exakte Fundstelle im Originaldokument.' },
+  { frage: 'Lässt sich EVANA TDR mit EVANA 360 kombinieren?', antwort: 'Ja. Wer EVANA 360 als Bestandsdatenraum nutzt, kann EVANA TDR als Add-on dazubuchen und Inhalte aus dem Bestand direkt in einen Deal übernehmen. Wer ausschließlich Transaktionen abwickelt, nutzt EVANA TDR als eigenständige SaaS-Anwendung.' },
+  { frage: 'Wie sicher und compliant ist EVANA TDR?', antwort: 'EVANA TDR ist ISO 27001-zertifiziert, DSGVO-konform, BaFin-ready und DORA-konform. Die Verarbeitung erfolgt in der EVANA Secure-Cloud, abgesichert durch regelmäßige unabhängige Audits und Penetrationstests. Jeder Zugriff und jede Freigabe wird audit-sicher protokolliert.' },
+  { frage: 'Wie verhält sich EVANA TDR zu EVANA AI, EVANA 360 und EVA?', antwort: 'EVANA AI ist die KI-Engine darunter, EVANA 360 der zentrale Bestandsdatenraum, EVANA TDR der Transaktionsdatenraum und EVA die KI-Assistentin, die Inhalte aus EVANA 360 und EVANA TDR in natürlicher Sprache befragbar macht. Alle Produkte greifen auf dieselbe Engine zu und lassen sich nahtlos miteinander kombinieren.' },
+];
+
+const schema = nurGueltig([
+  produktSchema({ name: 'EVANA TDR', beschreibung: `${definition.kern} ${definition.text}`, url: '/produkte/evana-tdr/' }),
+  faqSchema(faq),
+  brotkrumen(pfad),
+]);
+---
+<Basis
+  title="KI-Transaktionsdatenraum für Immobilien | EVANA TDR"
+  description="EVANA TDR ist der KI-gestützte Transaktionsdatenraum für Immobilien: klare Rollen, strukturiertes Q&A und Antwortentwürfe von EVA mit Quelle."
+  schema={schema}
+>
+  <Seitenkopf
+    titel="Transaktionen sauber strukturiert, mit KI im Datenraum"
+    lead="EVANA TDR ist der KI-gestützte Transaktionsdatenraum für Immobilien. Käufer, Verkäufer und Berater arbeiten in einem geschützten Raum zusammen. Jede Aktivität ist nachvollziehbar, jede Antwort von EVA belegt."
+    pfad={pfad}
+    zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
+  />
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <Fenster titel="Q&A · Bürozentrum Mainufer" meta="42 Fragen · 31 beantwortet · 3 offen">
+        <ul class="qa">
+          {fragen.map((f) => (
+            <li class={f.status}>
+              <div class="qa-frage">
+                <div class="qa-meta">
+                  <span class="qa-id">{f.id}</span>
+                  <span class={`status ${f.status}`}>{statusText[f.status]}</span>
+                  <span class="rolle">{f.rolle}</span>
+                </div>
+                <p>{f.frage}</p>
+              </div>
+              <div class="qa-antwort">
+                {f.quelle ? (
+                  <>
+                    <span class="absender"><span class="knoten" aria-hidden="true"></span>Antwortentwurf von EVA</span>
+                    <p>{f.eva}</p>
+                    <div class="zeile">
+                      <span class="fundstelle">{f.quelle}</span>
+                      {f.status === 'beantwortet' && <span class="knoepfe" aria-hidden="true"><span>Bearbeiten</span><span class="frei">Freigeben</span></span>}
+                    </div>
+                  </>
+                ) : (
+                  <p class="wartet">{f.eva}</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Fenster>
+    </div>
+  </section>
+
+  <Definition frage="Was ist EVANA TDR?" kern={definition.kern} text={definition.text} />
+
+  <section class="sektion auf-dunkel">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">EVA im Q&A</p>
+        <h2>Jede Frage landet strukturiert bei der richtigen Rolle</h2>
+        <p class="lead">Jede Frage geht direkt an die zuständige Rolle, mit Frist und Status. EVA liest die Bieterfrage, findet die passende Stelle in Ihren Unterlagen und schreibt Ihnen den Antwortentwurf vor. Der zuständige Berater prüft und gibt frei.</p>
+      </div>
+      <ul class="eva-qa">
+        {evaQa.map((e) => <li><h3>{e.titel}</h3><p>{e.text}</p></li>)}
+      </ul>
+      <a href={cta.demo} class="btn btn-primaer qa-cta">Q&A live sehen</a>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container log-raster">
+      <div>
+        <p class="eyebrow">Rollen, Rechte, Transparenz</p>
+        <h2>Sie wissen jederzeit, wer was sieht und wer was tut</h2>
+        <p class="lead">Ein intelligentes Rollen- und Rechtesystem regelt den Zugriff bis auf Dokument- und Feldebene. Käufer-, Verkäufer- und Beraterseite arbeiten getrennt im selben Raum, jeweils mit den Inhalten, die sie sehen sollen.</p>
+        <p class="absatz">Jede Aktivität wird protokolliert, Benachrichtigungen halten die Beteiligten auf Stand. So behalten Sie den Überblick und liefern auf Knopfdruck den Nachweis.</p>
+      </div>
+      <Fenster titel="Aktivitäten" meta="letzte 24 Stunden">
+        <ol class="log">
+          {aktivitaeten.map((a) => (
+            <li>
+              <span class="zeit">{a.zeit}</span>
+              <span class={`punkt ${a.farbe}`} aria-hidden="true"></span>
+              <span class="ereignis">{a.text}</span>
+              <span class="wer">{a.rolle}</span>
+            </li>
+          ))}
+        </ol>
+      </Fenster>
+    </div>
+  </section>
+
+  <Funktionen
+    eyebrow="Leistungsmerkmale"
+    titel="Der Transaktionsdatenraum für Immobilien, der mitarbeitet"
+    lead="Sicher, strukturiert und KI-gestützt führt EVANA TDR durch den gesamten Transaktionsprozess und leistet damit mehr als ein virtueller Aktenordner."
+    eintraege={merkmale}
+    mist
+  />
+
+  <section class="sektion">
+    <div class="container katalog">
+      <div>
+        <p class="eyebrow">Fragenkataloge per EVA</p>
+        <h2>EVA beantwortet ganze Due-Diligence-Kataloge in einer Sitzung</h2>
+      </div>
+      <div>
+        <p class="lead">Übergeben Sie EVA Ihren kompletten Due-Diligence-Katalog. EVA beantwortet jede einzelne Frage übergreifend aus dem gesamten Datenraum, jede Antwort mit Fundstellen belegt. Was früher Tage manueller Prüfung gekostet hat, läuft jetzt in einem Durchgang.</p>
+        <div class="aktionen">
+          <a href={cta.demo} class="btn btn-primaer">Checklisten live sehen</a>
+          <a href="/produkte/eva/" class="btn btn-sekundaer">Mehr über EVA</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Zitat
+    text="Der Transaktionsdatenraum ist der logische nächste Schritt unserer Entwicklung. Wir füllen damit eine Lücke für unsere Bestandskunden und ermöglichen Interessenten im Transaktionsbereich zudem eine intelligente Alternative in dem Bereich."
+    person="Martin Teiber"
+    rolle="CEO, EVANA AG"
+    mist
+  />
+
+  <Funktionen eyebrow="Für wen" titel="Wer mit EVANA TDR schneller zum Abschluss kommt" eintraege={rollen} variante="zeilen" />
+
+  <Anwendungen slugs={['transaktion-due-diligence', 'dokumente-befragen']} titel="EVANA TDR im Einsatz" mist />
+
+  <Referenzen produkte={['EVANA TDR']} titel="EVANA TDR in der Praxis" />
+
+  <Zusammenspiel
+    aktuell="evana-tdr"
+    titel="EVANA TDR steht für sich oder erweitert Ihren Bestandsdatenraum"
+    lead="Der Transaktionsdatenraum ist als eigenständige SaaS oder als Add-on zu EVANA 360 verfügbar, immer auf derselben KI-Engine."
+    nur={['evana-360', 'evana-ai', 'eva']}
+    rollen={{
+      'evana-360': 'Der zentrale Bestandsdatenraum. Daten und Dokumente aus EVANA 360 lassen sich direkt in einen Deal in EVANA TDR überführen.',
+      'evana-ai': `Die KI-Engine darunter. Sie klassifiziert und extrahiert Inhalte aus Dokumenten, Bildern und Scans mit ${zahlen.erkennungsrate} Erkennungsrate.`,
+      eva: 'Die KI-Assistentin in EVANA TDR. Sie wertet Unterlagen aus, beantwortet ganze Fragenkataloge und belegt jede Antwort.',
+    }}
+  />
+
+  <SicherheitKurz
+    text="Inhalte und Aktivitäten bleiben in der geschützten EVANA Secure-Cloud, zertifiziert und konform mit den regulatorischen Anforderungen von Finanz-, Versicherungs- und Immobilienwirtschaft."
+    zusatz="Jeder Zugriff und jede Freigabe wird audit-sicher protokolliert."
+  />
+
+  <Faq eintraege={faq} />
+
+  <Abschluss
+    titel="Bringen Sie Ihre nächste Transaktion in den richtigen Raum"
+    text="In einer kurzen Demo zeigen wir Ihnen EVANA TDR an einem realitätsnahen Deal, vom Q&A-Modul bis zur EVA-Auswertung ganzer Fragenkataloge."
+  />
+</Basis>
+
+<style>
+  .qa { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .qa li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 12px; align-items: stretch; }
+  .qa-frage { background: var(--mist); border-radius: 16px; padding: 16px 18px; }
+  .qa-frage p { font-weight: 600; color: var(--headline); line-height: 1.4; margin-top: 8px; }
+  .qa-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .8rem; }
+  .qa-id { font-weight: 700; color: var(--headline); }
+  .rolle { color: var(--hilfsgrau); }
+  .status { font-weight: 700; border-radius: 999px; padding: 2px 10px; }
+  .status.frei { background: var(--tint-petrol); color: var(--petrol); }
+  .status.beantwortet { background: var(--tint-orange); color: var(--tint-orange-text); }
+  .status.offen { background: var(--tint-magenta); color: var(--magenta); }
+  .qa-antwort { border-radius: 16px; padding: 16px 18px; background: var(--weiss); box-shadow: var(--schatten-dokument); }
+  .qa-antwort p { font-size: .94rem; line-height: 1.5; }
+  .absender { display: inline-flex; align-items: center; gap: 8px; font-size: .76rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--petrol); margin-bottom: 6px; }
+  .knoten { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(245,158,52,.2); }
+  .zeile { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; }
+  .knoepfe { display: inline-flex; gap: 6px; }
+  .knoepfe span { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 6px 10px; border-radius: 8px; background: var(--mist); color: var(--petrol); }
+  .knoepfe .frei { background: var(--magenta); color: var(--weiss); }
+  .wartet { color: var(--hilfsgrau); font-style: italic; }
+  .offen .qa-antwort { background: var(--mist); box-shadow: none; display: flex; align-items: center; }
+
+  .eva-qa { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  .eva-qa li { background: rgba(255,255,255,.07); border-radius: var(--radius); padding: 24px; }
+  .eva-qa h3 { font-size: 1.12rem; margin-bottom: 8px; }
+  .eva-qa p { font-size: .95rem; }
+  .qa-cta { margin-top: 32px; }
+
+  .log-raster { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .log-raster .lead { margin-top: 18px; }
+  .absatz { margin-top: 14px; }
+  .log { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .log li { display: grid; grid-template-columns: 46px 12px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 12px 14px; border-radius: 14px; background: var(--mist); font-size: .9rem; }
+  .zeit { font-weight: 700; color: var(--headline); font-variant-numeric: tabular-nums; }
+  .punkt { width: 10px; height: 10px; border-radius: 50%; }
+  .punkt.orange { background: var(--orange); }
+  .punkt.petrol { background: var(--petrol); }
+  .punkt.magenta { background: var(--magenta); }
+  .punkt.grau { background: var(--hilfsgrau); }
+  .ereignis { line-height: 1.35; }
+  .wer { font-size: .76rem; font-weight: 700; color: var(--petrol); background: var(--tint-petrol); border-radius: 999px; padding: 2px 10px; }
+
+  .katalog { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  .aktionen { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+
+  @media (max-width: 1000px) { .eva-qa { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 860px) {
+    .qa li, .log-raster, .katalog { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .eva-qa { grid-template-columns: 1fr; }
+    .log li { grid-template-columns: 46px 12px minmax(0, 1fr); }
+    .wer { grid-column: 3; justify-self: start; }
+  }
+</style>

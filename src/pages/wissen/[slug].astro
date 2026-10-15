@@ -1,0 +1,67 @@
+---
+import { getCollection, render } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Prosa from '../../components/Prosa.astro';
+import Faq from '../../components/Faq.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import { artikelSchema, brotkrumen, faqSchema, nurGueltig } from '../../lib/schema';
+import { datumLang } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const alle = await getCollection('wissen');
+  return alle.map((w) => ({ params: { slug: w.id }, props: { w, alle } }));
+}
+const { w, alle } = Astro.props;
+const d = w.data;
+const { Content, headings } = await render(w);
+const url = `/wissen/${w.id}/`;
+const inhalt = headings.filter((h) => h.depth === 2);
+const weitere = alle.filter((x) => x.id !== w.id).slice(0, 3);
+---
+<Basis
+  title={d.seoTitle ?? `${d.titel} | EVANA`}
+  description={d.seoDescription ?? d.kurz}
+  schema={nurGueltig([
+    brotkrumen([{ label: 'Wissen', href: '/wissen/' }, { label: d.titel, href: url }]),
+    artikelSchema({ titel: d.titel, beschreibung: d.kurz, datum: d.datum, aktualisiert: d.aktualisiert, autor: d.autor, url }),
+    faqSchema(d.faq),
+  ])}
+>
+  <Seitenkopf titel={d.titel} lead={d.kurz} pfad={[{ label: 'Wissen', href: '/wissen/' }]} demo={false} schmal>
+    <p class="meta">{d.thema} · {d.autor} · {datumLang(d.datum)}{d.aktualisiert && `, aktualisiert am ${datumLang(d.aktualisiert)}`}</p>
+  </Seitenkopf>
+  <section class="sektion" style="padding-top: 0">
+    <div class="container raster">
+      <Prosa><Content /></Prosa>
+      {inhalt.length > 2 && (
+        <nav class="toc" aria-label="Inhalt">
+          <p>Inhalt</p>
+          <ol>{inhalt.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        </nav>
+      )}
+    </div>
+  </section>
+  <Faq eintraege={d.faq} />
+  <section class="sektion">
+    <div class="container">
+      <h2 class="t">Weiterlesen</h2>
+      <ul class="weitere">{weitere.map((x) => <li><a href={`/wissen/${x.id}/`}><span>{x.data.thema}</span><strong>{x.data.titel}</strong></a></li>)}</ul>
+    </div>
+  </section>
+  <Abschluss />
+</Basis>
+
+<style>
+  .meta { margin-top: 18px; font-weight: 600; color: var(--hilfsgrau); }
+  .raster { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: clamp(32px, 5vw, 72px); align-items: start; }
+  .toc { position: sticky; top: 100px; background: var(--mist); border-radius: var(--radius); padding: 22px 24px; font-size: .92rem; }
+  .toc p { font-weight: 700; color: var(--headline); margin-bottom: 8px; }
+  .toc ol { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+  .toc a { text-decoration: none; }
+  .t { font-size: 1.6rem; margin-bottom: 20px; }
+  .weitere { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .weitere a { display: grid; gap: 6px; padding: 22px 24px; border-radius: 20px; background: var(--mist); text-decoration: none; color: var(--headline); height: 100%; }
+  .weitere span { font-size: .85rem; font-weight: 700; color: var(--petrol); }
+  @media (max-width: 900px) { .raster { grid-template-columns: 1fr; } .toc { display: none; } }
+</style>

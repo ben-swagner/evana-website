@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import { brotkrumen } from '../../lib/schema';
+import { datumKurz } from '../../lib/format';
+
+const alle = (await getCollection('wissen')).sort((a, b) => +b.data.datum - +a.data.datum);
+---
+<Basis
+  title="Wissen: KI und Dokumentenmanagement für Immobilien | EVANA"
+  description="Fachbeiträge zu KI-Dokumentenanalyse, Wirtschaftlichkeit, Integration in bestehende DMS und Fördermittelprüfung in der Immobilienwirtschaft."
+  schema={[brotkrumen([{ label: 'Wissen', href: '/wissen/' }])]}
+>
+  <Seitenkopf titel="Wissen für die Dokumentenarbeit" lead="Fachbeiträge und Rechenbeispiele rund um KI, Dokumentenmanagement und Daten in der Immobilienwirtschaft." pfad={[{ label: 'Wissen', href: '/wissen/' }]} demo={false} />
+  <section class="sektion" style="padding-top: 0">
+    <div class="container">
+      <ul class="liste">
+        {alle.map((w, i) => (
+          <li class:list={{ gross: i === 0 }}>
+            <a href={`/wissen/${w.id}/`}>
+              <span class="meta">{w.data.thema} · {datumKurz(w.data.datum)}</span>
+              <strong>{w.data.titel}</strong>
+              <span class="kurz">{w.data.kurz}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <Abschluss />
+</Basis>
+
+<style>
+  .liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .liste .gross { grid-column: 1 / -1; }
+  .liste a { display: grid; align-content: start; gap: 10px; height: 100%; padding: 28px; border-radius: var(--radius); background: var(--mist); text-decoration: none; color: var(--text); }
+  .liste .gross a { background: var(--petrol-dunkel); color: #d6e6e9; padding: clamp(28px, 4vw, 48px); }
+  .liste .gross strong { color: var(--weiss); font-size: clamp(1.5rem, 2.6vw, 2.2rem); }
+  .liste .gross .meta { color: var(--orange); }
+  .liste a:hover { background: var(--tint-petrol); }
+  .liste .gross a:hover { background: #00525f; }
+  .liste strong { color: var(--headline); font-size: 1.2rem; line-height: 1.25; }
+  .meta { font-size: .82rem; font-weight: 700; color: var(--petrol); }
+  .kurz { font-size: .97rem; max-width: 70ch; }
+</style>

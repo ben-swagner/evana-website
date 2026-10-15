@@ -1,0 +1,277 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Faq from '../../components/Faq.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import DokIcon from '../../components/DokIcon.astro';
+import Definition from '../../components/produkt/Definition.astro';
+import Funktionen from '../../components/produkt/Funktionen.astro';
+import Anwendungen from '../../components/produkt/Anwendungen.astro';
+import Referenzen from '../../components/produkt/Referenzen.astro';
+import SicherheitKurz from '../../components/produkt/SicherheitKurz.astro';
+import { cta, zahlen } from '../../data/fakten';
+import { brotkrumen, faqSchema, produktSchema, nurGueltig } from '../../lib/schema';
+
+const pfad = [{ label: 'Produkt', href: '/produkte/' }, { label: 'Document Router', href: '/produkte/document-router/' }];
+const typen = zahlen.dokumenttypen.replace('+', '');
+
+const definition = {
+  kern: 'Der EVANA Document Router ordnet täglich eingehende Dokumente automatisch dem richtigen Objekt zu.',
+  text: `Er erkennt den Dokumenttyp aus mehr als ${typen} Typen, benennt die Datei sauber und legt sie strukturiert in der richtigen Akte ab. Unsichere Fälle landen zur Prüfung bei Ihrem Team. So bleibt Ihre Ablage aktuell, ohne dass jemand sortieren muss.`,
+};
+
+const eingang = ['scan_0412.pdf', 'Rechnung_Aufzug.pdf', 'Nachtrag_final_v3.docx', 'Energieausweis.jpg', 'Wartung_Q3.pdf'];
+const ziele = [
+  { objekt: 'Bürohaus Mitte', datei: 'Rechnung_Aufzug_09-26.pdf', was: 'Rechnung, Wartung abgelegt' },
+  { objekt: 'Wohnpark Süd', datei: 'Nachtrag-2_WE-4.2.docx', was: 'Nachtrag zum Mietvertrag' },
+  { objekt: 'Logistik Nord', datei: 'Energieausweis_Halle-2.jpg', was: 'Energieausweis klassifiziert' },
+];
+
+const schritte = [
+  { titel: 'Eingang', text: 'Rechnungen, Protokolle und Nachträge kommen per Mail, Post und Portal. Der Router nimmt sie auf, E-Mail-Anhänge eingeschlossen.' },
+  { titel: 'Erkennen', text: `EVANA AI bestimmt den Dokumenttyp aus mehr als ${typen} Typen der Immobilienwirtschaft, mit einer Erkennungsrate von ${zahlen.erkennungsrate}.` },
+  { titel: 'Zuordnen', text: 'Der Router erkennt, zu welchem Objekt das Dokument gehört, und wählt den passenden Ordner in der Akte.' },
+  { titel: 'Benennen und ablegen', text: 'Die Datei bekommt einen sauberen Namen und liegt strukturiert am richtigen Ort, durchsuchbar und für EVA befragbar.' },
+];
+
+const umbenennung = [
+  { vorher: 'Scan_0412.pdf', nachher: '2026-04-12_Wartungsprotokoll_Aufzug.pdf', objekt: 'Bürozentrum Mainufer', ordner: 'Technik / Wartung' },
+  { vorher: 'AW_Rechnung_Juni.pdf', nachher: '2026-06_Rechnung_Gebaeudereinigung.pdf', objekt: 'Wohnanlage Lindenhof', ordner: 'Kaufmännisch / Rechnungen' },
+  { vorher: 'IMG_2231.jpg', nachher: 'Energieausweis_Verbrauch_2024.pdf', objekt: 'Bürozentrum Mainufer', ordner: 'Energie / Ausweise' },
+];
+
+const kontrolle = [
+  { titel: 'Sie bestimmen die Schwelle', text: 'Ein einstellbarer Confidence-Threshold legt fest, was automatisch abgelegt und was von Ihrem Team geprüft wird.' },
+  { titel: 'Dubletten erkannt', text: 'Doppelte Dateien und Versionen werden erkannt, bevor sie die Akte füllen.' },
+  { titel: 'Auch aus dem Postfach', text: 'Mails und Anhänge werden automatisch archiviert, ausgelesen und dem passenden Objekt zugeordnet. Die Suche im Postfach entfällt.' },
+];
+
+const faq = [
+  { frage: 'Was ist der EVANA Document Router?', antwort: `${definition.kern} ${definition.text}` },
+  { frage: 'Welche Dokumente verarbeitet der Document Router?', antwort: `Der Router verarbeitet alles, was täglich im Posteingang landet: Rechnungen, Wartungsprotokolle, Nachträge, Energieausweise und viele weitere Unterlagen, auch als Scan, Foto oder E-Mail-Anhang. EVANA AI erkennt dabei mehr als ${typen} Dokumenttypen der Immobilienwirtschaft.` },
+  { frage: 'Was passiert, wenn sich der Router nicht sicher ist?', antwort: 'Über einen einstellbaren Confidence-Threshold legen Sie fest, ab welcher Sicherheit ein Dokument automatisch abgelegt wird. Alles darunter landet zur Prüfung bei Ihrem Team.' },
+  { frage: 'Wie werden die Dateien benannt?', antwort: 'Der Router vergibt einheitliche, sprechende Dateinamen, zum Beispiel mit Datum, Dokumenttyp und Gegenstand. Aus einem Scan mit Gerätenamen wird so ein Dateiname, den Ihr Team sofort versteht.' },
+  { frage: 'Wie viel Zeit spart der Document Router?', antwort: `Allein für das Öffnen, Zuordnen, Umbenennen und Ablegen eingehender Dokumente gehen ${zahlen.stundenProAsset} pro Asset und Jahr verloren. Diese Arbeit übernimmt der Router.` },
+  { frage: 'Wie hängt der Document Router mit EVANA 360 und EVA zusammen?', antwort: 'Der Router legt die Dokumente in Ihrem Bestandsdatenraum EVANA 360 ab, auf Basis der KI-Engine EVANA AI. Sobald ein Dokument abgelegt ist, ist es über die globale Suche auffindbar, und die KI-Assistentin EVA kann es in ihre Antworten einbeziehen.' },
+];
+
+const schema = nurGueltig([
+  produktSchema({ name: 'EVANA Document Router', beschreibung: `${definition.kern} ${definition.text}`, url: '/produkte/document-router/' }),
+  faqSchema(faq),
+  brotkrumen(pfad),
+]);
+---
+<Basis
+  title="Document Router: Dokumente automatisch ablegen | EVANA"
+  description="Der EVANA Document Router ordnet eingehende Dokumente automatisch dem richtigen Objekt zu, klassifiziert sie, benennt sie sauber und legt sie ab."
+  schema={schema}
+>
+  <Seitenkopf
+    titel="Ihre Ablage sortiert sich ab jetzt selbst"
+    lead="Was täglich in Ihrem Posteingang landet, ordnet der EVANA Document Router automatisch dem richtigen Objekt zu, klassifiziert es, benennt es sauber und legt es ab. Ihre Ablage bleibt aktuell, ohne dass jemand per Hand sortieren muss."
+    pfad={pfad}
+    zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
+  >
+    <p class="neu"><span aria-hidden="true"></span>Neu seit der EXPO REAL 2026</p>
+  </Seitenkopf>
+
+  <section class="router-buehne">
+    <div class="container">
+      <div class="router">
+        <div class="spalte">
+          <p class="label">Posteingang</p>
+          <ul class="eingang">
+            {eingang.map((d, i) => <li class="dok" style={`--i:${i}`}><DokIcon farbe="#7A7A7A" /><span>{d}</span></li>)}
+          </ul>
+        </div>
+        <div class="mitte" aria-hidden="true">
+          <span class="strang"></span>
+          <span class="kern">Router</span>
+          <span class="strang"></span>
+        </div>
+        <div class="spalte">
+          <p class="label">Abgelegt beim Objekt</p>
+          <ul class="ziele">
+            {ziele.map((z) => (
+              <li>
+                <strong>{z.objekt}</strong>
+                <span class="datei"><DokIcon />{z.datei}</span>
+                <span class="was">{z.was}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+    </div>
+  </section>
+
+  <Definition frage="Was ist der Document Router?" kern={definition.kern} text={definition.text} />
+
+  <section class="sektion sektion-mist">
+    <div class="container stunden">
+      <div class="zahl">
+        <strong>{zahlen.stundenProAsset}</strong>
+        <span>pro Asset und Jahr gehen allein für das Ablegen eingehender Dokumente verloren.</span>
+      </div>
+      <div>
+        <h2>Der Posteingang ist die Stelle, an der Ordnung verloren geht</h2>
+        <p class="lead">Rechnungen, Protokolle und Nachträge kommen per Mail, Post und Portal. Jemand muss jede Datei öffnen, zuordnen, umbenennen und ablegen. Der Document Router übernimmt diese Arbeit für jedes eingehende Dokument, jeden Tag.</p>
+      </div>
+    </div>
+  </section>
+
+  <Funktionen
+    eyebrow="So arbeitet der Router"
+    titel="Vom Posteingang in die richtige Akte"
+    eintraege={schritte}
+    variante="schritte"
+  />
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Saubere Namen</p>
+        <h2>Aus Gerätenamen werden Dateinamen, die Ihr Team versteht</h2>
+      </div>
+      <ul class="namen">
+        {umbenennung.map((u) => (
+          <li>
+            <span class="vorher">{u.vorher}</span>
+            <span class="pfeil" aria-hidden="true"></span>
+            <span class="nachher">
+              <strong>{u.nachher}</strong>
+              <small>{u.objekt} / {u.ordner}</small>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container kontrolle">
+      <div>
+        <p class="eyebrow">Kontrolle</p>
+        <h2>Automatisch, wo es sicher ist, und mit Prüfung, wo Sie es wollen</h2>
+        <p class="lead">Der Router arbeitet im Hintergrund. Sie legen fest, wie viel er selbst entscheidet.</p>
+        <a href={cta.demo} class="btn btn-primaer">Router live sehen</a>
+      </div>
+      <ul class="kontroll-karten">
+        {kontrolle.map((k) => <li><h3>{k.titel}</h3><p>{k.text}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion auf-dunkel">
+    <div class="container danach">
+      <div>
+        <p class="eyebrow">Was danach kommt</p>
+        <h2>Abgelegt heißt sofort nutzbar</h2>
+      </div>
+      <ul>
+        <li><a href="/produkte/evana-360/"><strong>Gefunden in Sekunden</strong><span>Jedes abgelegte Dokument ist über die globale Suche in EVANA 360 auffindbar.</span></a></li>
+        <li><a href="/produkte/eva/"><strong>Befragbar mit EVA</strong><span>Die KI-Assistentin EVA bezieht neue Dokumente direkt in ihre Antworten ein.</span></a></li>
+        <li><a href="/produkte/report/"><strong>Im Report sichtbar</strong><span>Neue Nachweise, Mängel und Fristen fließen in den Objektbericht ein.</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <Referenzen ids={['wirtgen-invest']} titel="Klassifizieren und Ablegen in der Praxis" lead="Bei der Übernahme von vier Objekten hat EVANA rund 25.000 Dateien für Wirtgen Invest klassifiziert, benannt und strukturiert." mist />
+
+  <Anwendungen slugs={['dokumente-automatisch-ablegen', 'reports-und-fristen']} titel="Passende Anwendungsfälle" />
+
+  <SicherheitKurz />
+
+  <Faq eintraege={faq} />
+
+  <Abschluss
+    titel="Erleben Sie den Router mit Ihren Dokumenten"
+    text="In einer kurzen Demo zeigen wir Ihnen, wie der Document Router Ihren Posteingang sortiert, von der Erkennung bis zur Ablage beim richtigen Objekt."
+  />
+</Basis>
+
+<style>
+  .neu { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; padding: 7px 16px 7px 12px; border-radius: 999px; background: var(--tint-orange); color: var(--tint-orange-text); font-weight: 700; font-size: .9rem; }
+  .neu span { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+
+  .router-buehne { padding-bottom: clamp(56px, 8vw, 104px); }
+  .router {
+    display: grid; grid-template-columns: minmax(0, 1fr) 220px minmax(0, 1fr); align-items: center; gap: 0;
+    padding: clamp(24px, 4vw, 56px); border-radius: var(--radius-gross); background: var(--mist);
+  }
+  .label { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--hilfsgrau); margin-bottom: 12px; }
+  .eingang { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .eingang .dok { font-size: .9rem; }
+  .eingang .dok:nth-child(odd) { transform: rotate(-1.5deg); }
+  .eingang .dok:nth-child(even) { transform: rotate(1.2deg) translateX(14px); }
+  .mitte { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+  .strang { height: 4px; border-radius: 2px; }
+  .strang:first-child { background: linear-gradient(90deg, var(--petrol), var(--magenta)); }
+  .strang:last-child { background: linear-gradient(90deg, var(--magenta), var(--orange)); }
+  .kern {
+    display: grid; place-items: center; width: 108px; height: 108px; border-radius: 50%;
+    background: var(--orange); color: var(--weiss); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; font-size: .9rem;
+    box-shadow: 0 0 0 16px rgba(245,158,52,.16), 0 0 0 34px rgba(245,158,52,.07);
+  }
+  .ziele { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .ziele li { display: grid; gap: 6px; padding: 18px 20px; border-radius: var(--radius); background: var(--tint-petrol); }
+  .ziele strong { color: var(--petrol-dunkel); font-size: 1.1rem; }
+  .datei { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; background: var(--weiss); box-shadow: var(--schatten-dokument); font-size: .86rem; color: var(--headline); word-break: break-all; }
+  .datei :global(.dok-icon) { width: 16px; height: 20px; flex: none; }
+  .was { font-size: .84rem; color: var(--petrol); font-weight: 600; }
+  .router-buehne .beispiel-hinweis { margin-top: 14px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .kern { animation: puls 3.2s ease-in-out infinite; }
+    .eingang .dok { opacity: 0; animation: rein .5s ease-out forwards; animation-delay: calc(var(--i) * 90ms + 200ms); }
+    @keyframes puls {
+      0%, 100% { box-shadow: 0 0 0 16px rgba(245,158,52,.16), 0 0 0 34px rgba(245,158,52,.07); }
+      50% { box-shadow: 0 0 0 20px rgba(245,158,52,.2), 0 0 0 42px rgba(245,158,52,.06); }
+    }
+    @keyframes rein { from { opacity: 0; translate: -12px 0; } to { opacity: 1; translate: 0 0; } }
+  }
+
+  .stunden { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .zahl { display: grid; gap: 10px; padding: clamp(28px, 4vw, 44px); border-radius: var(--radius-gross); background: var(--petrol-dunkel); color: #d6e6e9; }
+  .zahl strong { font-size: clamp(2.2rem, 4.4vw, 3.4rem); line-height: 1; color: var(--orange); }
+  .stunden .lead { margin-top: 18px; }
+
+  .namen { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .namen li { display: grid; grid-template-columns: minmax(0, .7fr) 64px minmax(0, 1.3fr); align-items: center; padding: 16px 20px; border-radius: var(--radius); background: var(--weiss); box-shadow: var(--schatten-dokument); }
+  .vorher { font-size: .92rem; color: var(--hilfsgrau); text-decoration: line-through; text-decoration-color: var(--magenta); word-break: break-all; }
+  .pfeil { position: relative; height: 4px; margin-inline: 12px; border-radius: 2px; background: var(--verlauf); }
+  .pfeil::after { content: ''; position: absolute; right: -4px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--orange); }
+  .nachher { display: grid; gap: 2px; }
+  .nachher strong { color: var(--headline); font-weight: 600; word-break: break-all; }
+  .nachher small { color: var(--petrol); font-size: .84rem; font-weight: 600; }
+
+  .kontrolle { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .kontrolle .lead { margin-top: 18px; }
+  .kontrolle .btn { margin-top: 28px; }
+  .kontroll-karten { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .kontroll-karten li { padding: 22px 26px; border-radius: var(--radius); background: var(--mist); }
+  .kontroll-karten h3 { margin-bottom: 6px; }
+
+  .danach { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .danach ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .danach a { display: grid; gap: 4px; padding: 20px 24px; border-radius: 20px; background: rgba(255,255,255,.07); color: #d6e6e9; text-decoration: none; transition: background-color .15s; }
+  .danach a:hover { background: rgba(255,255,255,.13); color: var(--weiss); }
+  .danach strong { color: var(--weiss); font-size: 1.1rem; }
+
+  @media (max-width: 900px) {
+    .router { grid-template-columns: 1fr; gap: 18px; }
+    .mitte { grid-template-columns: 1fr; justify-items: center; }
+    .strang { width: 4px; height: 28px; }
+    .strang:first-child { background: linear-gradient(180deg, var(--petrol), var(--magenta)); }
+    .strang:last-child { background: linear-gradient(180deg, var(--magenta), var(--orange)); }
+    .eingang .dok:nth-child(even) { transform: rotate(1.2deg); }
+    .stunden, .kontrolle, .danach { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .namen li { grid-template-columns: 1fr; gap: 10px; }
+    .pfeil { width: 4px; height: 22px; margin: 0 0 0 12px; background: linear-gradient(180deg, var(--petrol), var(--magenta) 55%, var(--orange)); }
+    .pfeil::after { right: auto; left: -3px; top: auto; bottom: -4px; margin: 0; }
+  }
+</style>

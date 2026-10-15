@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import { brotkrumen } from '../../lib/schema';
+import { datumLang } from '../../lib/format';
+import { firma } from '../../data/fakten';
+
+const alle = (await getCollection('news')).sort((a, b) => +b.data.datum - +a.data.datum);
+const [neueste, ...rest] = alle;
+---
+<Basis
+  title="News und Presse | EVANA"
+  description="Produktupdates, Pressemitteilungen und Interviews der EVANA AG: KI-Transaktionsdatenraum, EVA im Q&A, SAP-Integration und Kooperationen."
+  schema={[brotkrumen([{ label: 'News und Presse', href: '/news/' }])]}
+>
+  <Seitenkopf titel="News und Presse" lead="Was es Neues bei EVANA gibt: Produktupdates, Pressemitteilungen und Gespräche über KI in der Immobilienwirtschaft." pfad={[{ label: 'News und Presse', href: '/news/' }]} demo={false} />
+  <section class="sektion" style="padding-top: 0">
+    <div class="container">
+      {neueste && (
+        <a class="top" href={`/news/${neueste.id}/`}>
+          <span class="meta">{neueste.data.kategorie} · {datumLang(neueste.data.datum)}</span>
+          <strong>{neueste.data.titel}</strong>
+          <span>{neueste.data.kurz}</span>
+        </a>
+      )}
+      <ul class="liste">
+        {rest.map((n) => (
+          <li><a href={`/news/${n.id}/`}><span class="meta">{n.data.kategorie} · {datumLang(n.data.datum)}</span><strong>{n.data.titel}</strong><span class="kurz">{n.data.kurz}</span></a></li>
+        ))}
+      </ul>
+      <div class="presse">
+        <h2>Presseanfragen</h2>
+        <p>Für Interviews, Bildmaterial und Hintergrundgespräche erreichen Sie uns unter <a href={`mailto:${firma.emailInfo}`}>{firma.emailInfo}</a>.</p>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .top { display: grid; gap: 12px; padding: clamp(28px, 4vw, 48px); border-radius: var(--radius-gross); background: var(--petrol-dunkel); color: #d6e6e9; text-decoration: none; margin-bottom: 14px; }
+  .top strong { color: var(--weiss); font-size: clamp(1.5rem, 2.6vw, 2.2rem); line-height: 1.15; max-width: 28ch; }
+  .top .meta { color: var(--orange); }
+  .top span:last-child { max-width: 70ch; }
+  .liste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .liste a { display: grid; align-content: start; gap: 8px; height: 100%; padding: 26px; border-radius: var(--radius); background: var(--mist); text-decoration: none; color: var(--text); }
+  .liste a:hover { background: var(--tint-petrol); }
+  .liste strong { color: var(--headline); font-size: 1.15rem; line-height: 1.3; }
+  .meta { font-size: .82rem; font-weight: 700; color: var(--petrol); }
+  .kurz { font-size: .95rem; }
+  .presse { margin-top: 56px; max-width: 60ch; }
+  .presse h2 { font-size: 1.4rem; margin-bottom: 8px; }
+</style>

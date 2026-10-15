@@ -1,0 +1,22 @@
+---
+// Zahlenleiste. Werte nur aus src/data/fakten.ts oder belegten Quellen.
+interface Props { eintraege: { wert: string; label: string }[]; dunkel?: boolean }
+const { eintraege, dunkel = false } = Astro.props;
+---
+<div class:list={['zahlen', { dunkel }]}>
+  <dl>
+    {eintraege.map((e) => (
+      <div><dt>{e.label}</dt><dd>{e.wert}</dd></div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  dl { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  dl div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 4px; padding: 22px 24px; border-radius: 20px; background: var(--mist); }
+  dt { font-size: .93rem; line-height: 1.35; }
+  dd { margin: 0; font-size: clamp(1.6rem, 2.6vw, 2.1rem); font-weight: 700; line-height: 1.1; color: var(--petrol); }
+  .dunkel dl div { background: rgba(255,255,255,.08); }
+  .dunkel dt { color: #b9d3d8; }
+  .dunkel dd { color: var(--orange); }
+</style>

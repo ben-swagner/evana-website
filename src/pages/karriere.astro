@@ -1,0 +1,40 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { firma } from '../data/fakten';
+import { brotkrumen } from '../lib/schema';
+// TODO: Link zum Stellenportal von EVANA ergänzen (alte Seite verlinkte "hier", Ziel unbekannt).
+const stellenportal = '';
+---
+<Basis
+  title="Karriere bei EVANA: KI für die Immobilienwirtschaft"
+  description="Arbeiten bei der EVANA AG in Saarbrücken und Frankfurt: Offene Stellen von Werkstudium bis Expertenrolle in KI, Software und Vertrieb."
+  schema={[brotkrumen([{ label: 'Karriere', href: '/karriere/' }])]}
+>
+  <Seitenkopf
+    titel="Arbeite an der Zukunft der Immobilienwirtschaft"
+    lead={`Wir bringen KI in eine Branche, die von Dokumenten lebt. Bei uns arbeitest du mit Daten, Modellen und Menschen, die wissen, was sie tun. ${firma.mitarbeitende} Kolleginnen und Kollegen in ${firma.ort} und ${firma.weitererStandort} freuen sich auf dich.`}
+    pfad={[{ label: 'Karriere', href: '/karriere/' }]}
+    demo={false}
+  />
+  <section class="sektion" style="padding-top: 0">
+    <div class="container box">
+      <div>
+        <h2>Offene Stellen</h2>
+        <p>Von Werkstudium bis Expertenrolle: Hier findest du alle Positionen, die wir aktuell besetzen. Initiativbewerbungen sind ebenfalls willkommen.</p>
+      </div>
+      <div class="aktionen">
+        {stellenportal && <a href={stellenportal} class="btn btn-primaer">Zu den Stellen</a>}
+        <a href={`mailto:${firma.emailJobs}`} class="btn btn-sekundaer">{firma.emailJobs}</a>
+      </div>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .box { display: flex; justify-content: space-between; gap: 24px; align-items: center; flex-wrap: wrap; background: var(--mist); border-radius: var(--radius-gross); padding: clamp(28px, 5vw, 56px); }
+  .box h2 { margin-bottom: 10px; }
+  .box p { max-width: 60ch; }
+  .aktionen { display: flex; gap: 12px; flex-wrap: wrap; }
+  .aktionen .btn-sekundaer { text-transform: none; letter-spacing: 0; }
+</style>

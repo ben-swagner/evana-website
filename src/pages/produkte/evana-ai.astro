@@ -1,0 +1,265 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Faq from '../../components/Faq.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import DokIcon from '../../components/DokIcon.astro';
+import Fenster from '../../components/produkt/Fenster.astro';
+import Definition from '../../components/produkt/Definition.astro';
+import Funktionen from '../../components/produkt/Funktionen.astro';
+import Kennzahlen from '../../components/produkt/Kennzahlen.astro';
+import Anwendungen from '../../components/produkt/Anwendungen.astro';
+import Referenzen from '../../components/produkt/Referenzen.astro';
+import Zitat from '../../components/produkt/Zitat.astro';
+import Zusammenspiel from '../../components/produkt/Zusammenspiel.astro';
+import SicherheitKurz from '../../components/produkt/SicherheitKurz.astro';
+import { cta, firma, zahlen } from '../../data/fakten';
+import { brotkrumen, faqSchema, produktSchema, nurGueltig } from '../../lib/schema';
+
+const pfad = [{ label: 'Produkt', href: '/produkte/' }, { label: 'EVANA AI', href: '/produkte/evana-ai/' }];
+const typen = zahlen.dokumenttypen.replace('+', '');
+
+const definition = {
+  kern: 'EVANA AI ist die KI-Engine im Kern der EVANA-Plattform.',
+  text: `Sie liest Dokumente, Bilder und Scans, klassifiziert sie automatisch in mehr als ${typen} Immobilien-Dokumenttypen und überführt unstrukturierte Inhalte in Minuten in strukturierte Daten. Auf dieser Technologie setzen EVANA 360, EVANA TDR und die KI-Assistentin EVA auf.`,
+};
+
+const stapel = [
+  { datei: 'Grundbuch_Auszug_HRB_2847.pdf', typ: 'Grundbuchauszug' },
+  { datei: 'Mietvertrag_Stadtwerke_2024.pdf', typ: 'Gewerbemietvertrag' },
+  { datei: 'Energieausweis_Mainufer_3OG.pdf', typ: 'Energieausweis Wohngebäude' },
+  { datei: 'Wartung_Brandschutz_Scan_03.jpg', typ: 'Wartungsprotokoll (Scan)' },
+];
+
+const felder = [
+  { feld: 'Mieter', wert: 'Mainufer Consulting GmbH' },
+  { feld: 'Mietfläche', wert: '842,3 m²' },
+  { feld: 'Vertragsbeginn', wert: '01.07.2022' },
+  { feld: 'Mindestlaufzeit', wert: '10 Jahre' },
+  { feld: 'Indexierung', wert: 'VPI · jährlich' },
+  { feld: 'Sonderkündigung', wert: 'Nein' },
+  { feld: 'Kaution', wert: '3 Monatsmieten · Bürgschaft' },
+];
+
+const pipeline = [
+  { titel: 'Erfassen', text: 'PDFs, Scans, Bilder und E-Mail-Anhänge. Auch handschriftliche Vermerke werden gelesen.' },
+  { titel: 'Klassifizieren', text: `Deep Learning auf Text und Bild ordnet jedes Dokument einem von mehr als ${typen} Typen zu.` },
+  { titel: 'Extrahieren', text: 'Regelbasierte Verfahren und NLP ziehen die relevanten Felder pro Typ heraus.' },
+  { titel: 'Bereitstellen', text: 'Strukturierte Daten gehen per Export oder API in Ihre Systeme, mit Bezug zur Fundstelle.' },
+];
+
+const merkmale = [
+  { titel: 'Klassifizierung', text: `Automatische Dokumentenklassifizierung für mehr als ${typen} Immobilien-Dokumenttypen, vom Grundbuch bis zum Wartungsprotokoll, mit ${zahlen.erkennungsrate} Erkennungsrate.` },
+  { titel: 'Datenextraktion', text: 'Vertragsfristen, Flächen, Verbräuche und Kennzahlen: Pro Typ definierte Felder werden strukturiert herausgelesen und übergeben.' },
+  { titel: 'Bilderkennung', text: 'Fotos, Lagepläne und Gutachtenbilder werden interpretiert. Bauzustände und Mängel, die im reinen Text fehlen, fließen in die Analyse ein.' },
+  { titel: 'Sprachunabhängig', text: 'Fremdsprachige Unterlagen werden erfasst und vereinheitlicht. Das ist wichtig für internationale Portfolios und grenzüberschreitende Transaktionen.' },
+  { titel: 'Export und Anbindung', text: 'Ausgabe in Ihrem Wunschformat, Übergabe per REST-API, an SAP RE-FX, mit SCIM und SSO. EVANA AI passt sich in Ihre Systemlandschaft ein.' },
+  { titel: 'DSGVO-Löschvorbereitung', text: 'Personenbezogene Inhalte werden gezielt erkannt, sodass Löschpflichten dokumentiert und kontrolliert umgesetzt werden können.' },
+];
+
+const dokumente = [
+  { titel: 'Grundbuchauszüge', text: 'Abteilungen, Lasten und Eintragungen werden strukturiert ausgelesen. Auch handschriftliche Löschungen werden korrekt erkannt.' },
+  { titel: 'Mietverträge', text: 'Laufzeit, Indexierung, Sonderkündigungsrechte, Flächen und Nebenkosten stehen direkt im Datensatz.' },
+  { titel: 'Energieausweise', text: 'Verbrauchs- und Bedarfskennwerte, Effizienzklassen und Gültigkeiten. Aus großen Ausweisbeständen werden in wenigen Tagen strukturierte Daten.' },
+  { titel: 'Bewertungsgutachten', text: 'Bis zu 300 Seiten pro Gutachten, rund 40 Bewertungsfelder strukturiert übergeben. Das spart bei TÜV Saarland Stunden pro Gutachten.' },
+  { titel: 'Wartungsprotokolle', text: 'Auch aus Scans und Fotos werden Mängel, Fristen und Prüfvermerke erfasst und nach Dringlichkeit nutzbar gemacht.' },
+  { titel: 'Dienst- und Serviceverträge', text: 'Vertragspartner, Leistungsumfang und Kündigungsfristen werden erfasst. So werden Service Charges und Compliance-Themen prüfbar.' },
+];
+
+const faq = [
+  { frage: 'Was ist EVANA AI?', antwort: `EVANA AI ist die KI-Engine im Kern der EVANA-Plattform. Sie liest Dokumente, Bilder und Scans, übernimmt die automatische Dokumentenklassifizierung in mehr als ${typen} Immobilien-Dokumenttypen und überführt unstrukturierte Inhalte in Minuten in strukturierte, weiterverwendbare Daten. Auf dieser Technologie setzen EVANA 360, EVANA TDR und die KI-Assistentin EVA auf.` },
+  { frage: 'Welche Dokumenttypen erkennt EVANA AI?', antwort: `EVANA AI klassifiziert mehr als ${typen} Dokumenttypen aus der Immobilienwirtschaft, darunter Grundbuchauszüge, Miet- und Dienstleistungsverträge, Energieausweise, Bewertungsgutachten, Wartungsprotokolle, Nebenkostenabrechnungen und viele weitere. Die KI wird seit der Gründung von EVANA im Jahr ${firma.gegruendet} kontinuierlich trainiert.` },
+  { frage: 'Wie genau ist die Klassifizierung?', antwort: `Die Erkennungsrate bei der Klassifizierung liegt bei ${zahlen.erkennungsrate}. Grundlage sind über ${zahlen.datenpunkte} relevante Datenpunkte, auf denen die KI trainiert wurde, und eine Kombination aus Deep-Learning-Verfahren, die den Text und das Rohbild eines Dokuments einbeziehen.` },
+  { frage: 'Kann EVANA AI auch Bildinhalte und Scans verarbeiten?', antwort: 'Ja. EVANA AI nutzt einen optimierten OCR-Prozess für gescannte Dokumente und interpretiert zusätzlich visuelle Inhalte wie Fotos, Lagepläne und Gutachtenbilder. So fließen auch Bauzustände, Mängel oder Markierungen in die Analyse ein, die im reinen Text fehlen. Selbst handschriftliche Vermerke werden erkannt.' },
+  { frage: 'Funktioniert EVANA AI auch mit fremdsprachigen Dokumenten?', antwort: 'Ja. EVANA AI verarbeitet Dokumente in mehreren Sprachen und eignet sich damit besonders für internationale Portfolios und grenzüberschreitende Transaktionen. Ergebnisse können konsistent vereinheitlicht und weiterverarbeitet werden.' },
+  { frage: 'In welchen Formaten exportiert EVANA AI die Daten und welche Systeme werden angebunden?', antwort: 'EVANA AI gibt Daten in kundenspezifischen Formaten aus und bindet sich an bestehende Software an. Verfügbar sind Anbindungen über REST-API, an SAP RE-FX, MS Office sowie Standards wie SCIM und SSO. Die KI passt sich in Ihre bestehende Systemlandschaft ein.' },
+  { frage: 'Kann ich EVANA AI für eigene Anwendungsfälle nutzen?', antwort: 'Ja. Die Engine von EVANA AI lässt sich auf Basis der eigenen Infrastruktur zu individuellen Lösungen ausbauen, mit schnell integrierten Dokumenttypen und zusätzlich definierten Datenfeldern. Gemeinsam mit der TÜV Saarland Immobilienbewertung GmbH analysiert EVANA AI so zum Beispiel Bewertungsgutachten mit bis zu 300 Seiten und extrahiert rund 40 Bewertungsfelder. Genauso lassen sich Due-Diligence-Unterlagen, ESG-Dokumente oder technische Dokumentationen automatisiert auswerten.' },
+  { frage: 'Wie sicher und compliant ist EVANA AI?', antwort: 'EVANA AI arbeitet in der EVANA Secure-Cloud. Die Plattform ist ISO 27001-zertifiziert, DSGVO-konform, BaFin-ready und DORA-konform sowie TÜV-geprüft und wird durch regelmäßige Audits und Penetrationstests abgesichert. Personenbezogene Inhalte werden gezielt erkannt, um Löschpflichten dokumentiert und kontrolliert umsetzen zu können.' },
+  { frage: 'Wie verhält sich EVANA AI zu EVANA 360, EVANA TDR und EVA?', antwort: 'EVANA AI ist die Technologiebasis darunter. EVANA 360 ist der zentrale Bestandsdatenraum auf dieser Basis, EVANA TDR der Transaktionsdatenraum für Due Diligence und EVA die KI-Assistentin, die Inhalte in natürlicher Sprache abfragbar macht. Alle drei Produkte greifen auf EVANA AI als gemeinsame Engine zu.' },
+];
+
+const schema = nurGueltig([
+  produktSchema({ name: 'EVANA AI', beschreibung: `${definition.kern} ${definition.text}`, url: '/produkte/evana-ai/' }),
+  faqSchema(faq),
+  brotkrumen(pfad),
+]);
+---
+<Basis
+  title="Automatische Dokumentenklassifizierung mit KI | EVANA AI"
+  description={`EVANA AI klassifiziert über ${typen} Immobilien-Dokumenttypen mit ${zahlen.erkennungsrate} Erkennungsrate und macht aus Verträgen, Gutachten und Scans strukturierte Daten.`}
+  schema={schema}
+>
+  <Seitenkopf
+    titel="Aus Dokumenten werden in Minuten Daten"
+    lead={`EVANA AI ist die KI im Kern unserer Plattform. Sie liest Verträge, Gutachten, Scans und Bilder, erkennt mehr als ${typen} Dokumenttypen und überführt unstrukturierte Inhalte automatisch in saubere, weiterverwendbare Daten.`}
+    pfad={pfad}
+    zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
+  />
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <Fenster titel="Klassifizierung · Eingangsstapel" meta="12 von 12 erkannt">
+        <div class="klass">
+          <ul class="stapel">
+            {stapel.map((s) => <li class="dok"><DokIcon farbe="#7A7A7A" /><span>{s.datei}</span></li>)}
+          </ul>
+          <div class="linie" aria-hidden="true"><span class="knoten"></span></div>
+          <ul class="typen">
+            {stapel.map((s) => <li><span class="typ">{s.typ}</span><small>{s.datei}</small></li>)}
+          </ul>
+        </div>
+      </Fenster>
+    </div>
+  </section>
+
+  <Definition frage="Was ist EVANA AI?" kern={definition.kern} text={definition.text} />
+
+  <section class="zahlen-sektion">
+    <div class="container">
+      <Kennzahlen
+        eintraege={[
+          { wert: zahlen.dokumenttypen, label: 'Dokumenttypen automatisch klassifiziert' },
+          { wert: zahlen.erkennungsrate, label: 'Erkennungsrate bei der Klassifizierung' },
+          { wert: `${zahlen.datenpunkte}+`, label: 'Datenpunkte, auf denen die KI trainiert ist' },
+          { wert: `seit ${firma.gegruendet}`, label: 'Training auf Immobiliendokumenten' },
+        ]}
+      />
+    </div>
+  </section>
+
+  <Funktionen
+    eyebrow="Vom Dokument zum Datensatz"
+    titel="Vier Schritte, eine Pipeline"
+    lead={`Die Pipeline ist für die Immobilienwirtschaft gebaut und seit ${firma.gegruendet} darauf trainiert.`}
+    eintraege={pipeline}
+    variante="schritte"
+    mist
+  />
+
+  <section class="sektion">
+    <div class="container ext-raster">
+      <Fenster titel="Extrahiert aus" meta="Gewerbemietvertrag_Mainufer.pdf">
+        <table class="felder">
+          <tbody>{felder.map((f) => <tr><th scope="row">{f.feld}</th><td>{f.wert}</td></tr>)}</tbody>
+        </table>
+        <div class="export"><span>CSV</span><span>Excel</span><span>API</span></div>
+      </Fenster>
+      <div>
+        <p class="eyebrow">Datenextraktion</p>
+        <h2>Aus dem PDF werden saubere Datenfelder</h2>
+        <p class="lead">EVANA AI liest die relevanten Inhalte aus jedem erkannten Dokument heraus, von Vertragsfristen über Verbrauchswerte bis zur Bewertungskennzahl, und liefert sie als saubere Datenfelder.</p>
+        <p class="absatz">Das Ergebnis ist direkt weiterverarbeitbar: in Ihrer Datenbank, in Ihrem ERP, in Ihrem Reporting. Jeder Wert behält den Bezug zum Originaldokument, damit jede Auswertung prüfbar bleibt.</p>
+        <a href={cta.demo} class="btn btn-primaer">Extraktion live sehen</a>
+      </div>
+    </div>
+  </section>
+
+  <Funktionen
+    eyebrow="Leistungsmerkmale"
+    titel="Eine KI, gebaut für Immobiliendokumente"
+    lead="EVANA AI ist eine spezialisierte Engine für die Dokumentenwelt der Immobilienwirtschaft."
+    eintraege={merkmale}
+    mist
+  />
+
+  <Funktionen
+    eyebrow="Dokumenttypen"
+    titel="Welche Dokumente EVANA AI besonders gut versteht"
+    lead={`Eine Auswahl aus mehr als ${typen} trainierten Typen.`}
+    eintraege={dokumente}
+    variante="zeilen"
+  />
+
+  <section class="sektion auf-dunkel">
+    <div class="container usecase">
+      <div>
+        <p class="eyebrow">Individuelle Use Cases</p>
+        <h2>Offen für Ihren Use Case, auf Basis unserer KI</h2>
+        <p class="lead">Die Engine von EVANA AI lässt sich auf Basis unserer eigenen Infrastruktur zu individuellen Lösungen ausbauen. Neue Dokumenttypen werden schnell integriert, zusätzliche Datenfelder definiert und bestehende Prozesse erweitert.</p>
+        <a href={cta.demo} class="btn btn-primaer">Eigenen Use Case besprechen</a>
+      </div>
+      <div class="faelle">
+        <a class="fall gross" href="/referenzen/tuev-saarland/">
+          <span class="wer">TÜV Saarland Immobilienbewertung</span>
+          <span>Bewertungsgutachten mit bis zu <b>300 Seiten</b> werden automatisch analysiert, rund <b>40 Bewertungsfelder</b> strukturiert extrahiert, inklusive Bildern und Lageplänen.</span>
+          <span class="weiter">Ganzen Case lesen</span>
+        </a>
+        <div class="fall"><span class="wer">Due Diligence und ESG</span><span>Due-Diligence-Unterlagen und ESG-Dokumente auf derselben Engine strukturiert auswerten.</span></div>
+        <div class="fall"><span class="wer">Technik und Portfolio</span><span>Technische Dokumentationen und Portfolioauswertungen automatisiert in strukturierte Daten überführen.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <Zitat
+    text="Durch die Verbindung unserer Expertise mit der KI-Kompetenz von EVANA entsteht ein echter Mehrwert für unsere Praxis."
+    person="Siegfried Seifert"
+    rolle="Geschäftsführer, TÜV Saarland Immobilienbewertung GmbH"
+  />
+
+  <Anwendungen slugs={['daten-extrahieren', 'dokumente-automatisch-ablegen', 'ki-und-systeme-anbinden']} titel="Wo EVANA AI arbeitet" mist />
+
+  <Referenzen produkte={['EVANA AI']} titel="EVANA AI in der Praxis" />
+
+  <Zusammenspiel
+    aktuell="evana-ai"
+    titel="EVANA AI ist die Basis, die Plattform baut darauf auf"
+    lead="Auf EVANA AI setzen die anderen Bausteine auf, jeder mit eigenem Fokus."
+  />
+
+  <SicherheitKurz text="Die Verarbeitung läuft in der geschützten EVANA Secure-Cloud, basierend auf KI-Modellen von Microsoft und OpenAI sowie eigenen proprietären Modellen, geprüft, zertifiziert und konform mit den Anforderungen von Finanz-, Versicherungs- und Immobilienwirtschaft." />
+
+  <Faq eintraege={faq} />
+
+  <Abschluss
+    titel="Sehen Sie EVANA AI an Ihren eigenen Dokumenten"
+    text="In einer kurzen Demo zeigen wir Ihnen, wie aus Ihren Verträgen, Gutachten und Scans in Minuten strukturierte Daten werden."
+  />
+</Basis>
+
+<style>
+  .klass { display: grid; grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr); align-items: center; gap: 0; }
+  .stapel { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .stapel .dok { font-size: .86rem; word-break: break-all; }
+  .stapel .dok:nth-child(odd) { transform: rotate(-1.2deg); }
+  .stapel .dok:nth-child(even) { transform: rotate(.8deg) translateX(10px); }
+  .linie { position: relative; height: 4px; margin-inline: 10px; border-radius: 2px; background: var(--verlauf); }
+  .linie .knoten { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 9px rgba(245,158,52,.18); }
+  .typen { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .typen li { display: grid; gap: 4px; padding: 12px 14px; border-radius: 14px; background: var(--tint-petrol); }
+  .typ { font-weight: 700; color: var(--petrol-dunkel); }
+  .typen small { color: var(--hilfsgrau); font-size: .78rem; word-break: break-all; }
+
+  .zahlen-sektion { padding-bottom: clamp(56px, 8vw, 104px); }
+
+  .ext-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .ext-raster .lead { margin-top: 18px; }
+  .absatz { margin-top: 14px; }
+  .ext-raster .btn { margin-top: 28px; }
+  .felder { width: 100%; border-collapse: collapse; font-size: .94rem; }
+  .felder th { text-align: left; font-weight: 400; color: var(--hilfsgrau); padding: 9px 12px; }
+  .felder td { text-align: right; font-weight: 600; color: var(--headline); padding: 9px 12px; }
+  .felder tr:nth-child(odd) th, .felder tr:nth-child(odd) td { background: var(--mist); }
+  .felder tr:nth-child(odd) th { border-radius: 10px 0 0 10px; }
+  .felder tr:nth-child(odd) td { border-radius: 0 10px 10px 0; }
+  .export { display: flex; gap: 6px; margin-top: 16px; }
+  .export span { font-size: .78rem; font-weight: 700; color: var(--tint-orange-text); background: var(--tint-orange); border-radius: 999px; padding: 4px 12px; }
+
+  .usecase { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .usecase .lead { margin-top: 18px; }
+  .usecase .btn { margin-top: 30px; }
+  .faelle { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .fall { display: grid; gap: 8px; align-content: start; padding: 22px 24px; border-radius: var(--radius); background: rgba(255,255,255,.07); color: #d6e6e9; text-decoration: none; font-size: .96rem; }
+  .fall.gross { grid-column: 1 / -1; background: var(--weiss); color: var(--text); font-size: 1.05rem; }
+  .fall.gross b { color: var(--petrol); }
+  .fall.gross:hover { color: var(--text); background: var(--tint-petrol); }
+  .wer { font-weight: 700; color: var(--weiss); }
+  .gross .wer { color: var(--headline); font-size: .82rem; letter-spacing: .05em; text-transform: uppercase; }
+  .weiter { font-weight: 700; color: var(--petrol); font-size: .9rem; }
+
+  @media (max-width: 900px) { .ext-raster, .usecase { grid-template-columns: 1fr; } }
+  @media (max-width: 700px) {
+    .klass { grid-template-columns: 1fr; gap: 14px; }
+    .linie { width: 4px; height: 44px; margin: 0 auto; background: linear-gradient(180deg, var(--petrol), var(--magenta) 55%, var(--orange)); }
+    .faelle { grid-template-columns: 1fr; }
+  }
+</style>

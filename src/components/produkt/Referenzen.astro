@@ -1,0 +1,69 @@
+---
+// Referenz-Teaser: Kundengeschichten aus der Collection "referenzen", gefiltert nach Produkt oder gezielt per ID.
+import { getCollection } from 'astro:content';
+interface Props {
+  produkte?: string[];
+  ids?: string[];
+  titel?: string;
+  lead?: string;
+  max?: number;
+  dunkel?: boolean;
+  mist?: boolean;
+}
+const { produkte = [], ids, titel = 'Aus der Praxis', lead, max = 3, dunkel = false, mist = false } = Astro.props;
+
+// MongoDB ist eine Technologiepartnerschaft und keine Kundengeschichte zu einem Produkt.
+const ohne = ['mongodb'];
+const alle = (await getCollection('referenzen')).sort((a, b) => b.data.datum.getTime() - a.data.datum.getTime());
+const auswahl = (
+  ids
+    ? ids.map((id) => alle.find((r) => r.id === id)).filter((r) => r !== undefined)
+    : alle.filter((r) => !ohne.includes(r.id) && r.data.produkte.some((p) => produkte.includes(p)))
+).slice(0, max);
+---
+{auswahl.length > 0 && (
+  <section class:list={['sektion', { 'auf-dunkel': dunkel, 'sektion-mist': mist }]}>
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Referenzen</p>
+        <h2>{titel}</h2>
+        {lead && <p class="lead">{lead}</p>}
+      </div>
+      <ul class:list={['refs', `n${auswahl.length}`]}>
+        {auswahl.map((r) => (
+          <li>
+            <a href={`/referenzen/${r.id}/`}>
+              <span class="kunde">{r.data.kunde}</span>
+              {r.data.kennzahlen[0] && (
+                <span class="zahl"><b>{r.data.kennzahlen[0].wert}</b> {r.data.kennzahlen[0].label}</span>
+              )}
+              <strong>{r.data.titel}</strong>
+              <span class="weiter" aria-hidden="true">Referenz lesen</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a class="alle" href="/referenzen/">Alle Referenzen</a>
+    </div>
+  </section>
+)}
+
+<style>
+  .refs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .refs.n1 { grid-template-columns: minmax(0, 1fr); max-width: 640px; }
+  .refs.n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .refs a {
+    display: flex; flex-direction: column; gap: 12px; height: 100%; padding: 28px;
+    background: var(--weiss); border-radius: var(--radius); box-shadow: var(--schatten);
+    text-decoration: none; color: var(--text); transition: transform .15s;
+  }
+  .refs a:hover { transform: translateY(-3px); }
+  .kunde { font-size: .82rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--hilfsgrau); }
+  .zahl { font-size: .95rem; color: var(--hilfsgrau); }
+  .zahl b { display: block; font-size: 2.1rem; line-height: 1.1; color: var(--petrol); }
+  strong { color: var(--headline); font-size: 1.12rem; line-height: 1.35; }
+  .weiter { margin-top: auto; padding-top: 6px; font-weight: 700; font-size: .9rem; color: var(--petrol); }
+  .alle { display: inline-block; margin-top: 28px; font-weight: 600; }
+  .auf-dunkel .alle { color: var(--orange); }
+  @media (max-width: 900px) { .refs, .refs.n2 { grid-template-columns: 1fr; } }
+</style>

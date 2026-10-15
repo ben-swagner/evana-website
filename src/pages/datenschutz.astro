@@ -1,0 +1,10 @@
+---
+import { getEntry, render } from 'astro:content';
+import Recht from '../layouts/Recht.astro';
+const eintrag = await getEntry('recht', 'datenschutz');
+const { Content } = await render(eintrag!);
+---
+<Recht title="Datenschutzerklärung | EVANA" description="Datenschutzerklärung der EVANA AG für die Website evana.ai." titel="Datenschutzerklärung" pfad={{ label: 'Datenschutz', href: '/datenschutz/' }}>
+  <p><a href="#" data-consent-oeffnen>Cookie-Einstellungen ändern</a></p>
+  <Content />
+</Recht>

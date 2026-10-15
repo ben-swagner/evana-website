@@ -1,55 +1,250 @@
 {
   "_hinweis": "Eine Quelle für alle Weiterleitungen. scripts/build-redirects.mjs erzeugt daraus public/_redirects (Cloudflare) und docs/redirects-azure.csv (Front Door Rules). Grundlage: Search-Console-Export August 2026. Status 'vorschlag' = Ziel noch abstimmen.",
   "regeln": [
-    { "von": "/unternehmen-evana-ai/", "nach": "/unternehmen/", "status": "fix" },
-    { "von": "/karriere-evana-ai/", "nach": "/karriere/", "status": "fix" },
-    { "von": "/impressum-evana-ai-anbieterkennzeichnung/", "nach": "/impressum/", "status": "fix" },
-    { "von": "/landingpage/", "nach": "/", "status": "fix" },
-    { "von": "/landing-evana/", "nach": "/", "status": "fix" },
-    { "von": "/evana-im-einsatz/", "nach": "/referenzen/", "status": "fix" },
-
-    { "von": "/tuev-saarland/", "nach": "/referenzen/tuev-saarland/", "status": "fix" },
-    { "von": "/tuev-saarland-immobilienbewertung-gmbh-und-evana-ag-automatisieren-analyse-und-verarbeitung-von-bewertungsgutachten/", "nach": "/referenzen/tuev-saarland/", "status": "fix" },
-    { "von": "/mann-immobilien/", "nach": "/referenzen/mann-immobilien/", "status": "fix" },
-    { "von": "/aachener-grundvermoegen-datenextraktion-ki/", "nach": "/referenzen/aachener-grundvermoegen/", "status": "fix" },
-    { "von": "/aachener-grundvermogen-energiemanagement/", "nach": "/referenzen/aachener-grundvermoegen/", "status": "fix" },
-    { "von": "/aachener-grundvermoegen-grundbuch/", "nach": "/referenzen/aachener-grundvermoegen/", "status": "fix" },
-    { "von": "/mongo-db/", "nach": "/referenzen/mongodb/", "status": "fix" },
-    { "von": "/baumanagement/", "nach": "/referenzen/baumanagement/", "status": "fix" },
-    { "von": "/optik-optoelektronik-2-mio-dokumente-effizient-verwaltet/", "nach": "/referenzen/optik-optoelektronik/", "status": "fix" },
-
-    { "von": "/technisches-property-management/", "nach": "/loesungen/property-facility-management/", "status": "fix" },
-    { "von": "/dokumentenmanagement-corporate-real-estate/", "nach": "/loesungen/corporate-real-estate/", "status": "fix" },
-    { "von": "/rest-api-zertifizierte-sap-schnittstelle/", "nach": "/produkte/integrationen/", "status": "fix" },
-    { "von": "/integration-von-evana360-in-sap-s-4hana/", "nach": "/produkte/integrationen/", "status": "fix" },
-    { "von": "/copilot-flex-routing-dsgvo/", "nach": "/anwendungsfaelle/ki-und-systeme-anbinden/", "status": "vorschlag" },
-    { "von": "/unsere-duplikaterkennung/", "nach": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "status": "vorschlag" },
-    { "von": "/dokumentenmanagement-objektuebernahme-evana/", "nach": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "status": "vorschlag" },
-    { "von": "/schluss-mit-suchen/", "nach": "/anwendungsfaelle/dokumente-befragen/", "status": "vorschlag" },
-    { "von": "/ihr-weg-aus-dem-dokumentendschungel/", "nach": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "status": "vorschlag" },
-    { "von": "/wie-lange-braucht-ihr-um-20-000-dokumente-zu-analysieren/", "nach": "/anwendungsfaelle/daten-extrahieren/", "status": "vorschlag" },
-
-    { "von": "/evana-wie-viel-kostet-manuelle-dokumentenarbeit/", "nach": "/wissen/kosten-manueller-dokumentenarbeit/", "status": "vorschlag" },
-    { "von": "/datengetriebene-immobilienentscheidungen-der-zukunft/", "nach": "/wissen/foerdermittelpruefung-mit-ki/", "status": "vorschlag" },
-    { "von": "/wp-content/uploads/2025/03/Evana-White-Paper.pdf", "nach": "/wissen/whitepaper/", "status": "vorschlag" },
-
-    { "von": "/news-evana-ai/", "nach": "/news/", "status": "fix" },
-    { "von": "/pressemitteilung/", "nach": "/news/", "status": "vorschlag" },
-    { "von": "/pressemitteilung-2/", "nach": "/news/", "status": "vorschlag" },
-    { "von": "/pressemitteilung-3/", "nach": "/news/", "status": "vorschlag" },
-    { "von": "/pressemitteilung-evana-ai-erreicht-naechsten-entwicklungsschritt/", "nach": "/news/evana-ai-erreicht-naechsten-entwicklungsschritt/", "status": "vorschlag" },
-    { "von": "/evana-ag-praesentiert-erstmals-ki-gestuetzten-transaktionsdatenraum-fuer-immobilienwirtschaft/", "nach": "/news/ki-gestuetzter-transaktionsdatenraum/", "status": "vorschlag" },
-
-    { "von": "/klasse-gemacht-lieber-flo/", "nach": "/news/", "status": "vorschlag" },
-    { "von": "/willst-du-mit-uns-die-evana-ai-testen-gehen/", "nach": "/", "status": "vorschlag" },
-    { "von": "/smart-smarter-evana/", "nach": "/", "status": "vorschlag" },
-    { "von": "/unsere-ki-bleibt-die-ruhe-selbst/", "nach": "/news/", "status": "vorschlag" },
-    { "von": "/voller-fokus-dank-evana/", "nach": "/news/", "status": "vorschlag" },
-    { "von": "/viele-koeche-verderben-den-brei/", "nach": "/news/", "status": "vorschlag" },
-    { "von": "/transformation-braucht-schnelligkeit/", "nach": "/news/", "status": "vorschlag" },
-
-    { "von": "/category/*", "nach": "/news/", "status": "fix" },
-    { "von": "/author/*", "nach": "/unternehmen/", "status": "fix" },
-    { "von": "/eng/*", "nach": "/", "status": "vorschlag" }
+    {
+      "von": "/aachener-grundvermoegen-datenextraktion-ki/",
+      "nach": "/referenzen/aachener-grundvermoegen-datenextraktion/",
+      "status": "fix"
+    },
+    {
+      "von": "/aachener-grundvermoegen-grundbuch/",
+      "nach": "/referenzen/aachener-grundvermoegen-grundsteuer/",
+      "status": "fix"
+    },
+    {
+      "von": "/aachener-grundvermogen-energiemanagement/",
+      "nach": "/referenzen/aachener-grundvermoegen-energieausweise/",
+      "status": "fix"
+    },
+    {
+      "von": "/baumanagement/",
+      "nach": "/referenzen/baumanagement/",
+      "status": "fix"
+    },
+    {
+      "von": "/copilot-flex-routing-dsgvo/",
+      "nach": "/news/copilot-flex-routing-dsgvo/",
+      "status": "fix"
+    },
+    {
+      "von": "/datengetriebene-immobilienentscheidungen-der-zukunft/",
+      "nach": "/wissen/foerdermittelpruefung-mit-ki/",
+      "status": "fix"
+    },
+    {
+      "von": "/dokumentenmanagement-corporate-real-estate/",
+      "nach": "/wissen/dokumentenmanagement-corporate-real-estate/",
+      "status": "fix"
+    },
+    {
+      "von": "/dokumentenmanagement-objektuebernahme-evana/",
+      "nach": "/referenzen/wirtgen-invest/",
+      "status": "fix"
+    },
+    {
+      "von": "/evana-ag-praesentiert-erstmals-ki-gestuetzten-transaktionsdatenraum-fuer-immobilienwirtschaft/",
+      "nach": "/news/ki-transaktionsdatenraum-launch/",
+      "status": "fix"
+    },
+    {
+      "von": "/evana-im-einsatz/",
+      "nach": "/referenzen/",
+      "status": "fix"
+    },
+    {
+      "von": "/evana-wie-viel-kostet-manuelle-dokumentenarbeit/",
+      "nach": "/wissen/kosten-manueller-dokumentenarbeit/",
+      "status": "fix"
+    },
+    {
+      "von": "/events/",
+      "nach": "/news/",
+      "status": "fix"
+    },
+    {
+      "von": "/ihr-weg-aus-dem-dokumentendschungel/",
+      "nach": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/impressum-evana-ai-anbieterkennzeichnung/",
+      "nach": "/impressum/",
+      "status": "fix"
+    },
+    {
+      "von": "/integration-von-evana360-in-sap-s-4hana/",
+      "nach": "/news/sap-integration/",
+      "status": "fix"
+    },
+    {
+      "von": "/karriere-evana-ai/",
+      "nach": "/karriere/",
+      "status": "fix"
+    },
+    {
+      "von": "/ki-dokumentenanalyse-immobilien/",
+      "nach": "/wissen/ki-dokumentenanalyse-immobilien/",
+      "status": "fix"
+    },
+    {
+      "von": "/ki-im-qa-prozess-antwortvorschlaege/",
+      "nach": "/news/ki-im-qa-prozess-antwortvorschlaege/",
+      "status": "fix"
+    },
+    {
+      "von": "/ki-integration-bestehende-dms-landschaften/",
+      "nach": "/wissen/ki-integration-bestehende-dms/",
+      "status": "fix"
+    },
+    {
+      "von": "/ki-integration-in-bestehende-dms/",
+      "nach": "/wissen/ki-integration-bestehende-dms/",
+      "status": "fix"
+    },
+    {
+      "von": "/klasse-gemacht-lieber-flo/",
+      "nach": "/news/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/landing-evana/",
+      "nach": "/produkte/eva/",
+      "status": "fix"
+    },
+    {
+      "von": "/landingpage/",
+      "nach": "/produkte/evana-ai/",
+      "status": "fix"
+    },
+    {
+      "von": "/mann-immobilien/",
+      "nach": "/referenzen/mann-immobilien/",
+      "status": "fix"
+    },
+    {
+      "von": "/mongo-db/",
+      "nach": "/referenzen/mongodb/",
+      "status": "fix"
+    },
+    {
+      "von": "/news-evana-ai/",
+      "nach": "/news/",
+      "status": "fix"
+    },
+    {
+      "von": "/optik-optoelektronik-2-mio-dokumente-effizient-verwaltet/",
+      "nach": "/wissen/dokumentenmanagement-corporate-real-estate/",
+      "status": "fix"
+    },
+    {
+      "von": "/pressemitteilung-2/",
+      "nach": "/news/noerr-kooperation-legal-due-diligence/",
+      "status": "fix"
+    },
+    {
+      "von": "/pressemitteilung-3/",
+      "nach": "/news/ampega-onboarding-100-objekte/",
+      "status": "fix"
+    },
+    {
+      "von": "/pressemitteilung-evana-ai-erreicht-naechsten-entwicklungsschritt/",
+      "nach": "/news/evana-ai-entwicklungsschritt/",
+      "status": "fix"
+    },
+    {
+      "von": "/pressemitteilung/",
+      "nach": "/news/ki-tool-legal-due-diligence/",
+      "status": "fix"
+    },
+    {
+      "von": "/rest-api-zertifizierte-sap-schnittstelle/",
+      "nach": "/news/sap-integration/",
+      "status": "fix"
+    },
+    {
+      "von": "/schluss-mit-suchen/",
+      "nach": "/anwendungsfaelle/dokumente-befragen/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/smart-smarter-evana/",
+      "nach": "/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/technisches-property-management/",
+      "nach": "/referenzen/technisches-property-management/",
+      "status": "fix"
+    },
+    {
+      "von": "/transformation-braucht-schnelligkeit/",
+      "nach": "/news/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/tuev-saarland-immobilienbewertung-gmbh-und-evana-ag-automatisieren-analyse-und-verarbeitung-von-bewertungsgutachten/",
+      "nach": "/news/tuev-saarland-kooperation/",
+      "status": "fix"
+    },
+    {
+      "von": "/tuev-saarland/",
+      "nach": "/referenzen/tuev-saarland/",
+      "status": "fix"
+    },
+    {
+      "von": "/unsere-duplikaterkennung/",
+      "nach": "/news/duplikaterkennung/",
+      "status": "fix"
+    },
+    {
+      "von": "/unsere-ki-bleibt-die-ruhe-selbst/",
+      "nach": "/news/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/unternehmen-evana-ai/",
+      "nach": "/unternehmen/",
+      "status": "fix"
+    },
+    {
+      "von": "/viele-koeche-verderben-den-brei/",
+      "nach": "/news/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/voller-fokus-dank-evana/",
+      "nach": "/news/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/wie-lange-braucht-ihr-um-20-000-dokumente-zu-analysieren/",
+      "nach": "/anwendungsfaelle/daten-extrahieren/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/willst-du-mit-uns-die-evana-ai-testen-gehen/",
+      "nach": "/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/wp-content/uploads/2025/03/Evana-White-Paper.pdf",
+      "nach": "/wissen/whitepaper/",
+      "status": "vorschlag"
+    },
+    {
+      "von": "/author/*",
+      "nach": "/unternehmen/",
+      "status": "fix"
+    },
+    {
+      "von": "/category/*",
+      "nach": "/news/",
+      "status": "fix"
+    },
+    {
+      "von": "/eng/*",
+      "nach": "/",
+      "status": "vorschlag"
+    }
   ]
 }

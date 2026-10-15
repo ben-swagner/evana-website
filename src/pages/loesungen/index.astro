@@ -1,0 +1,82 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import { zielgruppen } from '../../data/zielgruppen';
+import { brotkrumen } from '../../lib/schema';
+
+const immobilien = zielgruppen.filter((z) => z.bereich === 'immobilien');
+const weitere = zielgruppen.filter((z) => z.bereich === 'erweiterung');
+const pfad = [{ label: 'Lösungen', href: '/loesungen/' }];
+---
+<Basis
+  title="Lösungen nach Rolle: EVANA für Ihren Bereich | EVANA"
+  description="KI für Immobiliendokumente nach Rolle: Asset und Property Management, Transaktion, Finanzwirtschaft, öffentliche Hand, Filialnetze, Kanzleien und mehr."
+  schema={[brotkrumen(pfad)]}
+>
+  <Seitenkopf
+    titel="EVANA für Ihre Rolle"
+    lead="EVANA ist auf Immobiliendokumente spezialisiert und verarbeitet auch sehr große Bestände. Jede Rolle hat dabei ihre eigenen Unterlagen, Fristen und Fragen. Wählen Sie Ihren Bereich und sehen Sie, welche Arbeit EVANA Ihnen abnimmt."
+    pfad={pfad}
+  />
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Immobilienwirtschaft</p>
+        <h2>Für die Immobilienwirtschaft gebaut</h2>
+        <p class="lead">Seit 2015 trainieren wir EVANA auf die Dokumente der Immobilienwirtschaft, vom Mietvertrag bis zum Bewertungsgutachten.</p>
+      </div>
+      <ul class="karten">
+        {immobilien.map((z) => (
+          <li>
+            <a href={`/loesungen/${z.slug}/`}>
+              <strong>{z.navLabel}</strong>
+              <span>{z.kurz}</span>
+              <span class="dokus">{z.dokumente.slice(0, 3).join(', ')}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Weitere Einsatzfelder</p>
+        <h2>Überall, wo Standorte und Verträge viele Dokumente erzeugen</h2>
+        <p class="lead">Wer viele Standorte, Verträge und Nachweise verwaltet, arbeitet mit denselben Dokumenttypen wie die Immobilienwirtschaft. Deshalb hilft EVANA auch dort.</p>
+      </div>
+      <ul class="karten hell">
+        {weitere.map((z) => (
+          <li>
+            <a href={`/loesungen/${z.slug}/`}>
+              <strong>{z.navLabel}</strong>
+              <span>{z.kurz}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="sprint">
+        <p><strong>Für Filialnetze und Franchise-Systeme gibt es einen eigenen Einstieg.</strong> Im ROI-Sprint testen Sie EVANA 14 Tage lang an Ihren eigenen Standortunterlagen.</p>
+        <a href="/roi-sprint/" class="btn btn-sekundaer">Zum ROI-Sprint</a>
+      </div>
+    </div>
+  </section>
+
+  <Abschluss />
+</Basis>
+
+<style>
+  .karten { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .karten a { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 28px; background: var(--weiss); border-radius: var(--radius); box-shadow: var(--schatten-dokument); text-decoration: none; color: var(--text); }
+  .karten a:hover { box-shadow: var(--schatten); }
+  .karten strong { font-size: 1.25rem; line-height: 1.25; color: var(--headline); }
+  .karten a:hover strong { color: var(--petrol); }
+  .karten .dokus { margin-top: auto; padding-top: 6px; font-size: .86rem; color: var(--hilfsgrau); }
+  .karten.hell a { background: var(--mist); box-shadow: none; }
+  .karten.hell a:hover { background: var(--tint-petrol); }
+  .sprint { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; padding: 24px 28px; background: var(--tint-orange); border-radius: var(--radius); }
+  .sprint p { max-width: 62ch; color: var(--headline); }
+</style>

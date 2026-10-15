@@ -1,0 +1,158 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import Abschluss from '../components/Abschluss.astro';
+import { firma, zahlen, management, aufsichtsrat, investoren, siegel } from '../data/fakten';
+import { brotkrumen } from '../lib/schema';
+
+const initialen = (n: string) => n.split(' ').map((t) => t[0]).join('');
+const meilensteine = [
+  { jahr: '2015', text: 'Gründung der EVANA AG in Saarbrücken, auf dem Campus des Deutschen Forschungszentrums für Künstliche Intelligenz.' },
+  { jahr: '2021', text: 'Series B mit Extension, insgesamt 10 Mio. Euro unter Führung von Wecken & Cie., gemeinsam mit AC+X, Arventus, PATRIZIA und AM Alpha.' },
+  { jahr: '2023', text: 'Ampega, der Asset Manager der Talanx, übernimmt über 100 Objekte in zwei Wochen in EVANA 360.' },
+  { jahr: '2025', text: 'Martin Teiber wird CEO. EVANA bringt den KI-gestützten Transaktionsdatenraum EVANA TDR auf den Markt.' },
+  { jahr: '2026', text: 'EVA 2.0 befragt ganze Datenräume, EVA schreibt Antwortentwürfe im Q&A, der Document Router startet zur EXPO REAL.' },
+];
+---
+<Basis
+  title="Über EVANA: KI für Immobiliendokumente seit 2015"
+  description="EVANA steht für Evaluation und Analytics. Seit 2015 entwickelt die EVANA AG aus Saarbrücken KI, die Immobiliendokumente in verlässliche Daten verwandelt."
+  schema={[
+    brotkrumen([{ label: 'Über EVANA', href: '/unternehmen/' }]),
+    { '@context': 'https://schema.org', '@type': 'AboutPage', name: 'Über EVANA', about: { '@id': `${firma.url}/#organisation` } },
+  ]}
+>
+  <Seitenkopf
+    titel="Wir machen Dokumente auswertbar"
+    lead={`Die ${firma.name} entwickelt seit ${firma.gegruendet} KI, die Immobiliendokumente liest, ordnet und in verlässliche Daten verwandelt. Damit treffen Asset Manager, Bestandshalter und Transaktionsteams Entscheidungen auf einer Grundlage, die sie belegen können.`}
+    pfad={[{ label: 'Über EVANA', href: '/unternehmen/' }]}
+    demo={false}
+    zweitLink={{ label: 'Kontakt aufnehmen', href: '/kontakt/' }}
+  />
+
+  <section class="name auf-dunkel">
+    <div class="container name-raster">
+      <div class="woerter" aria-label="EVANA steht für Evaluation und Analytics">
+        <p><span class="hl">EV</span>aluation</p>
+        <p class="und">&amp;</p>
+        <p><span class="hl">ANA</span>lytics</p>
+      </div>
+      <div>
+        <h2>Wofür der Name steht</h2>
+        <p class="lead">
+          EVANA verbindet zwei Wörter: Evaluation und Analytics. Wir bewerten, was in Dokumenten steht, und machen es auswertbar.
+          Daraus entsteht eine verlässliche Datenbasis, auf der Menschen und KI-Systeme gleichermaßen arbeiten können.
+        </p>
+        <p class="claim">{firma.claim}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container zwei">
+      <div>
+        <h2>Unsere Überzeugung</h2>
+        <p class="lead">Das beste KI-Modell hilft wenig, wenn die Datenbasis darunter fehlt. Genau diese Basis schafft EVANA.</p>
+      </div>
+      <div class="text">
+        <p>
+          In der Immobilienwirtschaft steckt das entscheidende Wissen in Dokumenten: in Mietverträgen und Nachträgen, Grundbuchauszügen,
+          Gutachten, Energieausweisen und Wartungsprotokollen. Diese Unterlagen sind verstreut, uneinheitlich und oft nur als Scan vorhanden.
+        </p>
+        <p>{`Wir haben unsere KI von Anfang an gemeinsam mit Partnern aus der Immobilienwirtschaft auf genau diese Dokumente trainiert. Heute erkennt sie ${zahlen.dokumenttypen} Dokumenttypen mit einer Erkennungsrate von ${zahlen.erkennungsrate} und hat aus ${zahlen.datenpunkte} Datenpunkten gelernt. Unsere Kunden verwalten zusammen ${zahlen.betreutesVermoegen}.`}</p>
+        <p>{`Saarbrücken ist einer der führenden KI-Standorte in Europa. Hier entwickeln wir, unterstützt von unserem zweiten Standort in ${firma.weitererStandort}, mit ${firma.mitarbeitende} Mitarbeitenden.`}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <p class="eyebrow">Meilensteine</p>
+      <h2 class="t">Von der Forschung in den Bestand</h2>
+      <ol class="zeitleiste">
+        {meilensteine.map((m) => <li><span class="jahr">{m.jahr}</span><p>{m.text}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container">
+      <p class="eyebrow">Menschen</p>
+      <h2 class="t">Management und Aufsichtsrat</h2>
+      <div class="personen-raster">
+        <div>
+          <h3>Management</h3>
+          <ul class="personen">
+            {management.map((p) => <li><span class="avatar" aria-hidden="true">{initialen(p.name)}</span><div><strong>{p.name}</strong><span>{p.rolle}</span></div></li>)}
+          </ul>
+        </div>
+        <div>
+          <h3>Aufsichtsrat</h3>
+          <ul class="personen">
+            {aufsichtsrat.map((p) => <li><span class="avatar mag" aria-hidden="true">{initialen(p.name)}</span><div><strong>{p.name}</strong><span>{p.rolle}, {p.org}</span></div></li>)}
+          </ul>
+        </div>
+      </div>
+      <p class="investoren">Unterstützt von {investoren.slice(0, -1).join(', ')} und {investoren.at(-1)}.</p>
+    </div>
+  </section>
+
+  <section class="sektion sektion-mist">
+    <div class="container zwei">
+      <div>
+        <h2>Geprüft und zertifiziert</h2>
+        <p class="lead">Sicherheit ist für unsere Kunden aus Finanz- und Versicherungswirtschaft die Voraussetzung für jedes Projekt.</p>
+        <a href="/sicherheit/" class="btn btn-sekundaer" style="margin-top: 26px">Sicherheit und Compliance</a>
+      </div>
+      <div class="siegel">
+        <img src="/brand/evana-partner-2026-weiss.png" alt={`Siegel und Partnerschaften: ${siegel.join(', ')}`} width="1500" height="275" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container karriere">
+      <div>
+        <h2>Arbeiten bei EVANA</h2>
+        <p class="lead">Wir suchen Menschen, die Lust haben, KI in eine Branche zu bringen, die von Dokumenten lebt.</p>
+      </div>
+      <a href="/karriere/" class="btn btn-primaer">Offene Stellen</a>
+    </div>
+  </section>
+
+  <Abschluss />
+</Basis>
+
+<style>
+  .name { padding-block: clamp(64px, 9vw, 120px); }
+  .name-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+  .woerter p { font-size: clamp(2.6rem, 7vw, 5.6rem); font-weight: 400; line-height: 1; color: #9fc3ca; letter-spacing: -.01em; }
+  .woerter .hl { font-weight: 900; color: var(--weiss); }
+  .woerter .und { color: var(--orange); font-weight: 700; font-size: clamp(2rem, 4vw, 3rem); margin: 8px 0; }
+  .name .lead { margin-top: 16px; }
+  .claim { margin-top: 24px; font-weight: 700; color: var(--orange); letter-spacing: .02em; }
+  .zwei { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+  .zwei .lead { margin-top: 16px; }
+  .text { display: grid; gap: 1em; font-size: 1.08rem; }
+  .t { margin-bottom: 32px; }
+  .zeitleiste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .zeitleiste li { background: var(--weiss); border-radius: var(--radius); padding: 24px; }
+  .jahr { display: block; font-size: 1.8rem; font-weight: 700; color: var(--petrol); margin-bottom: 8px; }
+  .zeitleiste p { font-size: .95rem; }
+  .personen-raster { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .personen-raster h3 { margin-bottom: 14px; color: var(--hilfsgrau); font-size: 1rem; }
+  .personen { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .personen li { display: flex; gap: 16px; align-items: center; background: var(--mist); border-radius: 20px; padding: 16px 20px; }
+  .personen strong { display: block; color: var(--headline); font-size: 1.08rem; }
+  .personen span { font-size: .92rem; }
+  .avatar { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--petrol); color: var(--weiss); font-weight: 700; }
+  .avatar.mag { background: var(--magenta); }
+  .investoren { margin-top: 28px; color: var(--hilfsgrau); }
+  .siegel { background: var(--petrol-dunkel); border-radius: var(--radius); padding: 28px; }
+  .siegel img { width: 100%; height: auto; }
+  .karriere { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; background: var(--tint-orange); border-radius: var(--radius-gross); padding: clamp(28px, 5vw, 56px); }
+  .karriere .lead { margin-top: 10px; }
+  @media (max-width: 1000px) { .zeitleiste { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 860px) { .name-raster, .zwei, .personen-raster { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .zeitleiste { grid-template-columns: 1fr; } }
+</style>

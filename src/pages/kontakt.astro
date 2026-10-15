@@ -1,0 +1,57 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { firma, cta } from '../data/fakten';
+import { brotkrumen } from '../lib/schema';
+
+const wege = [
+  { titel: 'Demo anfragen', text: 'Wir zeigen Ihnen EVANA an Ihren eigenen Beispielen. Die Demo ist in der Regel innerhalb eines Werktags vorbereitet.', link: cta.demo, label: 'Zur Demo-Anfrage', primaer: true },
+  { titel: 'Vertrieb', text: 'Fragen zu Einsatz, Projekten und Angeboten.', link: `mailto:${firma.email}`, label: firma.email },
+  { titel: 'Support', text: 'Sie nutzen EVANA bereits und brauchen Hilfe.', link: `mailto:${firma.emailSupport}`, label: firma.emailSupport },
+  { titel: 'Allgemein und Presse', text: 'Alles andere, inklusive Presseanfragen.', link: `mailto:${firma.emailInfo}`, label: firma.emailInfo },
+];
+---
+<Basis
+  title="Kontakt | EVANA"
+  description="So erreichen Sie die EVANA AG in Saarbrücken: Demo anfragen, Vertrieb, Support und Presse."
+  schema={[
+    brotkrumen([{ label: 'Kontakt', href: '/kontakt/' }]),
+    { '@context': 'https://schema.org', '@type': 'ContactPage', name: 'Kontakt', about: { '@id': `${firma.url}/#organisation` } },
+  ]}
+>
+  <Seitenkopf titel="Sprechen Sie mit uns" lead="Ob Demo, Projektidee oder eine Frage zu Ihrem Bestand: Wählen Sie den passenden Weg, wir melden uns zeitnah." pfad={[{ label: 'Kontakt', href: '/kontakt/' }]} demo={false} />
+  <section class="sektion" style="padding-top: 0">
+    <div class="container raster">
+      <ul class="wege">
+        {wege.map((w) => (
+          <li class:list={{ primaer: w.primaer }}>
+            <h2>{w.titel}</h2>
+            <p>{w.text}</p>
+            <a href={w.link} class:list={['btn', w.primaer ? 'btn-primaer' : 'btn-sekundaer']}>{w.label}</a>
+          </li>
+        ))}
+      </ul>
+      <address class="adresse">
+        <h2>{firma.name}</h2>
+        <p>{firma.strasse}<br />{firma.plz} {firma.ort}</p>
+        <p>Telefon <a href={`tel:${firma.telefonLink}`}>{firma.telefon}</a></p>
+        <p>Weiterer Standort: {firma.weitererStandort}</p>
+      </address>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .raster { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .6fr); gap: 14px; align-items: start; }
+  .wege { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .wege li { background: var(--mist); border-radius: var(--radius); padding: 28px; display: grid; gap: 10px; align-content: start; }
+  .wege li.primaer { grid-column: 1 / -1; background: var(--petrol-dunkel); color: #d6e6e9; }
+  .wege li.primaer h2 { color: var(--weiss); }
+  .wege h2 { font-size: 1.3rem; }
+  .wege .btn { justify-self: start; margin-top: 8px; text-transform: none; letter-spacing: 0; }
+  .wege .primaer .btn { text-transform: uppercase; letter-spacing: .04em; }
+  .adresse { font-style: normal; background: var(--tint-orange); border-radius: var(--radius); padding: 28px; display: grid; gap: 10px; }
+  .adresse h2 { font-size: 1.2rem; }
+  @media (max-width: 900px) { .raster { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .wege { grid-template-columns: 1fr; } }
+</style>

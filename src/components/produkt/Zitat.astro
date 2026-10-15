@@ -1,0 +1,24 @@
+---
+interface Props { text: string; person: string; rolle: string; mist?: boolean }
+const { text, person, rolle, mist = false } = Astro.props;
+---
+<section class:list={['sektion zitat', { 'sektion-mist': mist }]}>
+  <div class="container">
+    <figure>
+      <span class="knoten" aria-hidden="true"></span>
+      <blockquote><p>„{text}“</p></blockquote>
+      <figcaption><strong>{person}</strong><span>{rolle}</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .zitat { padding-block: clamp(56px, 8vw, 104px); }
+  figure { margin: 0 auto; max-width: 880px; text-align: center; display: grid; justify-items: center; gap: 24px; }
+  .knoten { width: 18px; height: 18px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 9px rgba(245,158,52,.16); }
+  blockquote { margin: 0; }
+  blockquote p { font-size: clamp(1.3rem, 2.4vw, 1.75rem); line-height: 1.4; color: var(--headline); font-weight: 600; }
+  figcaption { display: grid; gap: 2px; }
+  figcaption strong { color: var(--petrol-dunkel); }
+  figcaption span { color: var(--hilfsgrau); font-size: .95rem; }
+</style>

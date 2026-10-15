@@ -1,0 +1,229 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Faq from '../../components/Faq.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import Definition from '../../components/produkt/Definition.astro';
+import Anwendungen from '../../components/produkt/Anwendungen.astro';
+import SicherheitKurz from '../../components/produkt/SicherheitKurz.astro';
+import { cta } from '../../data/fakten';
+import { brotkrumen, faqSchema, produktSchema, nurGueltig } from '../../lib/schema';
+
+const pfad = [{ label: 'Produkt', href: '/produkte/' }, { label: 'Integrationen', href: '/produkte/integrationen/' }];
+
+const definition = {
+  kern: 'EVANA ist eine offene Plattform für Immobiliendokumente.',
+  text: 'Die Daten, die EVANA aus Ihren Dokumenten gewinnt, stehen über öffentliche REST- und GraphQL-APIs, einen Power-Automate-Connector und einen MCP-Server bereit. So arbeiten Claude, ChatGPT, Microsoft Copilot, DeutschlandGPT oder Ihr eigenes LLM mit derselben Datenbasis wie SAP S/4HANA und Ihre Fachsysteme.',
+};
+
+const modelle = ['Claude', 'ChatGPT', 'Microsoft Copilot', 'DeutschlandGPT', 'Eigenes LLM'];
+const systemeHub = ['SAP S/4HANA', 'SAP RE-FX', 'Power BI', 'Microsoft 365', 'ERP und CAFM'];
+
+const schnittstellen = [
+  { titel: 'REST- und GraphQL-API', text: 'Öffentliche APIs erschließen alle Daten und Dokumente, die EVANA verwaltet, für Ihre Drittsysteme.', ton: 'petrol' },
+  { titel: 'Power-Automate-Connector', text: 'Über den Connector binden Sie EVANA in Ihre Abläufe in Microsoft Power Automate ein.', ton: 'magenta' },
+  { titel: 'MCP-Server und Skills-Dateien', text: 'Ihr Sprachmodell greift direkt auf die Immobiliendaten zu, die EVANA bereits sauber aufbereitet hat.', ton: 'orange' },
+  { titel: 'Export', text: 'Ausgabe in Ihrem Wunschformat, als CSV oder Excel, für Auswertungen außerhalb der Plattform.', ton: 'petrol' },
+];
+
+const landschaft = [
+  { name: 'SAP S/4HANA und SAP RE-FX', zweck: 'Zertifizierte Schnittstelle für den Abgleich von Stammdaten und Verträgen' },
+  { name: 'Microsoft 365 und Azure', zweck: 'Office, Outlook und SharePoint' },
+  { name: 'Power BI', zweck: 'Reporting auf Ihren Bestandsdaten' },
+  { name: 'SCIM und SSO', zweck: 'Identitäts- und Rechteverwaltung über Ihren Identity-Provider' },
+  { name: 'Individuelle Konnektoren', zweck: 'ERP, CAFM und Buchhaltung' },
+];
+
+const faq = [
+  { frage: 'Welche Schnittstellen bietet EVANA?', antwort: 'EVANA bietet öffentliche REST- und GraphQL-APIs, einen Power-Automate-Connector, einen MCP-Server mit Skills-Dateien für Sprachmodelle sowie eine zertifizierte Schnittstelle zu SAP S/4HANA und SAP RE-FX. Dazu kommen Anbindungen an Microsoft 365, Azure und Power BI sowie SCIM und SSO für Identitäten.' },
+  { frage: 'Welche KI-Modelle lassen sich an EVANA anbinden?', antwort: 'Über den MCP-Server binden Sie Claude, ChatGPT, Microsoft Copilot, DeutschlandGPT oder Ihr eigenes LLM an Ihre Immobiliendokumente an. Sie entscheiden, welches Modell Sie nutzen.' },
+  { frage: 'Was ist der MCP-Server von EVANA?', antwort: 'Der MCP-Server verbindet Ihre KI der Wahl direkt mit EVANA. Er öffnet Ihrem Sprachmodell den Zugang zu den Immobiliendaten, die EVANA aus Ihren Dokumenten bereits sauber aufbereitet hat. So bekommen Sie verlässliche Antworten über Ihr ganzes Portfolio.' },
+  { frage: 'Ist EVANA an SAP angebunden?', antwort: 'Ja. EVANA 360 lässt sich über eine zertifizierte Schnittstelle in SAP S/4HANA integrieren, inklusive SAP RE-FX. Stammdaten und Verträge bleiben abgeglichen, und SAP-Anwender greifen aus dem ERP auf ihr Daten- und Dokumentenmanagement zu.' },
+  { frage: 'Gibt es einen Vendor-Lock-in?', antwort: 'Nein. EVANA ist bewusst offen gestaltet. Sie behalten die Kontrolle über Modellwahl und Datenfluss, und alle Daten bleiben über offene APIs zugänglich.' },
+  { frage: 'Wo werden die Daten verarbeitet?', antwort: 'EVANA läuft in der EVANA Secure-Cloud auf Microsoft Azure, Ihre Daten bleiben in der EU. Die Plattform ist ISO 27001-zertifiziert, DSGVO-konform, BaFin-ready und DORA-konform.' },
+];
+
+const schema = nurGueltig([
+  produktSchema({ name: 'EVANA Integrationen', beschreibung: `${definition.kern} ${definition.text}`, url: '/produkte/integrationen/' }),
+  faqSchema(faq),
+  brotkrumen(pfad),
+]);
+---
+<Basis
+  title="Integrationen: MCP, API, SAP, Claude und Copilot | EVANA"
+  description="EVANA verbindet Ihre Immobiliendokumente mit Claude, Copilot oder Ihrem eigenen LLM und mit SAP, Power BI und Power Automate. Kein Vendor-Lock-in."
+  schema={schema}
+>
+  <Seitenkopf
+    titel="Offen für Ihre KI und Ihre Systeme"
+    lead="EVANA fügt sich in Ihre Systemlandschaft ein. Ihre KI und Ihre Fachsysteme arbeiten mit denselben strukturierten Daten aus Ihren Dokumenten, über MCP, offene APIs und eine zertifizierte SAP-Schnittstelle."
+    pfad={pfad}
+    zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
+  />
+
+  <section class="hub-sektion">
+    <div class="container">
+      <div class="hub">
+        <div class="seite">
+          <p class="label">Ihre KI</p>
+          <ul class="pillen">{modelle.map((m) => <li>{m}</li>)}</ul>
+        </div>
+        <div class="draht links" aria-hidden="true"><span>MCP</span></div>
+        <div class="zentrum">
+          <img src="/brand/evana-icon.png" alt="" width="56" height="50" />
+          <strong>EVANA</strong>
+          <span>Strukturierte Daten aus Ihren Dokumenten</span>
+        </div>
+        <div class="draht rechts" aria-hidden="true"><span>REST · GraphQL</span></div>
+        <div class="seite">
+          <p class="label">Ihre Systeme</p>
+          <ul class="pillen petrol">{systemeHub.map((m) => <li>{m}</li>)}</ul>
+        </div>
+      </div>
+      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+    </div>
+  </section>
+
+  <Definition frage="Wie offen ist EVANA?" kern={definition.kern} text={definition.text} mist />
+
+  <section class="sektion">
+    <div class="container mcp">
+      <div>
+        <p class="eyebrow">Ihre KI via MCP</p>
+        <h2>Verbinden Sie Ihre KI der Wahl direkt mit EVANA</h2>
+        <p class="lead">Der MCP-Server von EVANA ist der Türöffner zu all Ihren Immobiliendaten, die EVANA bereits sauber aufbereitet hat. So bekommt Ihr Sprachmodell verlässliche Antworten über Ihr ganzes Portfolio.</p>
+        <p class="absatz">Allgemeine KI-Assistenten kennen Ihre Dokumente nicht. Mit MCP-Server und Skills-Dateien arbeiten Claude, ChatGPT, Microsoft Copilot, DeutschlandGPT oder Ihr eigenes LLM mit derselben Datenbasis wie Ihr Team in EVANA.</p>
+      </div>
+      <div class="modell-karte">
+        <p class="label">Anbindbar über den MCP-Server</p>
+        <ul>{modelle.map((m) => <li><span class="knoten" aria-hidden="true"></span>{m}</li>)}</ul>
+        <p class="hinweis">Sie behalten die Kontrolle über Modellwahl und Datenfluss.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Schnittstellen</p>
+        <h2>Ihre Daten fließen dorthin, wo Sie sie brauchen</h2>
+        <p class="lead">Sämtliche Daten, die EVANA aus Ihren Dokumenten gewinnt und verwaltet, sind über offene Schnittstellen zugänglich. Datensilos lösen sich auf, und Ihre Arbeitsabläufe werden schlanker.</p>
+      </div>
+      <ul class="schnitt">
+        {schnittstellen.map((s) => <li class={s.ton}><h3>{s.titel}</h3><p>{s.text}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container sap">
+      <div>
+        <p class="eyebrow">SAP und Microsoft</p>
+        <h2>Zertifiziert für SAP, zu Hause in Microsoft</h2>
+        <p class="lead">Mit der Integration in SAP S/4HANA greifen SAP-Anwender vollintegriert über das ERP auf ihr Daten- und Dokumentenmanagement zu. Stammdaten und Verträge bleiben über die zertifizierte Schnittstelle abgeglichen.</p>
+        <a href="/news/sap-integration/" class="mehr">Mehr zur SAP-Integration</a>
+      </div>
+      <ul class="landschaft">
+        {landschaft.map((l) => <li><strong>{l.name}</strong><span>{l.zweck}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sektion auf-dunkel">
+    <div class="container lockin">
+      <div>
+        <p class="eyebrow">Kein Vendor-Lock-in</p>
+        <h2>Sie behalten die Kontrolle über Modellwahl und Datenfluss</h2>
+      </div>
+      <div>
+        <p class="lead">EVANA ist bewusst offen gestaltet. Es gibt keine starren Pipelines, und Ihre Prozesse bleiben, wie sie sind. EVANA schafft die strukturierte Datenbasis einmal und stellt sie allen Werkzeugen bereit.</p>
+        <p class="absatz">Die Verarbeitung läuft in der EVANA Secure-Cloud auf Microsoft Azure, Ihre Daten bleiben in der EU.</p>
+        <div class="aktionen">
+          <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+          <a href="/news/copilot-flex-routing-dsgvo/" class="btn btn-sekundaer">Interview zu Copilot und DSGVO</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Anwendungen slugs={['ki-und-systeme-anbinden', 'daten-extrahieren']} titel="Integrationen im Einsatz" />
+
+  <SicherheitKurz />
+
+  <Faq eintraege={faq} />
+
+  <Abschluss
+    titel="Sprechen wir über Ihre Systemlandschaft"
+    text="In einer kurzen Demo zeigen wir Ihnen, wie EVANA mit Ihrer KI und Ihren Systemen zusammenarbeitet, vom MCP-Server bis zur SAP-Schnittstelle."
+  />
+</Basis>
+
+<style>
+  .hub-sektion { padding-bottom: clamp(56px, 8vw, 104px); }
+  .hub {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(60px, 120px) auto minmax(60px, 120px) minmax(0, 1fr); align-items: center;
+    padding: clamp(24px, 4vw, 56px); border-radius: var(--radius-gross); background: var(--mist);
+  }
+  .label { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--hilfsgrau); margin-bottom: 12px; }
+  .pillen { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pillen li { background: var(--weiss); border-radius: 999px; padding: 10px 16px; font-weight: 600; color: var(--headline); box-shadow: var(--schatten-dokument); text-align: center; }
+  .pillen.petrol li { background: var(--tint-petrol); color: var(--petrol-dunkel); box-shadow: none; }
+  .draht { position: relative; height: 4px; border-radius: 2px; }
+  .draht.links { background: linear-gradient(90deg, var(--petrol), var(--magenta)); }
+  .draht.rechts { background: linear-gradient(90deg, var(--magenta), var(--orange)); }
+  .draht span {
+    position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); white-space: nowrap;
+    font-size: .74rem; font-weight: 700; letter-spacing: .04em; color: var(--petrol-dunkel);
+    background: var(--weiss); border-radius: 999px; padding: 3px 10px; box-shadow: var(--schatten-dokument);
+  }
+  .zentrum {
+    display: grid; justify-items: center; align-content: center; gap: 6px; width: 190px; aspect-ratio: 1; padding: 22px;
+    border-radius: 50%; background: var(--weiss); text-align: center;
+    box-shadow: 0 0 0 12px rgba(245,158,52,.16), var(--schatten);
+  }
+  .zentrum img { width: 50px; height: auto; }
+  .zentrum strong { color: var(--petrol-dunkel); letter-spacing: .06em; }
+  .zentrum span { font-size: .78rem; line-height: 1.25; color: var(--hilfsgrau); }
+  .hub-sektion .beispiel-hinweis { margin-top: 14px; }
+
+  .mcp { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .mcp .lead { margin-top: 18px; }
+  .absatz { margin-top: 14px; }
+  .modell-karte { padding: clamp(24px, 3vw, 36px); border-radius: var(--radius-gross); background: var(--weiss); box-shadow: var(--schatten); }
+  .modell-karte ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .modell-karte li { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 14px; background: var(--mist); font-weight: 600; color: var(--headline); }
+  .knoten { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+  .hinweis { margin-top: 14px; font-size: .9rem; color: var(--hilfsgrau); }
+
+  .schnitt { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  .schnitt li { padding: 26px 24px; border-radius: var(--radius); background: var(--weiss); box-shadow: var(--schatten); }
+  .schnitt li::before { content: ''; display: block; width: 34px; height: 8px; border-radius: 4px; margin-bottom: 18px; }
+  .schnitt .petrol::before { background: var(--petrol); }
+  .schnitt .magenta::before { background: var(--magenta); }
+  .schnitt .orange::before { background: var(--orange); }
+  .schnitt h3 { font-size: 1.15rem; margin-bottom: 8px; }
+  .schnitt p { font-size: .96rem; }
+
+  .sap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .sap .lead { margin-top: 18px; }
+  .mehr { display: inline-block; margin-top: 22px; font-weight: 700; }
+  .landschaft { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .landschaft li { display: grid; gap: 2px; padding: 16px 20px; border-radius: 18px; background: var(--mist); }
+  .landschaft strong { color: var(--petrol-dunkel); }
+  .landschaft span { font-size: .92rem; color: var(--hilfsgrau); }
+
+  .lockin { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  .aktionen { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+
+  @media (max-width: 1000px) { .schnitt { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 900px) {
+    .hub { grid-template-columns: 1fr; gap: 0; justify-items: stretch; }
+    .draht { width: 4px; height: 56px; margin: 8px auto; }
+    .draht.links { background: linear-gradient(180deg, var(--petrol), var(--magenta)); }
+    .draht.rechts { background: linear-gradient(180deg, var(--magenta), var(--orange)); }
+    .draht span { left: 16px; bottom: 50%; transform: translateY(50%); }
+    .zentrum { margin-inline: auto; width: 170px; }
+    .mcp, .sap, .lockin { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) { .schnitt { grid-template-columns: 1fr; } }
+</style>

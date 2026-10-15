@@ -1,0 +1,43 @@
+---
+// FAQ-Block mit nativen <details>. Das FAQPage-Schema erzeugt faqSchema() in src/lib/schema.ts;
+// die Seite übergibt es an Basis.astro, damit pro Seite nur ein FAQPage-Block existiert.
+interface Props { eintraege: { frage: string; antwort: string }[]; titel?: string; hell?: boolean }
+const { eintraege, titel = 'Häufige Fragen', hell = false } = Astro.props;
+---
+{eintraege.length > 0 && (
+  <section class:list={['sektion', { 'sektion-mist': !hell }]}>
+    <div class="container raster">
+      <div>
+        <h2>{titel}</h2>
+      </div>
+      <div class="liste">
+        {eintraege.map((e, i) => (
+          <details open={i === 0}>
+            <summary>{e.frage}</summary>
+            <p>{e.antwort}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .raster { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  .liste { display: grid; gap: 10px; }
+  details { background: var(--weiss); border-radius: 20px; padding: 0 24px; }
+  .sektion:not(.sektion-mist) details { background: var(--mist); }
+  summary {
+    list-style: none; cursor: pointer; padding: 20px 32px 20px 0; position: relative;
+    font-weight: 700; color: var(--headline); font-size: 1.08rem; line-height: 1.35;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: ''; position: absolute; right: 4px; top: 50%; width: 10px; height: 10px; margin-top: -7px;
+    border-right: 2.5px solid var(--petrol); border-bottom: 2.5px solid var(--petrol); transform: rotate(45deg);
+    transition: transform .15s;
+  }
+  details[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
+  details p { padding-bottom: 22px; max-width: 70ch; }
+  @media (max-width: 860px) { .raster { grid-template-columns: 1fr; } }
+</style>

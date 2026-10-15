@@ -1,0 +1,39 @@
+---
+// Zeigt, wie ein Produkt mit den übrigen Bausteinen der Plattform zusammenspielt.
+import { produkte } from '../../data/fakten';
+interface Props { aktuell: string; titel: string; lead?: string; nur?: string[]; rollen?: Record<string, string> }
+const { aktuell, titel, lead, nur, rollen = {} } = Astro.props;
+const liste = (nur ? nur.map((s) => produkte.find((p) => p.slug === s)) : produkte.filter((p) => p.slug !== aktuell)).filter(
+  (p) => p !== undefined,
+);
+---
+<section class="sektion sektion-mist">
+  <div class="container">
+    <div class="kopf">
+      <p class="eyebrow">Die Plattform</p>
+      <h2>{titel}</h2>
+      {lead && <p class="lead">{lead}</p>}
+    </div>
+    <ul class="bausteine">
+      {liste.map((p) => (
+        <li>
+          <a href={`/produkte/${p.slug}/`}>
+            <span class="name">{p.name}</span>
+            <span>{rollen[p.slug] ?? p.kurz}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .bausteine { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .bausteine a {
+    display: grid; gap: 8px; align-content: start; height: 100%; padding: 24px 26px;
+    background: var(--weiss); border-radius: var(--radius); text-decoration: none; color: var(--text);
+    box-shadow: var(--schatten); transition: transform .15s;
+  }
+  .bausteine a:hover { transform: translateY(-3px); }
+  .name { font-weight: 700; font-size: 1.25rem; color: var(--petrol); }
+</style>

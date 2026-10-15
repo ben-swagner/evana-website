@@ -8,6 +8,7 @@ const jahr = new Date().getFullYear();
     <div class="marke">
       <img src="/brand/evana-logo-weiss.png" alt="EVANA" width="150" height="38" loading="lazy" />
       <p>KI für Immobiliendokumente. Seit {firma.gegruendet} vom {firma.herkunft} aus.</p>
+      <p class="name"><b>EV</b>aluation &amp; <b>ANA</b>lytics</p>
       <address>
         {firma.name}<br />
         {firma.strasse}<br />
@@ -26,6 +27,7 @@ const jahr = new Date().getFullYear();
     <p>© {jahr} {firma.name}</p>
     <ul>
       {rechtliches.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      <li><a href="#" data-consent-oeffnen>Cookie-Einstellungen</a></li>
       <li><a href={firma.linkedin} rel="noopener">LinkedIn</a></li>
     </ul>
   </div>
@@ -36,6 +38,8 @@ const jahr = new Date().getFullYear();
   .raster { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; }
   .marke img { width: 150px; height: auto; margin-bottom: 18px; }
   .marke p { max-width: 30ch; margin-bottom: 18px; }
+  .marke .name { color: #9fc3ca; letter-spacing: .02em; }
+  .marke .name b { color: var(--weiss); }
   address { font-style: normal; line-height: 1.7; color: #9fc3ca; }
   h2 { font-size: .9rem; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 14px; color: var(--weiss); }
   ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }

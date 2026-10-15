@@ -1,0 +1,13 @@
+---
+import Basis from './Basis.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import Prosa from '../components/Prosa.astro';
+interface Props { title: string; description: string; titel: string; pfad: { label: string; href: string } }
+const { title, description, titel, pfad } = Astro.props;
+---
+<Basis title={title} description={description}>
+  <Seitenkopf titel={titel} pfad={[pfad]} demo={false} schmal />
+  <section class="sektion" style="padding-top: 0">
+    <div class="container"><Prosa><slot /></Prosa></div>
+  </section>
+</Basis>

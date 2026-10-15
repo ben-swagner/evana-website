@@ -1,0 +1,360 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Faq from '../../components/Faq.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import DokIcon from '../../components/DokIcon.astro';
+import Definition from '../../components/produkt/Definition.astro';
+import Anwendungen from '../../components/produkt/Anwendungen.astro';
+import SicherheitKurz from '../../components/produkt/SicherheitKurz.astro';
+import { cta } from '../../data/fakten';
+import { brotkrumen, faqSchema, produktSchema, nurGueltig } from '../../lib/schema';
+
+const pfad = [{ label: 'Produkt', href: '/produkte/' }, { label: 'Report', href: '/produkte/report/' }];
+
+const definition = {
+  kern: 'Der EVANA Report ist der Objektbericht in EVANA 360.',
+  text: 'Er liest Stammdaten, veraltete Nachweise, Mängel aus Wartungs- und Prüfprotokollen, Kündigungen und Fristen direkt aus Ihren Dokumenten und zeigt alle Daten eines Objekts auf einer Seite. Zu jedem Befund sehen Sie die Quelle, die Daten lassen sich als CSV, Excel oder per API weitergeben.',
+};
+
+const stamm = [
+  { label: 'Eigentümer', wert: 'Mitte Immobilien GmbH' },
+  { label: 'Nutzungsart', wert: 'Büro' },
+  { label: 'Adresse', wert: 'Lindenallee 12, Frankfurt' },
+  { label: 'Baujahr / Sanierung', wert: '1998 / 2016' },
+  { label: 'Mietfläche', wert: '8.450 m²' },
+];
+
+const kacheln = [
+  {
+    titel: 'Veraltete Dokumente', zahl: 3, ton: 'kritisch',
+    zeilen: [['Energieausweis', 'abgelaufen seit 24 Monaten'], ['Grundbuchauszug', 'älter als 96 Monate'], ['Mieterliste', 'älter als 4 Monate']],
+  },
+  {
+    titel: 'Mängel an Anlagen', zahl: 9, ton: 'handeln',
+    zeilen: [['Brandmeldeanlage', '1 offener Mangel'], ['Personenaufzug', '1 offener Mangel'], ['Sprinkleranlage', '2 offene Mängel']],
+  },
+  {
+    titel: 'Fristen und Kündigungen', zahl: 3, ton: 'handeln',
+    zeilen: [['Mieterhöhung EG', 'möglich ab 01.11.2026'], ['Kanzlei Berger & Partner', 'Kündigung zum 31.12.2026'], ['Café Lindner', 'Festlaufzeit endet 31.03.2027']],
+  },
+];
+
+const ablage = ['Energieausweis.pdf', 'Wartung_BMA_Q3.pdf', 'Kündigung_Berger.pdf', 'Mieterliste_2026.xlsx', 'Prüfbericht_Aufzug.pdf'];
+
+const befunde = [
+  { art: 'Veraltetes Dokument', titel: 'Energieausweis', status: 'abgelaufen', ton: 'kritisch', text: 'Seit 24 Monaten abgelaufen, ausgestellt am 23.09.2014.', quelle: 'Energieausweis_2014.pdf' },
+  { art: 'Prüfkataster', titel: 'Brandmeldeanlage', status: 'überfällig', ton: 'handeln', text: 'Prüfung fällig seit 01.09.2026, 1 offener Mangel.', quelle: 'Pruefprotokoll_BMA_2025.pdf' },
+  { art: 'Kündigung', titel: 'Kanzlei Berger', status: 'in 2 Monaten', ton: 'ok', text: 'Das Mietverhältnis endet zum 31.12.2026.', quelle: 'Kuendigung_Berger.pdf' },
+];
+
+const bereiche = [
+  { titel: 'Übersicht', text: 'Stammdaten des Objekts und alle Befunde mit Handlungsbedarf auf einer Seite.' },
+  { titel: 'Dokumente', text: 'Welche Nachweise veraltet sind oder fehlen, etwa Energieausweis, Grundbuchauszug oder Mieterliste.' },
+  { titel: 'Mängel und Maßnahmen', text: 'Offene Mängel an Anlagen, gelesen aus Wartungs- und Prüfprotokollen, mit dem nächsten Wartungstermin.' },
+  { titel: 'Verträge und Mieter', text: 'Kündigungen, auslaufende Festlaufzeiten und mögliche Mieterhöhungen mit Datum.' },
+  { titel: 'Key Facts', text: 'Kennzahlen wie WALT, Vermietungsquote oder Grundbuchblatt, jeweils mit Verweis auf die Quelle.' },
+];
+
+const keyFacts = [
+  { label: 'WALT', wert: '6,2 Jahre' },
+  { label: 'Vermietungsquote', wert: '96 %' },
+  { label: 'Grundbuch, Blatt', wert: '4417' },
+];
+
+const wege = [
+  { titel: 'Klassifizieren', text: 'EVANA erkennt Dokumenttypen automatisch.', href: '/produkte/evana-ai/' },
+  { titel: 'Extrahieren', text: 'Inhalte werden zu strukturierten Daten.', href: '/anwendungsfaelle/daten-extrahieren/' },
+  { titel: 'Report', text: 'Der Report zeigt alle Daten eines Objekts auf einen Blick.', href: '/produkte/report/', aktiv: true },
+  { titel: 'Fragen an EVA', text: 'EVA beantwortet Fragen direkt aus Ihren Dokumenten.', href: '/produkte/eva/' },
+  { titel: 'Datenraum', text: 'Transaktionen laufen sicher in EVANA TDR.', href: '/produkte/evana-tdr/' },
+  { titel: 'Anbinden', text: 'Daten fließen per API in Ihre BI-Tools.', href: '/produkte/integrationen/' },
+];
+
+const faq = [
+  { frage: 'Was ist der EVANA Report?', antwort: `${definition.kern} ${definition.text}` },
+  { frage: 'Welche Informationen zeigt der Objektbericht?', antwort: 'Der Objektbericht zeigt die Stammdaten eines Objekts, veraltete Dokumente und Nachweise, offene Mängel an Anlagen aus Wartungs- und Prüfprotokollen, Kündigungen, Fristen und Key Facts wie WALT oder Vermietungsquote. Die Inhalte sind in Bereiche gegliedert: Übersicht, Dokumente, Mängel und Maßnahmen, Verträge und Mieter, Key Facts und Historie.' },
+  { frage: 'Woher stammen die Daten im Report?', antwort: 'EVANA liest alle Angaben direkt aus Ihren eigenen Unterlagen, etwa aus Energieausweisen, Prüfprotokollen, Kündigungsschreiben oder Mieterlisten. Zu jedem Befund sehen Sie die Quelle und können ihn im Originaldokument prüfen.' },
+  { frage: 'Bleibt der Report aktuell?', antwort: 'Ja. Neue Dokumente fließen automatisch in den Report ein. Auslaufende Verträge und fällige Prüfungen erscheinen, bevor sie kritisch werden, und der Bericht zeigt, wann er zuletzt aktualisiert wurde.' },
+  { frage: 'Kann ich die Daten aus dem Report weiterverwenden?', antwort: 'Ja. Die Daten lassen sich als CSV oder Excel exportieren oder per API an Ihre weiteren Systeme übergeben, zum Beispiel an Ihre BI-Tools.' },
+  { frage: 'Wie spielen Report und EVA zusammen?', antwort: 'Der Report zeigt auf einen Blick, wo es bei einem Objekt hakt. Mit der KI-Assistentin EVA werten Sie die Daten direkt weiter aus und stellen Rückfragen in normaler Sprache, mit Fundstelle zu jeder Antwort.' },
+];
+
+const schema = nurGueltig([
+  produktSchema({ name: 'EVANA Report', beschreibung: `${definition.kern} ${definition.text}`, url: '/produkte/report/' }),
+  faqSchema(faq),
+  brotkrumen(pfad),
+]);
+---
+<Basis
+  title="Objektbericht: alle Daten auf einen Blick | EVANA Report"
+  description="Der EVANA Report liest Nachweise, Mängel, Kündigungen und Fristen aus Ihren Dokumenten und zeigt alle Daten eines Objekts auf einer Seite."
+  schema={schema}
+>
+  <Seitenkopf
+    titel="Alle Daten eines Objekts auf einen Blick"
+    lead="Der EVANA Report bündelt alles, was in Ihren Dokumenten zu einem Objekt steckt: veraltete Nachweise, offene Mängel, Kündigungen und Fristen. So sehen Sie auf einer Seite, wo es hakt, und zu jedem Befund die Quelle."
+    pfad={pfad}
+    zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
+  />
+
+  <section class="buehne">
+    <div class="container">
+      <figure class="app">
+        <div class="app-kopf">
+          <span class="krume">EVANA 360 / Commercial / <strong>Bürohaus Mitte</strong></span>
+          <span class="stand">Zuletzt aktualisiert: 13.10.2026, 15:38</span>
+          <span class="knopf" aria-hidden="true">Aktualisieren</span>
+        </div>
+        <div class="app-koerper">
+          <ul class="seitenmenue" aria-hidden="true">
+            <li>Dashboard</li><li>Dokumente</li><li>Datenraum</li><li>Elemente</li><li class="aktiv">Objektbericht</li>
+          </ul>
+          <div class="bericht">
+            <div class="bericht-titel">
+              <h2>Objektbericht · Bürohaus Mitte</h2>
+              <span class="ton handeln">Handlungsbedarf</span>
+            </div>
+            <ul class="reiter" aria-hidden="true">
+              <li class="aktiv">Übersicht</li><li>Dokumente</li><li>Mängel und Maßnahmen</li><li>Verträge und Mieter</li><li>Key Facts</li><li>Historie</li>
+            </ul>
+            <dl class="stamm">
+              {stamm.map((s) => <div><dt>{s.label}</dt><dd>{s.wert}</dd></div>)}
+            </dl>
+            <div class="kacheln">
+              {kacheln.map((k) => (
+                <section class={`kachel ${k.ton}`}>
+                  <header><h3>{k.titel}</h3><span class="zahl">{k.zahl}</span></header>
+                  <ul>{k.zeilen.map(([a, b]) => <li><strong>{a}</strong><span>{b}</span></li>)}</ul>
+                </section>
+              ))}
+            </div>
+            <div class="eva-zeile">
+              <span class="knoten" aria-hidden="true"></span>
+              <p><strong>EVA</strong> Für Bürohaus Mitte sind 3 Nachweise veraltet und 4 Prüfungen überfällig.</p>
+              <span class="fundstelle">aus 214 Dokumenten</span>
+            </div>
+          </div>
+        </div>
+      </figure>
+      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+    </div>
+  </section>
+
+  <Definition frage="Was ist der EVANA Report?" kern={definition.kern} text={definition.text} />
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Mehr als Dokumentenablage</p>
+        <h2>Aus Ablage wird Überblick</h2>
+        <p class="lead">EVANA liest Ihre Dokumente aus und macht daraus einen Objektbericht. Abgelaufene Nachweise, überfällige Prüfungen und Kündigungen erkennt EVANA direkt in den Unterlagen, und zu jedem Befund sehen Sie die Quelle.</p>
+      </div>
+      <div class="fluss">
+        <ul class="ablage">
+          {ablage.map((d) => <li class="dok"><DokIcon /><span>{d}</span></li>)}
+        </ul>
+        <div class="verbindung" aria-hidden="true"><span class="knoten-gross">Bericht</span></div>
+        <ul class="befunde">
+          {befunde.map((b) => (
+            <li>
+              <div class="befund-kopf"><span class="art">{b.art}</span><span class={`ton ${b.ton}`}>{b.status}</span></div>
+              <strong>{b.titel}</strong>
+              <p>{b.text}</p>
+              <span class="fundstelle">Quelle: {b.quelle}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container bereiche-raster">
+      <div>
+        <p class="eyebrow">Was im Report steht</p>
+        <h2>EVANA findet, was fällig ist</h2>
+        <p class="lead">Stammdaten, veraltete Nachweise, Mängel aus Wartungs- und Prüfprotokollen, Kündigungen und Fristen: Der Objektbericht liest alles direkt aus Ihren Dokumenten und ordnet es in klare Bereiche.</p>
+        <div class="facts" aria-label="Beispiel: Key Facts mit Quelle">
+          <p class="facts-titel">Key Facts</p>
+          <ul>
+            {keyFacts.map((f) => <li><span>{f.label}</span><strong>{f.wert}</strong><span class="fundstelle">Quelle</span></li>)}
+          </ul>
+          <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+        </div>
+      </div>
+      <ol class="bereiche">
+        {bereiche.map((b) => <li><h3>{b.titel}</h3><p>{b.text}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sektion auf-dunkel">
+    <div class="container portfolio">
+      <div>
+        <p class="eyebrow">Vom Objekt zum Portfolio</p>
+        <h2>Aus Ihren Dokumenten werden Dashboards für das ganze Portfolio</h2>
+      </div>
+      <div>
+        <p class="lead">Sie sehen sofort, wo Fristen, Wartungen oder offene Mängel anstehen, und werten alles direkt mit EVA aus. Neue Dokumente fließen automatisch ein, damit der Report aktuell bleibt.</p>
+        <ul class="export" aria-label="Exportformate">
+          <li>CSV</li><li>Excel</li><li>API</li>
+        </ul>
+        <p class="export-text">Exportieren Sie die Daten auf Knopfdruck oder geben Sie sie per API an Ihre BI-Tools weiter.</p>
+        <a href={cta.demo} class="btn btn-primaer">Report live sehen</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <p class="eyebrow">Ein Tool, viele Wege</p>
+        <h2>EVANA kann mehr als Dokumente ablegen</h2>
+        <p class="lead">Eine Plattform bündelt Ablage, Daten, Report und unsere KI-Assistentin EVA.</p>
+      </div>
+      <ul class="wege">
+        {wege.map((w, i) => (
+          <li class:list={{ aktiv: w.aktiv }}>
+            <a href={w.href} aria-current={w.aktiv ? 'page' : undefined}>
+              <span class="nr">{String(i + 1).padStart(2, '0')}</span>
+              <strong>{w.titel}</strong>
+              <span>{w.text}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Anwendungen slugs={['reports-und-fristen', 'dokumente-befragen', 'dokumente-automatisch-ablegen']} titel="Report und Fristen im Alltag" />
+
+  <SicherheitKurz />
+
+  <Faq eintraege={faq} />
+
+  <Abschluss
+    titel="Sehen Sie den Report für Ihr eigenes Objekt"
+    text="In einer kurzen Demo erstellen wir den Objektbericht aus Ihren Unterlagen und zeigen Ihnen, wo Nachweise fehlen, Anlagen Mängel haben oder Verträge enden."
+  />
+</Basis>
+
+<style>
+  /* Bühne mit großer UI-Szene */
+  .buehne { padding-bottom: clamp(56px, 8vw, 104px); background: linear-gradient(180deg, var(--weiss) 0, var(--weiss) 120px, var(--mist) 120px); }
+  .app { margin: 0; border-radius: var(--radius-gross); overflow: hidden; background: var(--weiss); box-shadow: 0 40px 90px -40px rgba(0, 67, 79, .45), var(--schatten); }
+  .app-kopf { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 16px 24px; background: var(--petrol-dunkel); color: #b9d3d8; font-size: .88rem; }
+  .krume strong { color: var(--weiss); }
+  .stand { margin-left: auto; }
+  .knopf { background: var(--magenta); color: var(--weiss); font-weight: 700; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; border-radius: 8px; padding: 7px 12px; }
+  .app-koerper { display: grid; grid-template-columns: 180px minmax(0, 1fr); }
+  .seitenmenue { list-style: none; margin: 0; padding: 22px 14px; display: grid; align-content: start; gap: 4px; background: var(--mist); font-size: .9rem; color: var(--hilfsgrau); }
+  .seitenmenue li { padding: 9px 12px; border-radius: 10px; }
+  .seitenmenue .aktiv { background: var(--tint-magenta); color: var(--magenta); font-weight: 700; }
+  .bericht { padding: clamp(18px, 3vw, 30px); display: grid; gap: 18px; }
+  .bericht-titel { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .bericht-titel h2 { font-size: clamp(1.3rem, 2.2vw, 1.7rem); }
+  .ton { font-size: .78rem; font-weight: 700; border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+  .ton.kritisch { background: var(--tint-magenta); color: var(--magenta); }
+  .ton.handeln { background: var(--tint-orange); color: var(--tint-orange-text); }
+  .ton.ok { background: var(--tint-petrol); color: var(--petrol); }
+  .reiter { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; font-size: .85rem; }
+  .reiter li { padding: 7px 14px; border-radius: 999px; background: var(--mist); color: var(--hilfsgrau); font-weight: 600; }
+  .reiter .aktiv { background: var(--magenta); color: var(--weiss); }
+  .stamm { margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .stamm div { background: var(--mist); border-radius: 12px; padding: 10px 12px; }
+  .stamm dt { font-size: .74rem; color: var(--hilfsgrau); }
+  .stamm dd { margin: 2px 0 0; font-weight: 700; color: var(--headline); font-size: .92rem; line-height: 1.3; }
+  .kacheln { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .kachel { border-radius: 18px; padding: 16px 18px; background: var(--mist); }
+  .kachel header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .kachel h3 { font-size: .98rem; }
+  .zahl { display: grid; place-items: center; min-width: 38px; height: 38px; border-radius: 12px; font-weight: 700; font-size: 1.2rem; }
+  .kachel.kritisch .zahl { background: var(--tint-magenta); color: var(--magenta); }
+  .kachel.handeln .zahl { background: var(--tint-orange); color: var(--tint-orange-text); }
+  .kachel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .kachel li { display: grid; gap: 1px; padding: 9px 11px; border-radius: 10px; background: var(--weiss); font-size: .84rem; line-height: 1.3; }
+  .kachel li strong { color: var(--headline); font-weight: 600; }
+  .kachel li span { color: var(--hilfsgrau); }
+  .eva-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 14px 18px; border-radius: 16px; background: var(--tint-petrol); }
+  .eva-zeile p { flex: 1 1 260px; color: var(--petrol-dunkel); }
+  .eva-zeile p strong { margin-right: 6px; }
+  .eva-zeile .fundstelle { background: var(--weiss); }
+  .knoten { width: 14px; height: 14px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 5px rgba(245,158,52,.22); }
+  .buehne .beispiel-hinweis { margin-top: 14px; }
+
+  /* Ablage zu Bericht */
+  .fluss { display: grid; grid-template-columns: minmax(0, .8fr) 140px minmax(0, 1.2fr); align-items: center; }
+  .ablage { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .ablage .dok:nth-child(odd) { transform: rotate(-1.4deg); }
+  .ablage .dok:nth-child(even) { transform: rotate(1deg) translateX(12px); }
+  .verbindung { position: relative; height: 4px; margin-inline: 8px; border-radius: 2px; background: var(--verlauf); }
+  .knoten-gross {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%;
+    background: var(--orange); color: var(--weiss); font-weight: 700; font-size: .85rem; letter-spacing: .04em; text-transform: uppercase;
+    box-shadow: 0 0 0 14px rgba(245,158,52,.16), 0 0 0 30px rgba(245,158,52,.08);
+  }
+  .befunde { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .befunde li { display: grid; gap: 6px; padding: 18px 20px; border-radius: var(--radius); background: var(--weiss); box-shadow: var(--schatten); }
+  .befund-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .art { font-size: .76rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--hilfsgrau); }
+  .befunde strong { font-size: 1.15rem; color: var(--headline); }
+  .befunde p { font-size: .95rem; }
+  .befunde .fundstelle { justify-self: start; margin-top: 4px; }
+
+  /* Bereiche */
+  .bereiche-raster { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .bereiche-raster .lead { margin-top: 18px; }
+  .facts { margin-top: 32px; padding: 22px; border-radius: var(--radius); background: var(--weiss); box-shadow: var(--schatten); }
+  .facts-titel { font-weight: 700; color: var(--headline); margin-bottom: 10px; }
+  .facts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .facts li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 12px; background: var(--mist); font-size: .92rem; }
+  .facts li strong { color: var(--petrol-dunkel); font-size: 1.05rem; }
+  .facts .fundstelle { background: var(--weiss); }
+  .bereiche { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: b; }
+  .bereiche li { counter-increment: b; position: relative; padding: 20px 24px 20px 72px; border-radius: 20px; background: var(--mist); }
+  .bereiche li::before {
+    content: counter(b, decimal-leading-zero); position: absolute; left: 22px; top: 20px;
+    font-weight: 700; color: var(--orange); font-size: 1.1rem;
+  }
+  .bereiche h3 { font-size: 1.12rem; margin-bottom: 4px; }
+
+  /* Portfolio */
+  .portfolio { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  .export { list-style: none; margin: 26px 0 0; padding: 0; display: flex; gap: 8px; }
+  .export li { font-weight: 700; font-size: .85rem; color: var(--tint-orange-text); background: var(--tint-orange); border-radius: 999px; padding: 6px 16px; }
+  .export-text { margin-top: 12px; }
+  .portfolio .btn { margin-top: 28px; }
+
+  /* Wege */
+  .wege { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .wege a { display: grid; gap: 6px; align-content: start; height: 100%; padding: 24px 26px; border-radius: var(--radius); background: var(--weiss); text-decoration: none; color: var(--text); transition: transform .15s; }
+  .wege a:hover { transform: translateY(-3px); }
+  .wege .nr { font-weight: 700; color: var(--orange); }
+  .wege strong { font-size: 1.2rem; color: var(--headline); }
+  .wege .aktiv a { background: var(--petrol-dunkel); color: #d6e6e9; }
+  .wege .aktiv strong { color: var(--weiss); }
+
+  @media (max-width: 1000px) {
+    .stamm { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .kacheln { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 860px) {
+    .app-koerper { grid-template-columns: 1fr; }
+    .seitenmenue { display: none; }
+    .fluss { grid-template-columns: 1fr; gap: 20px; }
+    .verbindung { width: 4px; height: 120px; margin: 0 auto; background: linear-gradient(180deg, var(--petrol), var(--magenta) 55%, var(--orange)); }
+    .ablage .dok:nth-child(even) { transform: rotate(1deg); }
+    .bereiche-raster, .portfolio { grid-template-columns: 1fr; }
+    .wege { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .stamm { grid-template-columns: 1fr 1fr; }
+    .kacheln, .wege { grid-template-columns: 1fr; }
+    .stand { margin-left: 0; }
+    .facts li { grid-template-columns: minmax(0, 1fr) auto; }
+    .facts .fundstelle { display: none; }
+  }
+</style>
