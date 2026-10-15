@@ -1,17 +1,22 @@
 ---
-import { kunden } from '../../data/fakten';
-// Platzhalter: Bis die Logodateien vorliegen, stehen die Namen als Text im Grau der Logoleiste.
+import { kundenlogos } from '../../data/fakten';
 ---
 <section class="kunden" aria-labelledby="kunden-titel">
   <div class="container">
     <h2 id="kunden-titel">Mit EVANA arbeiten unter anderem</h2>
-    <ul>{kunden.map((k) => <li>{k}</li>)}</ul>
+    <ul>
+      {kundenlogos.map((k) => (
+        <li><img src={`/kunden/${k.datei}`} alt={k.name} loading="lazy" decoding="async" /></li>
+      ))}
+    </ul>
   </div>
 </section>
 
 <style>
-  .kunden { padding-block: 28px 44px; border-bottom: 1px solid var(--linie); }
-  h2 { font-size: .95rem; font-weight: 600; color: var(--hilfsgrau); margin-bottom: 18px; }
-  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 14px 40px; }
-  li { font-weight: 700; font-size: 1.15rem; color: #9aa4a6; letter-spacing: .01em; }
+  .kunden { padding-block: 28px 48px; border-bottom: 1px solid var(--linie); }
+  h2 { font-size: .95rem; font-weight: 600; color: var(--hilfsgrau); margin-bottom: 22px; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 28px 48px; }
+  li { display: flex; align-items: center; height: 44px; }
+  img { height: 100%; width: auto; max-width: 150px; object-fit: contain; opacity: .75; }
+  @media (max-width: 600px) { ul { gap: 22px 32px; } li { height: 34px; } img { max-width: 120px; } }
 </style>

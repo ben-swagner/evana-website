@@ -50,7 +50,21 @@ export const produkte = [
   { name: 'EVANA AI', slug: 'evana-ai', kurz: 'Die KI-Engine, die Dokumente klassifiziert, ausliest und strukturiert.' },
 ];
 
+// Logoleiste: Dateien in public/kunden/, einheitlich grau. Reihenfolge = Anzeige.
+export const kundenlogos = [
+  { name: 'Ampega Talanx Investment Group', datei: 'ampega.png' },
+  { name: 'PATRIZIA', datei: 'patrizia.png' },
+  { name: 'TÜV Saarland Immobilienbewertung', datei: 'tuev-saarland.png' },
+  { name: 'Mann Immobilien', datei: 'mann-immobilien.png' },
+  { name: 'Wirtgen Invest', datei: 'wirtgen-invest.png' },
+  { name: 'Polis Immobilien', datei: 'polis.png' },
+  { name: 'Universitätsklinikum Schleswig-Holstein', datei: 'uksh.png' },
+  { name: 'Meilenstein Realitäten', datei: 'meilenstein.png' },
+  { name: 'Credit Suisse', datei: 'credit-suisse.png' },
+];
+
+// Für Texte und llms.txt (Auswahl, alle dürfen genannt werden).
 export const kunden = [
   'Ampega', 'PATRIZIA', 'Aachener Grundvermögen', 'Mann Immobilien', 'HIH',
-  'TÜV Saarland', 'Noerr', 'Polis Immobilien', 'UKSH', 'Wilo',
+  'TÜV Saarland', 'Noerr', 'Polis Immobilien', 'UKSH', 'Wilo', 'Wirtgen Invest',
 ];
