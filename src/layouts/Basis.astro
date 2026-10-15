@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { firma } from '../data/fakten';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: Record<string, unknown>[];
+  ogBild?: string;
+}
+const { title, description, schema = [], ogBild = '/brand/evana-logo.png' } = Astro.props;
+
+// Staging (Cloudflare) setzt STAGING=true, dann wird nichts indexiert.
+const staging = import.meta.env.STAGING === 'true' || process.env.STAGING === 'true';
+const canonical = new URL(Astro.url.pathname, firma.url).href;
+
+const organisation = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${firma.url}/#organisation`,
+  name: firma.name,
+  url: firma.url,
+  logo: `${firma.url}/brand/evana-logo.png`,
+  foundingDate: String(firma.gegruendet),
+  email: firma.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: firma.strasse,
+    postalCode: firma.plz,
+    addressLocality: firma.ort,
+    addressCountry: 'DE',
+  },
+  sameAs: [firma.linkedin],
+};
+const alleSchemas = [organisation, ...schema];
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {staging && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogBild, firma.url).href} />
+    <meta name="theme-color" content="#00434f" />
+    <link rel="icon" type="image/png" href="/brand/favicon-64.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {alleSchemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <a class="sr-only" href="#inhalt">Zum Inhalt springen</a>
+    <Header />
+    <main id="inhalt">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

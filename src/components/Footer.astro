@@ -1,0 +1,48 @@
+---
+import { footerSpalten, rechtliches } from '../data/navigation';
+import { firma } from '../data/fakten';
+const jahr = new Date().getFullYear();
+---
+<footer class="fuss auf-dunkel">
+  <div class="container raster">
+    <div class="marke">
+      <img src="/brand/evana-logo-weiss.png" alt="EVANA" width="150" height="38" loading="lazy" />
+      <p>KI für Immobiliendokumente. Seit {firma.gegruendet} vom {firma.herkunft} aus.</p>
+      <address>
+        {firma.name}<br />
+        {firma.strasse}<br />
+        {firma.plz} {firma.ort}<br />
+        <a href={`mailto:${firma.email}`}>{firma.email}</a>
+      </address>
+    </div>
+    {footerSpalten.map((s) => (
+      <nav aria-label={s.titel}>
+        <h2>{s.titel}</h2>
+        <ul>{s.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+      </nav>
+    ))}
+  </div>
+  <div class="container unten">
+    <p>© {jahr} {firma.name}</p>
+    <ul>
+      {rechtliches.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      <li><a href={firma.linkedin} rel="noopener">LinkedIn</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .fuss { padding-block: 72px 32px; font-size: .95rem; }
+  .raster { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; }
+  .marke img { width: 150px; height: auto; margin-bottom: 18px; }
+  .marke p { max-width: 30ch; margin-bottom: 18px; }
+  address { font-style: normal; line-height: 1.7; color: #9fc3ca; }
+  h2 { font-size: .9rem; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 14px; color: var(--weiss); }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  a { color: #d6e6e9; text-decoration: none; }
+  a:hover { color: var(--orange); }
+  .unten { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); color: #8fb1b8; }
+  .unten ul { display: flex; gap: 24px; }
+  @media (max-width: 860px) { .raster { grid-template-columns: 1fr 1fr; } .marke { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .raster { grid-template-columns: 1fr; } }
+</style>

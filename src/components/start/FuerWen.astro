@@ -1,0 +1,49 @@
+---
+const immobilien = [
+  { titel: 'Asset Management', text: 'Kennzahlen, Mietverträge und ESG-Daten objektübergreifend abfragen.', href: '/loesungen/asset-management/' },
+  { titel: 'Property und Facility Management', text: 'Protokolle auswerten, Mängel und Fristen im Blick behalten.', href: '/loesungen/property-facility-management/' },
+  { titel: 'Transaktion und Due Diligence', text: 'Datenräume aufsetzen und Bieterfragen mit Belegen beantworten.', href: '/loesungen/transaktion-due-diligence/' },
+  { titel: 'Banken, Versicherer und KVGs', text: 'Bestände prüffähig dokumentieren, mit BaFin- und DORA-Anforderungen.', href: '/loesungen/finanzwirtschaft/' },
+  { titel: 'Öffentliche Hand', text: 'Große Aktenbestände strukturiert auswerten und Auskünfte schneller geben.', href: '/loesungen/oeffentliche-hand/' },
+];
+const weitere = [
+  { titel: 'Filialnetze und Franchise', href: '/loesungen/filialnetze-franchise/' },
+  { titel: 'Kanzleien und Beratung', href: '/loesungen/kanzleien-beratung/' },
+  { titel: 'Healthcare und Pflege', href: '/loesungen/healthcare-pflege/' },
+  { titel: 'Industrie und Corporate Real Estate', href: '/loesungen/corporate-real-estate/' },
+];
+---
+<section class="sektion">
+  <div class="container">
+    <div class="kopf">
+      <p class="eyebrow">Für wen</p>
+      <h2>Gebaut für die Immobilienwirtschaft</h2>
+      <p class="lead">EVANA kennt die Dokumente und Abläufe Ihrer Rolle. Wählen Sie Ihren Bereich.</p>
+    </div>
+
+    <ul class="rollen">
+      {immobilien.map((r) => (
+        <li><a href={r.href}><strong>{r.titel}</strong><span>{r.text}</span></a></li>
+      ))}
+    </ul>
+
+    <div class="weitere">
+      <p>Überall, wo viele Dokumente über Standorte und Verträge entscheiden, hilft EVANA ebenfalls:</p>
+      <ul>{weitere.map((w) => <li><a href={w.href}>{w.titel}</a></li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rollen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; border-top: 1px solid var(--linie); }
+  .rollen li { border-bottom: 1px solid var(--linie); }
+  .rollen a { display: grid; gap: 8px; height: 100%; padding: 26px 22px 26px 0; text-decoration: none; color: var(--text); }
+  .rollen strong { font-size: 1.12rem; color: var(--headline); line-height: 1.25; }
+  .rollen span { font-size: .95rem; }
+  .rollen a:hover strong { color: var(--petrol); }
+  .weitere { margin-top: 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+  .weitere p { color: var(--hilfsgrau); }
+  .weitere ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .weitere a { display: inline-block; padding: 8px 16px; border-radius: 999px; background: var(--mist); font-weight: 600; text-decoration: none; color: var(--petrol-dunkel); }
+  .weitere a:hover { background: var(--tint-petrol); }
+</style>

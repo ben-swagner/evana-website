@@ -1,0 +1,17 @@
+{
+  "name": "evana-website",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/build-redirects.mjs && astro build",
+    "preview": "astro preview",
+    "check:text": "node scripts/check-text.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/titillium-web": "^5.3.0",
+    "astro": "^7.4.0"
+  }
+}

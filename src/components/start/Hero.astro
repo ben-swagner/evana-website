@@ -1,0 +1,150 @@
+---
+import DokIcon from '../DokIcon.astro';
+import { cta } from '../../data/fakten';
+import type { Demo } from '../../data/anwendungsfaelle';
+
+// Beispiel aus dem urbanicom-Vortrag: Filial- bzw. Portfolio-Frage über viele Mietverträge.
+const beispiel: Demo = {
+  art: 'antwort',
+  frage: 'Welche Mietverträge haben Verlängerungsoptionen, die in den nächsten 24 Monaten auslaufen?',
+  antwort: [
+    'Hamburg, Spitalerstraße: Option bis 31.03.2027, Verlängerung um 5 Jahre, Indexmiete nach VPI',
+    'Köln, Hohe Straße: Option bis 30.09.2027, Verlängerung um 3 Jahre',
+    'Leipzig, Petersstraße: Option bis 31.12.2027, Staffelmiete ab Jahr 2',
+  ],
+  fundstellen: [
+    { datei: 'MV_Hamburg_Spitalerstr.pdf', stelle: '§ 4 Abs. 2, S. 7' },
+    { datei: 'Nachtrag_2_Koeln.pdf', stelle: 'S. 2' },
+    { datei: 'MV_Leipzig_Petersstr.pdf', stelle: '§ 3, S. 5' },
+  ],
+};
+const dokumente = [
+  { name: 'MV_Hamburg_Spitalerstr.pdf', typ: 'Mietvertrag, 34 Seiten' },
+  { name: 'Nachtrag_2_Koeln.pdf', typ: 'Nachtrag zum Mietvertrag' },
+  { name: 'MV_Leipzig_Petersstr.pdf', typ: 'Mietvertrag, Scan' },
+];
+---
+<section class="hero">
+  <div class="container hero-raster">
+    <div class="hero-text">
+      <p class="eyebrow">KI für Immobiliendokumente</p>
+      <h1>Aus Ihren Dokumenten werden Antworten</h1>
+      <p class="lead">
+        EVANA liest Mietverträge, Grundbuchauszüge, Gutachten und Protokolle, ordnet sie dem richtigen Objekt zu
+        und beantwortet Ihre Fragen mit Fundstelle. Spezialisiert auf die Immobilienwirtschaft und gebaut für
+        Bestände mit Millionen Dokumenten.
+      </p>
+      <div class="aktionen">
+        <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+        <a href="#anwendungsfaelle" class="btn btn-sekundaer">Anwendungsfälle ansehen</a>
+      </div>
+      <ul class="vertrauen" aria-label="Sicherheit">
+        <li>ISO 27001, zertifiziert durch TÜV Saarland</li>
+        <li>Hosting in der EU</li>
+      </ul>
+    </div>
+
+    <div class="fluss" aria-label="Beispiel: Eine Frage an drei Dokumente, eine belegte Antwort">
+      <svg class="linien" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="verlauf-hero" gradientUnits="userSpaceOnUse" x1="20" y1="10" x2="80" y2="60">
+            <stop offset="0" stop-color="#01748D" />
+            <stop offset=".55" stop-color="#861552" />
+            <stop offset="1" stop-color="#F59E34" />
+          </linearGradient>
+        </defs>
+        <path pathLength="1" class="strang s1" d="M44 7 C 58 7, 62 18, 70 24" />
+        <path pathLength="1" class="strang s2" d="M50 19 C 58 19, 62 22, 70 24" />
+        <path pathLength="1" class="strang s3" d="M44 31 C 58 31, 62 27, 70 24" />
+        <path pathLength="1" class="strang haupt" d="M70 24 C 84 30, 88 36, 80 45" />
+      </svg>
+      <span class="knoten" aria-hidden="true"></span>
+
+      <ul class="stapel">
+        {dokumente.map((d, i) => (
+          <li class={`dok d${i + 1}`}>
+            <DokIcon />
+            <div>{d.name}<small>{d.typ}</small></div>
+          </li>
+        ))}
+      </ul>
+
+      {beispiel.art === 'antwort' && (
+        <div class="antwort">
+          <p class="frage">{beispiel.frage}</p>
+          <div class="eva">
+            <p class="eva-name"><img src="/brand/evana-icon.png" alt="" width="22" height="20" /> EVA</p>
+            <ul>{beispiel.antwort.map((z) => <li>{z}</li>)}</ul>
+            <div class="quellen">
+              {beispiel.fundstellen.map((f) => <span class="fundstelle">{f.datei} · {f.stelle}</span>)}
+            </div>
+          </div>
+          <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(48px, 8vw, 104px) clamp(56px, 8vw, 96px); overflow: hidden; }
+  .hero-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .hero-text h1 { max-width: 12ch; }
+  .hero-text .lead { margin-top: 24px; }
+  .aktionen { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .vertrauen { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: .9rem; color: var(--hilfsgrau); }
+  .vertrauen li { display: flex; align-items: center; gap: 8px; }
+  .vertrauen li::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--petrol); }
+
+  .fluss { position: relative; aspect-ratio: 1 / 1.02; }
+  .linien { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .strang { fill: none; stroke: url(#verlauf-hero); stroke-width: .55; stroke-linecap: round; }
+  .strang.haupt { stroke-width: .75; }
+  .knoten {
+    position: absolute; left: 70%; top: 24%; width: 22px; height: 22px; margin: -11px 0 0 -11px;
+    border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 10px rgba(245,158,52,.18), 0 0 0 22px rgba(245,158,52,.08);
+  }
+
+  .stapel { list-style: none; margin: 0; padding: 0; }
+  .stapel .dok { position: absolute; width: 46%; }
+  .d1 { left: 0; top: 2%; transform: rotate(-3deg); }
+  .d2 { left: 6%; top: 14%; transform: rotate(2deg); }
+  .d3 { left: 0; top: 26%; transform: rotate(-1.5deg); }
+
+  .antwort {
+    position: absolute; left: 14%; right: 0; top: 45%;
+    background: var(--weiss); border-radius: var(--radius); box-shadow: var(--schatten);
+    padding: 22px; border: 1px solid var(--linie);
+  }
+  .frage {
+    background: var(--mist); border-radius: 16px 16px 16px 4px; padding: 12px 16px;
+    font-weight: 600; color: var(--headline); line-height: 1.4; font-size: .98rem;
+  }
+  .eva { margin-top: 14px; }
+  .eva-name { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--petrol-dunkel); font-size: .9rem; }
+  .eva-name img { width: 22px; height: auto; }
+  .eva ul { margin: 8px 0 0; padding-left: 18px; font-size: .92rem; line-height: 1.45; display: grid; gap: 6px; }
+  .eva li::marker { color: var(--orange); }
+  .quellen { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .strang { stroke-dasharray: 1; stroke-dashoffset: 1; animation: zeichnen 1.1s ease-out forwards; }
+    .strang.s2 { animation-delay: .15s; }
+    .strang.s3 { animation-delay: .3s; }
+    .strang.haupt { animation-delay: .9s; animation-duration: .8s; }
+    .knoten { opacity: 0; animation: auftauchen .4s ease-out .8s forwards; }
+    .antwort { opacity: 0; transform: translateY(10px); animation: einblenden .5s ease-out 1.5s forwards; }
+    @keyframes zeichnen { to { stroke-dashoffset: 0; } }
+    @keyframes auftauchen { to { opacity: 1; } }
+    @keyframes einblenden { to { opacity: 1; transform: none; } }
+  }
+
+  @media (max-width: 920px) {
+    .hero-raster { grid-template-columns: 1fr; }
+    .fluss { aspect-ratio: auto; display: grid; gap: 18px; }
+    .linien, .knoten { display: none; }
+    .stapel { display: grid; gap: 10px; }
+    .stapel .dok { position: static; width: auto; transform: none; }
+    .antwort { position: static; border-top: 4px solid var(--orange); }
+  }
+</style>

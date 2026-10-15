@@ -1,0 +1,42 @@
+---
+import Basis from '../layouts/Basis.astro';
+import Hero from '../components/start/Hero.astro';
+import Kunden from '../components/start/Kunden.astro';
+import Umschalter from '../components/start/Umschalter.astro';
+import Spezialisiert from '../components/start/Spezialisiert.astro';
+import Eva from '../components/start/Eva.astro';
+import Ergebnisse from '../components/start/Ergebnisse.astro';
+import Ebenen from '../components/start/Ebenen.astro';
+import FuerWen from '../components/start/FuerWen.astro';
+import Sicherheit from '../components/start/Sicherheit.astro';
+import Abschluss from '../components/Abschluss.astro';
+import { firma } from '../data/fakten';
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'EVANA',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    description: 'KI-Plattform für Immobiliendokumente: Klassifizierung, Datenextraktion, Dokumentenmanagement, Transaktionsdatenraum und die KI-Assistentin EVA.',
+    publisher: { '@id': `${firma.url}/#organisation` },
+  },
+];
+---
+<Basis
+  title="EVANA · KI für Immobiliendokumente, Dokumentenmanagement und Datenräume"
+  description="EVANA liest Mietverträge, Grundbuchauszüge und Gutachten, ordnet sie dem richtigen Objekt zu und beantwortet Ihre Fragen mit Fundstelle. KI-Dokumentenmanagement für die Immobilienwirtschaft."
+  schema={schema}
+>
+  <Hero />
+  <Kunden />
+  <Umschalter />
+  <Spezialisiert />
+  <Eva />
+  <Ergebnisse />
+  <Ebenen />
+  <FuerWen />
+  <Sicherheit />
+  <Abschluss />
+</Basis>

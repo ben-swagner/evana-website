@@ -1,0 +1,29 @@
+---
+import { sicherheit } from '../../data/fakten';
+---
+<section class="sektion sektion-mist">
+  <div class="container raster">
+    <div>
+      <p class="eyebrow">Sicherheit</p>
+      <h2>Für regulierte Bestände gemacht</h2>
+      <p class="lead">Banken, Versicherer, KVGs und öffentliche Auftraggeber vertrauen EVANA ihre Dokumente an. Das sind die Gründe.</p>
+      <a href="/sicherheit/" class="mehr">Alles zu Sicherheit und Zertifizierungen</a>
+    </div>
+    <dl class="liste">
+      {sicherheit.map((s) => <div><dt>{s.titel}</dt><dd>{s.text}</dd></div>)}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .raster { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .lead { margin-top: 18px; }
+  .mehr { display: inline-block; margin-top: 24px; font-weight: 600; }
+  .liste { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; margin: 0; }
+  .liste div { padding: 18px 0; border-top: 1px solid var(--linie); }
+  .liste dt { font-weight: 700; color: var(--headline); display: flex; align-items: center; gap: 10px; }
+  .liste dt::before { content: ''; width: 10px; height: 10px; border-radius: 3px; background: var(--petrol); flex: none; }
+  .liste dd { margin: 4px 0 0 20px; font-size: .95rem; }
+  @media (max-width: 900px) { .raster { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .liste { grid-template-columns: 1fr; } }
+</style>

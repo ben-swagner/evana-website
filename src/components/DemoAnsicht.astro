@@ -1,0 +1,190 @@
+---
+// Stellt das Beispiel eines Anwendungsfalls als kleine UI-Szene dar: links Eingang, rechts Ergebnis.
+import DokIcon from './DokIcon.astro';
+import type { Demo } from '../data/anwendungsfaelle';
+interface Props { demo: Demo }
+const { demo } = Astro.props;
+const maxEnden = demo.art === 'report' ? Math.max(...demo.vertragsenden.map((v) => v.anzahl)) : 1;
+---
+<div class={`szene szene-${demo.art}`}>
+  {demo.art === 'antwort' && (
+    <>
+      <div class="eingang"><p class="frage">{demo.frage}</p></div>
+      <div class="pfeil" aria-hidden="true"></div>
+      <div class="ergebnis">
+        <p class="label">Antwort von EVA</p>
+        <ul class="liste">{demo.antwort.map((z) => <li>{z}</li>)}</ul>
+        <div class="chips">{demo.fundstellen.map((f) => <span class="fundstelle">{f.datei} · {f.stelle}</span>)}</div>
+      </div>
+    </>
+  )}
+
+  {demo.art === 'zuordnung' && (
+    <>
+      <div class="eingang">
+        <p class="label">Posteingang</p>
+        <ul class="doks">
+          {demo.eingang.map((d) => (
+            <li class="dok"><DokIcon farbe="#7A7A7A" /><div>{d.name}<small>unsortiert</small></div></li>
+          ))}
+        </ul>
+      </div>
+      <div class="pfeil" aria-hidden="true"></div>
+      <div class="ergebnis">
+        <p class="label">Abgelegt</p>
+        <ul class="ablage">
+          {demo.ziel.map((z, i) => (
+            <li>
+              <span class="typ">{demo.eingang[i].typ}</span>
+              <strong>{z.neuerName}</strong>
+              <small>{z.objekt} / {z.ordner}</small>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  )}
+
+  {demo.art === 'extraktion' && (
+    <>
+      <div class="eingang">
+        <p class="label">Dokument</p>
+        <div class="dok gross"><DokIcon /><div>{demo.dokument}<small>{demo.seiten}</small></div></div>
+        <div class="seitenstapel" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
+      <div class="pfeil" aria-hidden="true"></div>
+      <div class="ergebnis">
+        <p class="label">Extrahierte Felder</p>
+        <table class="felder">
+          <tbody>{demo.felder.map((f) => <tr><th scope="row">{f.feld}</th><td>{f.wert}</td></tr>)}</tbody>
+        </table>
+        <div class="chips"><span class="export">CSV</span><span class="export">Excel</span><span class="export">API</span></div>
+      </div>
+    </>
+  )}
+
+  {demo.art === 'qa' && (
+    <>
+      <div class="eingang">
+        <p class="label">{demo.bieter}</p>
+        <p class="frage">{demo.frage}</p>
+      </div>
+      <div class="pfeil" aria-hidden="true"></div>
+      <div class="ergebnis">
+        <p class="label">Antwortentwurf von EVA</p>
+        <p class="entwurf">{demo.entwurf}</p>
+        <div class="chips"><span class="fundstelle">{demo.quelle}</span></div>
+        <div class="knoepfe" aria-hidden="true"><span>Bearbeiten</span><span class="frei">Freigeben</span></div>
+      </div>
+    </>
+  )}
+
+  {demo.art === 'report' && (
+    <>
+      <div class="eingang">
+        <p class="label">Quellen</p>
+        <ul class="doks kompakt">
+          <li class="dok"><DokIcon />23 Mietverträge</li>
+          <li class="dok"><DokIcon />Wartungsprotokolle</li>
+          <li class="dok"><DokIcon />Energieausweise</li>
+        </ul>
+      </div>
+      <div class="pfeil" aria-hidden="true"></div>
+      <div class="ergebnis">
+        <p class="label">Objektreport {demo.objekt}</p>
+        <dl class="kennzahlen">
+          {demo.kennzahlen.map((k) => <div><dt>{k.label}</dt><dd>{k.wert}</dd></div>)}
+        </dl>
+        <p class="unterlabel">Vertragsenden je Jahr</p>
+        <ul class="balken">
+          {demo.vertragsenden.map((v) => (
+            <li><span class="jahr">{v.jahr}</span><span class="bar" style={`--w:${(v.anzahl / maxEnden) * 100}%`}></span><span class="n">{v.anzahl}</span></li>
+          ))}
+        </ul>
+      </div>
+    </>
+  )}
+
+  {demo.art === 'anbindung' && (
+    <>
+      <div class="eingang">
+        <p class="label">Ihre KI</p>
+        <ul class="pillen">{demo.modelle.map((m) => <li>{m}</li>)}</ul>
+      </div>
+      <div class="mitte" aria-hidden="true"><img src="/brand/evana-icon.png" alt="" width="56" height="50" /><span>EVANA Datenbasis</span></div>
+      <div class="ergebnis">
+        <p class="label">Ihre Systeme</p>
+        <ul class="pillen petrol">{demo.schnittstellen.map((m) => <li>{m}</li>)}</ul>
+      </div>
+    </>
+  )}
+</div>
+
+<style>
+  .szene { display: grid; grid-template-columns: minmax(0, .9fr) 56px minmax(0, 1.2fr); align-items: center; gap: 0; }
+  .label { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--hilfsgrau); margin-bottom: 10px; }
+  .unterlabel { font-size: .82rem; font-weight: 600; color: var(--hilfsgrau); margin: 14px 0 6px; }
+  .eingang { display: grid; gap: 10px; }
+  .ergebnis { background: var(--weiss); border-radius: var(--radius); box-shadow: var(--schatten); padding: 22px; border: 1px solid var(--linie); }
+
+  .pfeil { position: relative; height: 4px; margin-inline: 6px; background: var(--verlauf); border-radius: 2px; }
+  .pfeil::after { content: ''; position: absolute; right: -6px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 6px rgba(245,158,52,.18); }
+
+  .frage { background: var(--weiss); border-radius: 16px 16px 16px 4px; padding: 14px 16px; font-weight: 600; color: var(--headline); line-height: 1.4; box-shadow: var(--schatten-dokument); }
+  .liste { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: .94rem; line-height: 1.45; }
+  .liste li::marker { color: var(--orange); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .export { font-size: .78rem; font-weight: 700; color: var(--tint-orange-text); background: var(--tint-orange); border-radius: 999px; padding: 4px 12px; }
+
+  .doks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .doks .dok:nth-child(1) { transform: rotate(-1.5deg); }
+  .doks .dok:nth-child(2) { transform: rotate(1deg); }
+  .doks.kompakt .dok { padding: 10px 12px; }
+  .doks.kompakt .dok-icon { width: 18px; height: 22px; }
+  .ablage { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .ablage li { display: grid; gap: 2px; padding-bottom: 12px; border-bottom: 1px solid var(--linie); }
+  .ablage li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .ablage strong { font-weight: 600; color: var(--headline); font-size: .92rem; word-break: break-word; }
+  .ablage small { color: var(--hilfsgrau); font-size: .82rem; }
+  .typ { justify-self: start; font-size: .74rem; font-weight: 700; color: var(--petrol); background: var(--tint-petrol); border-radius: 999px; padding: 2px 10px; }
+
+  .dok.gross { padding: 16px; transform: rotate(-1.5deg); }
+  .seitenstapel { position: relative; height: 22px; margin-inline: 14px; }
+  .seitenstapel span { position: absolute; inset: 0; border-radius: 0 0 10px 10px; background: var(--weiss); box-shadow: var(--schatten-dokument); }
+  .seitenstapel span:nth-child(2) { inset: 6px 8px -6px; opacity: .8; }
+  .seitenstapel span:nth-child(3) { inset: 12px 16px -12px; opacity: .6; }
+  .felder { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  .felder th { text-align: left; font-weight: 400; color: var(--hilfsgrau); padding: 7px 0; border-bottom: 1px solid var(--linie); }
+  .felder td { text-align: right; font-weight: 600; color: var(--headline); padding: 7px 0; border-bottom: 1px solid var(--linie); }
+
+  .entwurf { font-size: .94rem; line-height: 1.5; }
+  .knoepfe { display: flex; gap: 8px; margin-top: 14px; }
+  .knoepfe span { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 7px 12px; border-radius: 8px; border: 1.5px solid var(--petrol); color: var(--petrol); }
+  .knoepfe .frei { background: var(--magenta); border-color: var(--magenta); color: var(--weiss); }
+
+  .kennzahlen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0; }
+  .kennzahlen div { background: var(--mist); border-radius: 12px; padding: 10px 12px; }
+  .kennzahlen dt { font-size: .76rem; color: var(--hilfsgrau); }
+  .kennzahlen dd { margin: 0; font-weight: 700; font-size: 1.15rem; color: var(--petrol-dunkel); }
+  .balken { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .balken li { display: grid; grid-template-columns: 40px 1fr 22px; align-items: center; gap: 8px; font-size: .84rem; }
+  .bar { height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--petrol) var(--w), var(--tint-petrol) var(--w)); }
+  .n { text-align: right; font-weight: 600; }
+
+  .szene-anbindung { grid-template-columns: 1fr auto 1fr; gap: 20px; }
+  .pillen { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .pillen li { background: var(--weiss); border-radius: 999px; padding: 10px 16px; font-weight: 600; color: var(--headline); box-shadow: var(--schatten-dokument); text-align: center; }
+  .pillen.petrol li { background: var(--tint-petrol); color: var(--petrol-dunkel); box-shadow: none; }
+  .szene-anbindung .ergebnis { background: transparent; box-shadow: none; border: 0; padding: 0; }
+  .mitte { display: grid; justify-items: center; gap: 10px; padding: 20px; border-radius: 50%; aspect-ratio: 1; align-content: center; background: var(--weiss); box-shadow: 0 0 0 10px rgba(245,158,52,.15), var(--schatten); width: 150px; }
+  .mitte img { width: 48px; height: auto; }
+  .mitte span { font-size: .78rem; font-weight: 700; text-align: center; color: var(--petrol-dunkel); line-height: 1.2; }
+
+  @media (max-width: 760px) {
+    .szene, .szene-anbindung { grid-template-columns: 1fr; gap: 0; }
+    .pfeil { width: 4px; height: 36px; margin: 6px auto; background: linear-gradient(180deg, var(--petrol), var(--magenta) 55%, var(--orange)); }
+    .pfeil::after { right: auto; left: 50%; top: auto; bottom: -6px; margin: 0 0 0 -7px; }
+    .szene-anbindung { gap: 18px; }
+    .mitte { margin-inline: auto; }
+  }
+</style>

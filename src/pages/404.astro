@@ -1,0 +1,23 @@
+---
+import Basis from '../layouts/Basis.astro';
+import { anwendungsfaelle } from '../data/anwendungsfaelle';
+---
+<Basis title="Seite nicht gefunden | EVANA" description="Diese Seite gibt es nicht oder sie entsteht gerade.">
+  <section class="sektion">
+    <div class="container">
+      <p class="eyebrow">Seite nicht gefunden</p>
+      <h1>Diese Seite gibt es noch nicht</h1>
+      <p class="lead">Die Website wird gerade neu aufgebaut, und einige Bereiche entstehen noch. Von hier aus geht es weiter:</p>
+      <ul class="weiter">
+        <li><a href="/">Zur Startseite</a></li>
+        {anwendungsfaelle.map((a) => <li><a href={`/anwendungsfaelle/${a.slug}/`}>{a.tab}</a></li>)}
+      </ul>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  h1 { font-size: clamp(2rem, 4vw, 3.2rem); max-width: 18ch; }
+  .lead { margin-top: 20px; }
+  .weiter { margin-top: 28px; display: grid; gap: 8px; padding-left: 18px; }
+</style>

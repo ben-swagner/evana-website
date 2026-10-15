@@ -1,0 +1,76 @@
+---
+import { cta, zahlen } from '../../data/fakten';
+const katalog = [
+  { frage: 'Liegen für alle Mietverträge gültige Unterschriften vor?', treffer: 14, status: 'ok' },
+  { frage: 'Bestehen offene Wartungsmängel mit hoher Dringlichkeit?', treffer: 3, status: 'kritisch' },
+  { frage: 'Sind alle Energieausweise aktuell und gültig?', treffer: 9, status: 'handeln' },
+  { frage: 'Gibt es Sonderkündigungsrechte einzelner Mieter?', treffer: 6, status: 'ok' },
+];
+const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlungsbedarf', kritisch: 'Kritisch' };
+---
+<section class="sektion auf-dunkel eva-sektion">
+  <div class="container raster">
+    <div>
+      <p class="eyebrow">Unsere KI-Assistentin EVA</p>
+      <h2>Einen ganzen Fragenkatalog in einem Durchgang beantworten</h2>
+      <p class="lead">
+        Übergeben Sie EVA Ihre Due-Diligence-Checkliste. Sie beantwortet jede Frage aus dem gesamten Datenraum
+        und belegt jede Antwort mit ihren Fundstellen. Was früher Tage manueller Prüfung gekostet hat, liegt jetzt
+        nach kurzer Zeit vor, und Ihr Team konzentriert sich auf die Entscheidung.
+      </p>
+      <dl class="fakten">
+        <div><dt>Antwortzeit pro Frage</dt><dd>{zahlen.evaAntwortzeit}</dd></div>
+        <div><dt>Antworten mit Fundstelle</dt><dd>jede einzelne</dd></div>
+      </dl>
+      <div class="aktionen">
+        <a href="/produkte/eva/" class="btn btn-sekundaer">EVA kennenlernen</a>
+        <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+      </div>
+    </div>
+
+    <div class="katalog" aria-label="Beispiel: Due-Diligence-Katalog">
+      <div class="katalog-kopf">
+        <strong>Due-Diligence-Katalog</strong>
+        <span>42 Fragen beantwortet</span>
+      </div>
+      <ul>
+        {katalog.map((k) => (
+          <li>
+            <p>{k.frage}</p>
+            <div class="zeile">
+              <span class={`status ${k.status}`}>{statusText[k.status]}</span>
+              <span class="treffer">{k.treffer} Fundstellen</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
+  .lead { margin-top: 20px; }
+  .fakten { display: flex; flex-wrap: wrap; gap: 32px; margin: 32px 0 0; }
+  .fakten dt { font-size: .85rem; color: #8fb1b8; }
+  .fakten dd { margin: 2px 0 0; font-size: 1.6rem; font-weight: 700; color: var(--orange); }
+  .aktionen { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+
+  .katalog { background: var(--weiss); color: var(--text); border-radius: var(--radius-gross); padding: 28px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.5); }
+  .katalog-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--linie); }
+  .katalog-kopf strong { color: var(--headline); font-size: 1.1rem; }
+  .katalog-kopf span { font-size: .85rem; color: var(--petrol); font-weight: 600; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { padding: 16px 0; border-bottom: 1px solid var(--linie); }
+  li p { font-weight: 600; color: var(--headline); line-height: 1.4; }
+  .zeile { display: flex; gap: 12px; align-items: center; margin-top: 8px; font-size: .82rem; }
+  .status { font-weight: 700; border-radius: 999px; padding: 3px 10px; }
+  .status.ok { background: var(--tint-petrol); color: var(--petrol); }
+  .status.handeln { background: var(--tint-orange); color: var(--tint-orange-text); }
+  .status.kritisch { background: var(--tint-magenta); color: var(--magenta); }
+  .treffer { color: var(--hilfsgrau); }
+  .katalog .beispiel-hinweis { color: var(--hilfsgrau); }
+
+  @media (max-width: 900px) { .raster { grid-template-columns: 1fr; } .katalog { padding: 20px; } }
+</style>

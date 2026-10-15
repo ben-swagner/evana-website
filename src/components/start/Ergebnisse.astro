@@ -1,0 +1,44 @@
+---
+import { zahlen } from '../../data/fakten';
+const faelle = [
+  { kunde: 'Ampega', kontext: 'Asset Manager der Talanx', wert: '100+ Objekte', text: 'in zwei Wochen vollständig in EVANA 360 übernommen.', href: '/referenzen/ampega/' },
+  { kunde: 'TÜV Saarland', kontext: 'Immobilienbewertung', wert: '300 Seiten', text: 'je Bewertungsgutachten automatisch ausgewertet, rund 40 Felder pro Gutachten.', href: '/referenzen/tuev-saarland/' },
+  { kunde: 'Wirtgen Invest', kontext: 'Bestandshalter', wert: '25.000 Dokumente', text: 'aus vier Objekten klassifiziert und umbenannt, in wenigen Tagen statt Monaten.', href: '/referenzen/wirtgen-invest/' },
+  { kunde: 'Aachener Grundvermögen', kontext: 'Kapitalverwaltung', wert: '15.000 Dokumente', text: 'aus internationalen Beständen automatisch ausgelesen und als strukturierte Daten bereitgestellt.', href: '/referenzen/aachener-grundvermoegen/' },
+];
+---
+<section class="sektion">
+  <div class="container">
+    <div class="kopf">
+      <p class="eyebrow">Ergebnisse</p>
+      <h2>Was Kunden mit EVANA erreicht haben</h2>
+      <p class="lead">
+        Teams sparen bis zu {zahlen.zeitersparnis} Zeit bei der Dokumentenarbeit, beim Ablegen allein{' '}
+        {zahlen.stundenProAsset} pro Asset und Jahr. Unsere Kunden verwalten zusammen {zahlen.betreutesVermoegen}.
+      </p>
+    </div>
+    <ol class="faelle">
+      {faelle.map((f) => (
+        <li>
+          <div class="wer"><strong>{f.kunde}</strong><span>{f.kontext}</span></div>
+          <p class="wert">{f.wert}</p>
+          <p class="text">{f.text}</p>
+          <a href={f.href} aria-label={`Referenz ${f.kunde} lesen`}>Zur Referenz</a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .faelle { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--headline); }
+  .faelle li { display: grid; grid-template-columns: 1.1fr .9fr 1.6fr auto; gap: 24px; align-items: baseline; padding: 26px 0; border-bottom: 1px solid var(--linie); }
+  .wer strong { display: block; font-size: 1.15rem; color: var(--headline); }
+  .wer span { font-size: .9rem; color: var(--hilfsgrau); }
+  .wert { font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 700; color: var(--petrol); line-height: 1; }
+  .text { max-width: 46ch; }
+  .faelle a { font-weight: 600; white-space: nowrap; }
+  @media (max-width: 860px) {
+    .faelle li { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>

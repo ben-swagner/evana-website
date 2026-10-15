@@ -1,0 +1,113 @@
+---
+import { hauptnavigation } from '../data/navigation';
+import { cta } from '../data/fakten';
+const pfad = Astro.url.pathname;
+---
+<header class="kopfzeile">
+  <div class="container leiste">
+    <a href="/" class="logo" aria-label="EVANA Startseite">
+      <img src="/brand/evana-logo.png" alt="EVANA" width="160" height="40" />
+    </a>
+
+    <nav class="haupt" aria-label="Hauptnavigation">
+      <ul>
+        {hauptnavigation.map((p) => (
+          <li class={p.kinder ? 'hat-kinder' : ''}>
+            <a href={p.href} aria-current={pfad.startsWith(p.href) ? 'page' : undefined}>{p.label}</a>
+            {p.kinder && (
+              <div class="menue">
+                <ul>
+                  {p.kinder.map((k) => (
+                    <li>
+                      <a href={k.href}>
+                        <strong>{k.label}</strong>
+                        {k.text && <span>{k.text}</span>}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="rechts">
+      <a href="/unternehmen/" class="klein">Unternehmen</a>
+      <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+    </div>
+
+    <details class="mobil">
+      <summary aria-label="Menü öffnen">
+        <span></span><span></span><span></span>
+      </summary>
+      <div class="mobil-panel">
+        {hauptnavigation.map((p) => (
+          <div class="mobil-gruppe">
+            <a href={p.href} class="mobil-titel">{p.label}</a>
+            {p.kinder && (
+              <ul>{p.kinder.map((k) => <li><a href={k.href}>{k.label}</a></li>)}</ul>
+            )}
+          </div>
+        ))}
+        <a href="/unternehmen/" class="mobil-titel">Unternehmen</a>
+        <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style>
+  .kopfzeile {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,.94); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linie);
+  }
+  .leiste { display: flex; align-items: center; gap: 32px; height: 76px; }
+  .logo img { width: 150px; height: auto; }
+  .haupt { flex: 1; }
+  .haupt > ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .haupt > ul > li { position: relative; }
+  .haupt > ul > li > a {
+    display: block; padding: 10px 14px; font-weight: 600; color: var(--headline);
+    text-decoration: none; border-radius: 8px;
+  }
+  .haupt > ul > li > a:hover, .haupt > ul > li:focus-within > a { color: var(--petrol); background: var(--mist); }
+  .haupt a[aria-current='page'] { color: var(--petrol); }
+
+  .menue {
+    position: absolute; top: calc(100% + 6px); left: 0; min-width: 320px;
+    background: var(--weiss); border-radius: 20px; box-shadow: var(--schatten);
+    padding: 10px; opacity: 0; visibility: hidden; transform: translateY(-4px);
+    transition: opacity .15s, transform .15s, visibility .15s;
+  }
+  .hat-kinder:hover .menue, .hat-kinder:focus-within .menue { opacity: 1; visibility: visible; transform: none; }
+  .menue ul { list-style: none; margin: 0; padding: 0; }
+  .menue a { display: block; padding: 10px 14px; border-radius: 12px; text-decoration: none; color: var(--headline); }
+  .menue a:hover { background: var(--mist); }
+  .menue strong { display: block; font-weight: 600; }
+  .menue span { display: block; font-size: .86rem; color: var(--hilfsgrau); line-height: 1.35; }
+
+  .rechts { display: flex; align-items: center; gap: 20px; }
+  .klein { color: var(--hilfsgrau); text-decoration: none; font-weight: 600; font-size: .95rem; }
+  .klein:hover { color: var(--petrol); }
+
+  .mobil { display: none; margin-left: auto; }
+  .mobil summary { list-style: none; cursor: pointer; width: 44px; height: 44px; display: grid; place-content: center; gap: 5px; }
+  .mobil summary::-webkit-details-marker { display: none; }
+  .mobil summary span { display: block; width: 24px; height: 2px; background: var(--headline); border-radius: 2px; }
+  .mobil-panel {
+    position: absolute; left: 0; right: 0; top: 76px; background: var(--weiss);
+    padding: 16px var(--gutter) 28px; border-bottom: 1px solid var(--linie);
+    max-height: calc(100vh - 76px); overflow-y: auto; display: grid; gap: 18px;
+  }
+  .mobil-titel { font-weight: 700; color: var(--headline); text-decoration: none; font-size: 1.1rem; }
+  .mobil-gruppe ul { list-style: none; padding: 6px 0 0 12px; margin: 0; display: grid; gap: 6px; }
+  .mobil-gruppe ul a { color: var(--text); text-decoration: none; }
+
+  @media (max-width: 1080px) {
+    .haupt, .rechts { display: none; }
+    .mobil { display: block; }
+  }
+</style>

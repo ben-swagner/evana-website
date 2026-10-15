@@ -1,0 +1,140 @@
+/* EVANA Design-Tokens. Farben ausschließlich aus dem Brand-Kontext. */
+@import '@fontsource/titillium-web/400.css';
+@import '@fontsource/titillium-web/600.css';
+@import '@fontsource/titillium-web/700.css';
+@import '@fontsource/titillium-web/900.css';
+
+:root {
+  --petrol: #01748d;
+  --petrol-dunkel: #00434f;
+  --orange: #f59e34;
+  --magenta: #861552;
+  --headline: #303030;
+  --text: #3c3c3b;
+  --eyebrow: #7a7a7a;
+  --hilfsgrau: #5e6a6c;
+  --mist: #f2f8f9;
+  --flaeche: #00758f0f;
+  --linie: #00434f1a;
+  --tint-petrol: #e3f1f4;
+  --tint-orange: #fef3e6;
+  --tint-orange-text: #6b3f05;
+  --tint-magenta: #f7e8ef;
+  --weiss: #ffffff;
+
+  --verlauf: linear-gradient(90deg, var(--petrol) 0%, var(--magenta) 55%, var(--orange) 100%);
+
+  --radius: 24px;
+  --radius-gross: 36px;
+  --radius-klein: 12px;
+  --schatten: 0 18px 48px -24px rgba(0, 67, 79, 0.28), 0 2px 6px rgba(0, 67, 79, 0.06);
+  --schatten-dokument: 0 10px 24px -12px rgba(0, 67, 79, 0.35);
+
+  --font: 'Titillium Web', system-ui, sans-serif;
+  --max: 1200px;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--weiss);
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+h1, h2, h3, h4 { color: var(--headline); margin: 0; font-weight: 700; }
+
+h1, .h1 {
+  font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+  line-height: 1.02;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+}
+
+h2, .h2 {
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+}
+
+h3 { font-size: 1.3rem; line-height: 1.25; }
+
+p { margin: 0; }
+
+a { color: var(--petrol); text-underline-offset: 3px; }
+a:hover { color: var(--petrol-dunkel); }
+
+:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; border-radius: 4px; }
+
+.container { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Eyebrow mit kurzem orangem Strich (Brand-Regel) */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--eyebrow);
+  margin-bottom: 18px;
+}
+.eyebrow::before { content: ''; width: 22px; height: 3px; border-radius: 2px; background: var(--orange); }
+.auf-dunkel .eyebrow { color: #9fc3ca; }
+
+.lead { font-size: clamp(1.1rem, 1.6vw, 1.3rem); line-height: 1.5; max-width: 60ch; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 12px 26px;
+  font: 700 0.95rem/1 var(--font); letter-spacing: 0.04em; text-transform: uppercase;
+  border-radius: 10px; border: 2px solid transparent; text-decoration: none; cursor: pointer;
+  transition: background-color .15s, color .15s, border-color .15s;
+}
+.btn-primaer { background: var(--orange); color: var(--weiss); }
+.btn-primaer:hover { background: #e48a1c; color: var(--weiss); }
+.btn-sekundaer { background: transparent; color: var(--petrol); border-color: var(--petrol); }
+.btn-sekundaer:hover { background: var(--petrol); color: var(--weiss); }
+.auf-dunkel .btn-sekundaer { color: var(--weiss); border-color: rgba(255,255,255,.55); }
+.auf-dunkel .btn-sekundaer:hover { background: var(--weiss); color: var(--petrol-dunkel); }
+
+.sektion { padding-block: clamp(72px, 10vw, 128px); }
+.sektion-mist { background: var(--mist); }
+.auf-dunkel { background: var(--petrol-dunkel); color: #d6e6e9; }
+.auf-dunkel h2, .auf-dunkel h3 { color: var(--weiss); }
+
+.kopf { max-width: 760px; margin-bottom: clamp(36px, 5vw, 56px); }
+.kopf .lead { margin-top: 18px; }
+
+/* Dokumentkarte: das wiederkehrende Objekt der Bildsprache */
+.dok {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--weiss); border-radius: var(--radius-klein);
+  padding: 12px 14px; box-shadow: var(--schatten-dokument);
+  font-size: 0.9rem; color: var(--headline);
+}
+.dok-icon { flex: none; width: 26px; height: 32px; }
+.dok small { display: block; color: var(--hilfsgrau); font-size: 0.78rem; line-height: 1.3; }
+
+.fundstelle {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; font-weight: 600; color: var(--petrol);
+  background: var(--tint-petrol); border-radius: 999px; padding: 4px 10px;
+}
+
+.beispiel-hinweis { font-size: 0.78rem; color: var(--hilfsgrau); margin-top: 12px; }
+.auf-dunkel .beispiel-hinweis { color: #8fb1b8; }

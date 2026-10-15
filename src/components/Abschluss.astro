@@ -1,0 +1,42 @@
+---
+import { cta } from '../data/fakten';
+interface Props { titel?: string; text?: string }
+const {
+  titel = 'Erleben Sie EVANA mit Ihren eigenen Dokumenten',
+  text = 'In der Demo zeigen wir Ihnen an Ihren Beispielen, welche Arbeit EVANA Ihrem Team abnimmt. Die Demo ist in der Regel innerhalb eines Werktags vorbereitet.',
+} = Astro.props;
+---
+<section class="abschluss">
+  <div class="container">
+    <div class="karte">
+      <svg class="linie" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="verlauf-abschluss" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#01748D" /><stop offset=".55" stop-color="#861552" /><stop offset="1" stop-color="#F59E34" />
+          </linearGradient>
+        </defs>
+        <path d="M0 90 C 150 90, 200 20, 330 40 S 520 100, 600 30" fill="none" stroke="url(#verlauf-abschluss)" stroke-width="4" vector-effect="non-scaling-stroke" />
+      </svg>
+      <h2>{titel}</h2>
+      <p class="lead">{text}</p>
+      <div class="aktionen">
+        <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+        <a href="/kontakt/" class="btn btn-sekundaer">Kontakt aufnehmen</a>
+      </div>
+      <p class="sprint">Sie betreiben ein Filialnetz oder ein Franchise-System? Mit dem <a href="/roi-sprint/">ROI-Sprint</a> testen Sie EVANA 14 Tage mit Ihren eigenen Unterlagen.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .abschluss { padding-block: clamp(56px, 8vw, 104px); }
+  .karte { position: relative; overflow: hidden; background: var(--petrol-dunkel); color: #d6e6e9; border-radius: var(--radius-gross); padding: clamp(36px, 6vw, 80px); }
+  .linie { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 120px; opacity: .9; }
+  h2 { color: var(--weiss); max-width: 20ch; position: relative; }
+  .lead { margin-top: 18px; position: relative; }
+  .aktionen { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; position: relative; }
+  .karte .btn-sekundaer { color: var(--weiss); border-color: rgba(255,255,255,.55); }
+  .karte .btn-sekundaer:hover { background: var(--weiss); color: var(--petrol-dunkel); }
+  .sprint { margin-top: 40px; font-size: .95rem; color: #9fc3ca; position: relative; max-width: 60ch; padding-bottom: 40px; }
+  .sprint a { color: var(--orange); font-weight: 600; }
+</style>

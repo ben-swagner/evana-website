@@ -1,0 +1,122 @@
+---
+import Basis from '../../layouts/Basis.astro';
+import DemoAnsicht from '../../components/DemoAnsicht.astro';
+import Abschluss from '../../components/Abschluss.astro';
+import { anwendungsfaelle, type Anwendungsfall } from '../../data/anwendungsfaelle';
+import { cta, firma } from '../../data/fakten';
+
+export function getStaticPaths() {
+  return anwendungsfaelle.map((a) => ({ params: { slug: a.slug }, props: { fall: a } }));
+}
+interface Props { fall: Anwendungsfall }
+const { fall } = Astro.props;
+const andere = anwendungsfaelle.filter((a) => a.slug !== fall.slug);
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: `${firma.url}/` },
+      { '@type': 'ListItem', position: 2, name: 'Anwendungsfälle', item: `${firma.url}/anwendungsfaelle/` },
+      { '@type': 'ListItem', position: 3, name: fall.tab, item: `${firma.url}/anwendungsfaelle/${fall.slug}/` },
+    ],
+  },
+];
+---
+<Basis title={fall.seo.title} description={fall.seo.description} schema={schema}>
+  <section class="kopfbereich">
+    <div class="container">
+      <nav class="pfad" aria-label="Brotkrumen"><a href="/">Start</a> / <a href="/anwendungsfaelle/">Anwendungsfälle</a></nav>
+      <p class="eyebrow">{fall.tab}</p>
+      <h1>{fall.titel}</h1>
+      <p class="lead">{fall.kurz}</p>
+      <div class="aktionen">
+        <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <DemoAnsicht demo={fall.demo} />
+      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
+    </div>
+  </section>
+
+  <section class="sektion">
+    <div class="container zwei">
+      <div>
+        <h2>Heute</h2>
+        <p>{fall.vorher}</p>
+      </div>
+      <div class="mit">
+        <h2>Mit EVANA</h2>
+        <p>{fall.mitEvana}</p>
+      </div>
+    </div>
+    <div class="container">
+      <dl class="details">
+        {fall.details.map((d) => <div><dt>{d.titel}</dt><dd>{d.text}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  {fall.referenz && (
+    <section class="sektion auf-dunkel">
+      <div class="container referenz">
+        <p class="eyebrow">Aus der Praxis</p>
+        <h2>{fall.referenz.name}</h2>
+        <p class="lead">{fall.referenz.ergebnis}</p>
+      </div>
+    </section>
+  )}
+
+  <section class="sektion">
+    <div class="container meta">
+      <div>
+        <h2 class="klein">Besonders gefragt bei</h2>
+        <ul class="pillen">{fall.fuerWen.map((f) => <li>{f}</li>)}</ul>
+      </div>
+      <div>
+        <h2 class="klein">Dahinter steckt</h2>
+        <ul class="pillen petrol">{fall.produkte.map((p) => <li>{p}</li>)}</ul>
+      </div>
+    </div>
+    <div class="container weitere">
+      <h2 class="klein">Weitere Anwendungsfälle</h2>
+      <ul>{andere.map((a) => <li><a href={`/anwendungsfaelle/${a.slug}/`}><strong>{a.tab}</strong><span>{a.titel}</span></a></li>)}</ul>
+    </div>
+  </section>
+
+  <Abschluss />
+</Basis>
+
+<style>
+  .kopfbereich { padding-block: clamp(40px, 7vw, 88px) clamp(40px, 6vw, 72px); }
+  .pfad { font-size: .9rem; color: var(--hilfsgrau); margin-bottom: 28px; }
+  .pfad a { color: var(--hilfsgrau); }
+  .kopfbereich h1 { max-width: 18ch; font-size: clamp(2.1rem, 4.6vw, 3.6rem); }
+  .kopfbereich .lead { margin-top: 22px; }
+  .aktionen { margin-top: 30px; }
+
+  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); }
+  .zwei h2 { font-size: 1.5rem; margin-bottom: 12px; color: var(--hilfsgrau); }
+  .zwei .mit h2 { color: var(--petrol); }
+  .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin: 56px 0 0; padding-top: 32px; border-top: 1px solid var(--linie); }
+  .details dt { font-weight: 700; color: var(--headline); font-size: 1.1rem; margin-bottom: 6px; }
+  .details dd { margin: 0; }
+
+  .referenz .lead { margin-top: 14px; }
+  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .klein { font-size: 1rem; color: var(--hilfsgrau); margin-bottom: 12px; }
+  .pillen { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pillen li { padding: 8px 16px; border-radius: 999px; background: var(--mist); font-weight: 600; color: var(--headline); }
+  .pillen.petrol li { background: var(--tint-petrol); color: var(--petrol-dunkel); }
+  .weitere { margin-top: 56px; }
+  .weitere ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); border-top: 1px solid var(--linie); }
+  .weitere a { display: grid; gap: 4px; padding: 18px 18px 18px 0; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--linie); height: 100%; }
+  .weitere strong { color: var(--petrol); }
+  .weitere span { font-size: .92rem; }
+  @media (max-width: 760px) { .zwei, .meta, .details { grid-template-columns: 1fr; } }
+</style>
