@@ -91,7 +91,7 @@ function markdown(liste, origin) {
   const datum = (iso) => new Date(iso).toLocaleString('de-DE', { timeZone: 'Europe/Berlin', dateStyle: 'short', timeStyle: 'short' });
   const offen = wurzeln.filter((k) => k.status === 'offen').length;
 
-  let md = `# Kommentare zur Staging-Seite\n\nStand: ${datum(new Date().toISOString())}. ${wurzeln.length} Kommentare, davon ${offen} offen.\n`;
+  let md = `# Kommentare zur Staging-Seite\n\nStand: ${datum(new Date().toISOString())}. ${wurzeln.length} ${wurzeln.length === 1 ? 'Kommentar' : 'Kommentare'}, davon ${offen} offen.\n`;
   for (const seite of seiten) {
     md += `\n## ${seite}\n`;
     for (const k of wurzeln.filter((w) => w.seite === seite)) {
