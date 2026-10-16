@@ -37,3 +37,12 @@ Astro-Projekt mit reinem Static-Output. Staging auf Cloudflare Pages, Produktion
 ## Bildsprache
 
 Leitmotiv ist die Linie, die von Dokumenten ausgeht und von Petrol über Magenta zu Orange wechselt (Einlesen, Verarbeiten, Antworten). Sie wird sparsam eingesetzt: animiert nur im Hero, statisch als Verbindung in den UI-Szenen und im Abschluss-CTA. Wiederkehrende Objekte sind weiße Dokumentkarten, der orange Knoten und Fundstellen-Chips.
+
+## Kommentarmodus (nur Staging)
+
+Auf Staging können angemeldete Personen (Cloudflare Access, @evana.de, @evana.ai, ben@swagner.co) Kommentare an beliebige Stellen der Seite heften.
+
+- Widget: `src/components/Kommentarmodus.astro`, eingebunden in `Basis.astro` nur bei `STAGING=true`. Mit der Cloudflare-Variable `KOMMENTARE=false` und einem neuen Build verschwindet es ganz. Die Produktion enthält es nie.
+- API: `functions/api/` (Cloudflare Pages Functions), Daten in D1 (`evana-kommentare`, Binding `DB`), Anmeldung über das Access-JWT (`ACCESS_TEAM`, `ACCESS_AUD`).
+- Kommentare abarbeiten: `/api/kommentare?format=md&status=offen` liefert alle offenen Punkte als Markdown, nach Seite gruppiert, mit Link `#evk-<id>` zur Stelle. Nach dem Umsetzen den Faden auf der Seite als erledigt markieren.
+- Lokal testen: `npm run build && npx wrangler pages dev dist --d1 DB=evana-kommentare --binding KOMMENTARE_DEV_USER=name@evana.de`

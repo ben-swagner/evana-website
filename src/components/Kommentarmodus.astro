@@ -1,0 +1,569 @@
+---
+// Kommentarmodus für die Staging-Seite. Wird nur eingebunden, wenn STAGING=true und KOMMENTARE nicht "false" ist
+// (siehe Basis.astro). Die Produktion auf Azure enthält davon nichts.
+// Daten: Cloudflare Pages Functions unter /api/kommentare mit D1, Anmeldung über Cloudflare Access.
+---
+<div id="evk" class="evk" data-evk hidden>
+  <div class="evk-leiste" role="toolbar" aria-label="Kommentarmodus">
+    <button type="button" class="evk-knopf evk-haupt" data-evk-umschalten aria-pressed="false">
+      <span class="evk-punkt" aria-hidden="true"></span>
+      <span data-evk-label>Kommentieren</span>
+      <span class="evk-zahl" data-evk-zahl hidden></span>
+    </button>
+    <button type="button" class="evk-knopf" data-evk-panel-auf>Alle Kommentare</button>
+  </div>
+  <div class="evk-hinweis" data-evk-hinweis hidden>
+    Klicken Sie auf eine Stelle, um sie zu kommentieren.
+  </div>
+  <div class="evk-rahmen" data-evk-rahmen hidden></div>
+  <div class="evk-ebene" data-evk-ebene></div>
+  <div class="evk-pop" data-evk-pop hidden role="dialog" aria-label="Kommentar"></div>
+  <aside class="evk-panel" data-evk-panel hidden aria-label="Alle Kommentare">
+    <div class="evk-panel-kopf">
+      <strong>Kommentare</strong>
+      <button type="button" class="evk-x" data-evk-panel-zu aria-label="Schließen">×</button>
+    </div>
+    <div class="evk-filter" role="tablist">
+      <button type="button" data-filter="offen" class="ist-aktiv">Offen</button>
+      <button type="button" data-filter="erledigt">Erledigt</button>
+      <button type="button" data-filter="alle">Alle</button>
+    </div>
+    <div class="evk-liste" data-evk-liste></div>
+    <div class="evk-panel-fuss">
+      <button type="button" class="evk-knopf" data-evk-kopieren>Als Markdown kopieren</button>
+      <a class="evk-knopf" href="/api/kommentare?format=md" target="_blank" rel="noopener">Markdown öffnen</a>
+    </div>
+  </aside>
+</div>
+
+<style is:global>
+  .evk { font-family: var(--font); font-size: 15px; line-height: 1.45; color: var(--text); }
+  .evk[hidden] { display: none !important; }
+  .evk *, .evk *::before, .evk *::after { box-sizing: border-box; }
+  .evk-leiste {
+    position: fixed; left: 16px; bottom: 16px; z-index: 2147483600;
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .evk-knopf {
+    display: inline-flex; align-items: center; gap: 8px;
+    font: 600 14px/1 var(--font); color: var(--petrol-dunkel); text-decoration: none;
+    background: var(--weiss); border: 1px solid var(--linie); border-radius: 999px;
+    padding: 10px 16px; cursor: pointer; box-shadow: var(--schatten);
+  }
+  .evk-knopf:hover { border-color: var(--petrol); }
+  .evk-knopf:focus-visible, .evk button:focus-visible, .evk textarea:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .evk-haupt[aria-pressed='true'] { background: var(--petrol-dunkel); color: var(--weiss); border-color: var(--petrol-dunkel); }
+  .evk-punkt { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+  .evk-zahl {
+    min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px;
+    background: var(--orange); color: var(--petrol-dunkel); font-size: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .evk-zahl[hidden] { display: none; }
+  .evk-hinweis {
+    position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 2147483600;
+    max-width: min(640px, calc(100vw - 32px));
+    background: var(--petrol-dunkel); color: var(--weiss); border-radius: var(--radius-klein);
+    padding: 8px 14px; font-size: 14px; box-shadow: var(--schatten); pointer-events: none;
+  }
+  .evk-rahmen {
+    position: fixed; z-index: 2147483500; pointer-events: none;
+    border: 2px dashed var(--orange); border-radius: 6px; background: rgba(245, 158, 52, 0.08);
+  }
+  html.evk-aktiv, html.evk-aktiv * { cursor: crosshair !important; }
+  html.evk-aktiv .evk, html.evk-aktiv .evk * { cursor: auto !important; }
+  html.evk-aktiv .evk button, html.evk-aktiv .evk a, html.evk-aktiv .evk-pin { cursor: pointer !important; }
+  .evk-ebene { position: absolute; top: 0; left: 0; width: 0; height: 0; z-index: 2147483400; }
+  .evk-pin {
+    position: absolute; transform: translate(-50%, -100%);
+    width: 30px; height: 30px; border-radius: 50% 50% 50% 0; rotate: -45deg;
+    background: var(--orange); border: 2px solid var(--weiss); box-shadow: var(--schatten-dokument);
+    display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer;
+  }
+  .evk-pin span { rotate: 45deg; font: 700 12px/1 var(--font); color: var(--petrol-dunkel); }
+  .evk-pin.ist-erledigt { background: var(--tint-petrol); opacity: 0.85; }
+  .evk-pin.ist-geschaetzt { border-style: dashed; }
+  .evk-pin.ist-offen-gewaehlt { outline: 3px solid var(--magenta); outline-offset: 2px; }
+  .evk-pop {
+    position: fixed; z-index: 2147483650; width: min(360px, calc(100vw - 32px));
+    max-height: min(70vh, 560px); overflow: auto;
+    background: var(--weiss); border: 1px solid var(--linie); border-radius: var(--radius-klein);
+    box-shadow: var(--schatten); padding: 14px;
+  }
+  .evk-pop[hidden] { display: none; }
+  .evk-pop textarea {
+    width: 100%; min-height: 84px; resize: vertical; font: 15px/1.45 var(--font); color: var(--text);
+    border: 1px solid var(--linie); border-radius: 8px; padding: 8px 10px; background: var(--weiss);
+  }
+  .evk-stelle { font-size: 12px; color: var(--hilfsgrau); margin: 0 0 8px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .evk-reihe { display: flex; gap: 8px; justify-content: flex-end; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+  .evk-reihe .evk-links { margin-right: auto; }
+  .evk-btn {
+    font: 600 13px/1 var(--font); border-radius: 999px; padding: 8px 14px; cursor: pointer;
+    border: 1px solid var(--linie); background: var(--weiss); color: var(--petrol-dunkel);
+  }
+  .evk-btn-primaer { background: var(--petrol); border-color: var(--petrol); color: var(--weiss); }
+  .evk-btn-text { border: 0; background: none; padding: 4px 6px; color: var(--hilfsgrau); font-weight: 400; text-decoration: underline; }
+  .evk-eintrag { padding: 10px 0; border-top: 1px solid var(--linie); }
+  .evk-eintrag:first-of-type { border-top: 0; padding-top: 0; }
+  .evk-meta { font-size: 12px; color: var(--hilfsgrau); margin-bottom: 4px; }
+  .evk-meta strong { color: var(--headline); font-size: 13px; }
+  .evk-inhalt { white-space: pre-wrap; word-wrap: break-word; margin: 0; }
+  .evk-antwort { margin-left: 14px; padding-left: 10px; border-left: 2px solid var(--tint-petrol); }
+  .evk-status { display: inline-block; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 8px; background: var(--tint-orange); color: var(--tint-orange-text); }
+  .evk-status.ist-erledigt { background: var(--tint-petrol); color: var(--petrol-dunkel); }
+  .evk-meldung { font-size: 13px; color: var(--magenta); margin-top: 8px; }
+  .evk-panel {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 2147483640; width: min(420px, 100vw);
+    background: var(--weiss); border-left: 1px solid var(--linie); box-shadow: var(--schatten);
+    display: flex; flex-direction: column;
+  }
+  .evk-panel[hidden] { display: none; }
+  .evk-panel-kopf { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--linie); }
+  .evk-x { border: 0; background: none; font-size: 24px; line-height: 1; cursor: pointer; color: var(--hilfsgrau); }
+  .evk-filter { display: flex; gap: 6px; padding: 12px 16px 0; }
+  .evk-filter button { font: 600 13px/1 var(--font); border: 1px solid var(--linie); background: var(--weiss); color: var(--hilfsgrau); border-radius: 999px; padding: 7px 12px; cursor: pointer; }
+  .evk-filter button.ist-aktiv { background: var(--tint-petrol); color: var(--petrol-dunkel); border-color: var(--tint-petrol); }
+  .evk-liste { flex: 1; overflow: auto; padding: 8px 16px 16px; }
+  .evk-liste h3 { font-size: 13px; color: var(--eyebrow); text-transform: none; margin: 16px 0 6px; font-weight: 600; letter-spacing: 0; }
+  .evk-liste a.evk-karte { display: block; text-decoration: none; color: inherit; border: 1px solid var(--linie); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .evk-liste a.evk-karte:hover { border-color: var(--petrol); }
+  .evk-panel-fuss { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--linie); flex-wrap: wrap; }
+  .evk-panel-fuss .evk-knopf { box-shadow: none; padding: 8px 12px; font-size: 13px; }
+  @media print { .evk { display: none !important; } }
+</style>
+
+<script>
+  type Kommentar = {
+    id: number; parentId: number | null; seite: string; selektor: string | null; ausschnitt: string | null;
+    x: number | null; y: number | null; seiteY: number | null; breite: number | null;
+    autorEmail: string; autor: string; inhalt: string; status: 'offen' | 'erledigt'; erledigtVon: string | null;
+    erstellt: string; aktualisiert: string;
+  };
+
+  const wurzel = document.getElementById('evk') as HTMLElement;
+  const $ = <T extends HTMLElement>(sel: string) => wurzel.querySelector(sel) as T;
+  const knopf = $<HTMLButtonElement>('[data-evk-umschalten]');
+  const label = $('[data-evk-label]');
+  const zahlEl = $('[data-evk-zahl]');
+  const hinweis = $('[data-evk-hinweis]');
+  const rahmen = $('[data-evk-rahmen]');
+  const ebene = $('[data-evk-ebene]');
+  const pop = $('[data-evk-pop]');
+  const panel = $('[data-evk-panel]');
+  const liste = $('[data-evk-liste]');
+  const seite = location.pathname;
+  const SPEICHER = 'evk-aktiv';
+
+  let ich: { email: string; name: string } | null = null;
+  let eingerichtet = false;
+  let aktiv = false;
+  let kommentare: Kommentar[] = [];
+  let alle: Kommentar[] = [];
+  let filter: 'offen' | 'erledigt' | 'alle' = 'offen';
+  let offenerFaden: number | null = null;
+
+  const speicher = {
+    lesen() { try { return localStorage.getItem(SPEICHER) === '1'; } catch (e) { return false; } },
+    schreiben(w: boolean) { try { localStorage.setItem(SPEICHER, w ? '1' : '0'); } catch (e) {} },
+  };
+
+  async function api(pfad: string, init?: RequestInit) {
+    const r = await fetch(pfad, {
+      credentials: 'same-origin',
+      ...init,
+      headers: { 'content-type': 'application/json', ...(init?.headers || {}) },
+    });
+    const daten = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(daten.fehler || `Fehler ${r.status}`);
+    return daten;
+  }
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, klasse?: string, text?: string) {
+    const e = document.createElement(tag);
+    if (klasse) e.className = klasse;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  const datum = (iso: string) =>
+    new Date(iso).toLocaleString('de-DE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+
+  // ---------- Anker: Selektor bauen und wiederfinden ----------
+  function selektorFuer(ziel: Element): string {
+    const teile: string[] = [];
+    let e: Element | null = ziel;
+    while (e && e !== document.body && e !== document.documentElement) {
+      if (e.id && !e.id.startsWith('evk') && document.querySelectorAll('#' + CSS.escape(e.id)).length === 1) {
+        teile.unshift('#' + CSS.escape(e.id));
+        return teile.join(' > ');
+      }
+      const tag = e.tagName.toLowerCase();
+      let n = 1;
+      let s = e.previousElementSibling;
+      while (s) { if (s.tagName === e.tagName) n++; s = s.previousElementSibling; }
+      teile.unshift(`${tag}:nth-of-type(${n})`);
+      e = e.parentElement;
+    }
+    teile.unshift('body');
+    return teile.join(' > ');
+  }
+
+  function ausschnittFuer(ziel: Element): string {
+    const bild = ziel.closest('img, svg') as HTMLElement | null;
+    if (bild) return (bild.getAttribute('alt') || bild.getAttribute('aria-label') || 'Grafik').slice(0, 160);
+    const text = ((ziel as HTMLElement).innerText || ziel.textContent || '').replace(/\s+/g, ' ').trim();
+    return text.slice(0, 160) || ziel.tagName.toLowerCase();
+  }
+
+  function position(k: Kommentar): { left: number; top: number; geschaetzt: boolean } {
+    let ziel: Element | null = null;
+    try { ziel = k.selektor ? document.querySelector(k.selektor) : null; } catch (e) { ziel = null; }
+    if (ziel) {
+      const r = ziel.getBoundingClientRect();
+      if (r.width > 0 || r.height > 0) {
+        return {
+          left: r.left + scrollX + (k.x ?? 0.5) * r.width,
+          top: r.top + scrollY + (k.y ?? 0.5) * r.height,
+          geschaetzt: false,
+        };
+      }
+    }
+    const hoehe = document.documentElement.scrollHeight;
+    return { left: Math.min(innerWidth - 24, 40), top: (k.seiteY ?? 0) * hoehe, geschaetzt: true };
+  }
+
+  // ---------- Darstellung ----------
+  const wurzelKommentare = () => kommentare.filter((k) => !k.parentId);
+  const antwortenZu = (id: number) => kommentare.filter((k) => k.parentId === id);
+
+  function zaehlen() {
+    const offen = wurzelKommentare().filter((k) => k.status === 'offen').length;
+    zahlEl.textContent = String(offen);
+    zahlEl.hidden = offen === 0;
+    zahlEl.title = `${offen} offene Kommentare auf dieser Seite`;
+  }
+
+  function pinsZeichnen() {
+    ebene.replaceChildren();
+    if (!aktiv) return;
+    wurzelKommentare().forEach((k, i) => {
+      const p = position(k);
+      const pin = el('button', 'evk-pin');
+      pin.type = 'button';
+      pin.style.left = `${p.left}px`;
+      pin.style.top = `${p.top}px`;
+      if (k.status === 'erledigt') pin.classList.add('ist-erledigt');
+      if (p.geschaetzt) pin.classList.add('ist-geschaetzt');
+      if (offenerFaden === k.id) pin.classList.add('ist-offen-gewaehlt');
+      pin.setAttribute('aria-label', `Kommentar ${i + 1} von ${k.autor}`);
+      pin.title = p.geschaetzt ? `${k.autor}: Die Stelle hat sich geändert, Position geschätzt.` : k.autor;
+      pin.append(el('span', '', String(i + 1)));
+      pin.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); fadenOeffnen(k.id, pin); });
+      ebene.append(pin);
+    });
+  }
+
+  function popPlatzieren(x: number, y: number) {
+    pop.hidden = false;
+    const b = pop.offsetWidth;
+    const h = pop.offsetHeight;
+    pop.style.left = `${Math.max(16, Math.min(x + 12, innerWidth - b - 16))}px`;
+    pop.style.top = `${Math.max(16, Math.min(y + 12, innerHeight - h - 16))}px`;
+  }
+
+  function popSchliessen() {
+    pop.hidden = true;
+    pop.replaceChildren();
+    offenerFaden = null;
+    pinsZeichnen();
+  }
+
+  function eingabe(platzhalter: string, onSenden: (t: string) => Promise<void>, knopfText = 'Speichern', onAbbruch?: () => void) {
+    const form = el('form');
+    const ta = el('textarea');
+    ta.placeholder = platzhalter;
+    ta.required = true;
+    const meldung = el('div', 'evk-meldung');
+    meldung.hidden = true;
+    const reihe = el('div', 'evk-reihe');
+    const abbr = el('button', 'evk-btn', 'Abbrechen');
+    abbr.type = 'button';
+    abbr.addEventListener('click', () => (onAbbruch ? onAbbruch() : popSchliessen()));
+    const ok = el('button', 'evk-btn evk-btn-primaer', knopfText);
+    ok.type = 'submit';
+    reihe.append(abbr, ok);
+    form.append(ta, meldung, reihe);
+    ta.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); form.requestSubmit(); }
+    });
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const t = ta.value.trim();
+      if (!t) return;
+      ok.disabled = true;
+      meldung.hidden = true;
+      try { await onSenden(t); } catch (err) {
+        meldung.textContent = (err as Error).message;
+        meldung.hidden = false;
+        ok.disabled = false;
+      }
+    });
+    setTimeout(() => ta.focus(), 0);
+    return form;
+  }
+
+  function neuerKommentar(ziel: Element, cx: number, cy: number) {
+    const r = ziel.getBoundingClientRect();
+    const daten = {
+      seite,
+      selektor: selektorFuer(ziel),
+      ausschnitt: ausschnittFuer(ziel),
+      x: r.width ? (cx - r.left) / r.width : 0.5,
+      y: r.height ? (cy - r.top) / r.height : 0.5,
+      seiteY: (cy + scrollY) / document.documentElement.scrollHeight,
+      breite: innerWidth,
+    };
+    pop.replaceChildren();
+    offenerFaden = null;
+    pop.append(el('p', 'evk-stelle', `Stelle: ${daten.ausschnitt}`));
+    pop.append(
+      eingabe('Ihr Kommentar zu dieser Stelle …', async (inhalt) => {
+        const { kommentar } = await api('/api/kommentare', { method: 'POST', body: JSON.stringify({ ...daten, inhalt }) });
+        kommentare.push(kommentar);
+        zaehlen();
+        fadenOeffnen(kommentar.id);
+      }),
+    );
+    popPlatzieren(cx, cy);
+  }
+
+  function fadenOeffnen(id: number, anker?: HTMLElement) {
+    const k = kommentare.find((x) => x.id === id);
+    if (!k) return;
+    offenerFaden = id;
+    pinsZeichnen();
+    pop.replaceChildren();
+
+    const kopf = el('div', 'evk-reihe');
+    kopf.style.marginTop = '0';
+    kopf.style.marginBottom = '8px';
+    const status = el('span', 'evk-status' + (k.status === 'erledigt' ? ' ist-erledigt' : ''), k.status === 'erledigt' ? `Erledigt${k.erledigtVon ? ' von ' + k.erledigtVon : ''}` : 'Offen');
+    status.classList.add('evk-links');
+    const umschalt = el('button', 'evk-btn', k.status === 'erledigt' ? 'Wieder öffnen' : 'Erledigt');
+    umschalt.type = 'button';
+    umschalt.addEventListener('click', async () => {
+      const { kommentar } = await api(`/api/kommentare/${id}`, { method: 'PATCH', body: JSON.stringify({ status: k.status === 'erledigt' ? 'offen' : 'erledigt' }) });
+      Object.assign(k, kommentar);
+      zaehlen();
+      fadenOeffnen(id);
+    });
+    const zu = el('button', 'evk-x', '×');
+    zu.type = 'button';
+    zu.setAttribute('aria-label', 'Schließen');
+    zu.addEventListener('click', popSchliessen);
+    kopf.append(status, umschalt, zu);
+    pop.append(kopf);
+    if (k.ausschnitt) pop.append(el('p', 'evk-stelle', `Stelle: ${k.ausschnitt}`));
+
+    const eintragZeigen = (e: Kommentar, istAntwort: boolean) => {
+      const box = el('div', 'evk-eintrag' + (istAntwort ? ' evk-antwort' : ''));
+      const meta = el('div', 'evk-meta');
+      meta.append(el('strong', '', e.autor), document.createTextNode(` · ${datum(e.erstellt)}${e.breite ? (e.breite < 768 ? ' · Mobil' : ' · Desktop') : ''}`));
+      const inhalt = el('p', 'evk-inhalt', e.inhalt);
+      box.append(meta, inhalt);
+      if (ich && e.autorEmail === ich.email) {
+        const aktionen = el('div', 'evk-reihe');
+        aktionen.style.marginTop = '4px';
+        const bearb = el('button', 'evk-btn evk-btn-text', 'Bearbeiten');
+        bearb.type = 'button';
+        bearb.addEventListener('click', () => {
+          const form = eingabe('', async (t) => {
+            const { kommentar } = await api(`/api/kommentare/${e.id}`, { method: 'PATCH', body: JSON.stringify({ inhalt: t }) });
+            Object.assign(e, kommentar);
+            fadenOeffnen(id);
+          }, 'Speichern', () => fadenOeffnen(id));
+          (form.querySelector('textarea') as HTMLTextAreaElement).value = e.inhalt;
+          inhalt.replaceWith(form);
+          aktionen.remove();
+        });
+        const loesch = el('button', 'evk-btn evk-btn-text', 'Löschen');
+        loesch.type = 'button';
+        loesch.addEventListener('click', async () => {
+          if (!confirm(istAntwort ? 'Antwort löschen?' : 'Kommentar mit allen Antworten löschen?')) return;
+          await api(`/api/kommentare/${e.id}`, { method: 'DELETE' });
+          kommentare = kommentare.filter((x) => x.id !== e.id && x.parentId !== e.id);
+          zaehlen();
+          if (istAntwort) fadenOeffnen(id); else popSchliessen();
+        });
+        aktionen.append(bearb, loesch);
+        box.append(aktionen);
+      }
+      pop.append(box);
+    };
+    eintragZeigen(k, false);
+    antwortenZu(id).forEach((a) => eintragZeigen(a, true));
+
+    pop.append(
+      eingabe('Antworten …', async (inhalt) => {
+        const { kommentar } = await api('/api/kommentare', { method: 'POST', body: JSON.stringify({ parentId: id, inhalt }) });
+        kommentare.push(kommentar);
+        if (k.status === 'erledigt') { k.status = 'offen'; k.erledigtVon = null; }
+        zaehlen();
+        fadenOeffnen(id);
+      }, 'Antworten'),
+    );
+
+    const pin = anker || (ebene.querySelector('.ist-offen-gewaehlt') as HTMLElement | null);
+    if (pin) {
+      const r = pin.getBoundingClientRect();
+      popPlatzieren(r.right, r.top);
+    } else {
+      popPlatzieren(innerWidth / 2 - 180, innerHeight / 3);
+    }
+    if (location.hash !== `#evk-${id}`) history.replaceState(null, '', `#evk-${id}`);
+  }
+
+  // ---------- Übersicht aller Seiten ----------
+  async function panelZeichnen() {
+    liste.replaceChildren(el('p', 'evk-meta', 'Lädt …'));
+    try {
+      const { kommentare: k } = await api('/api/kommentare');
+      alle = k;
+    } catch (e) {
+      liste.replaceChildren(el('p', 'evk-meldung', (e as Error).message));
+      return;
+    }
+    const wurzeln = alle.filter((k) => !k.parentId && (filter === 'alle' || k.status === filter));
+    liste.replaceChildren();
+    if (!wurzeln.length) { liste.append(el('p', 'evk-meta', 'Keine Kommentare in dieser Ansicht.')); return; }
+    const seiten = [...new Set(wurzeln.map((k) => k.seite))];
+    for (const s of seiten) {
+      liste.append(el('h3', '', s));
+      for (const k of wurzeln.filter((x) => x.seite === s)) {
+        const a = el('a', 'evk-karte') as HTMLAnchorElement;
+        a.href = `${k.seite}#evk-${k.id}`;
+        const meta = el('div', 'evk-meta');
+        const n = alle.filter((x) => x.parentId === k.id).length;
+        meta.append(el('strong', '', k.autor), document.createTextNode(` · ${datum(k.erstellt)}${n ? ` · ${n} ${n === 1 ? 'Antwort' : 'Antworten'}` : ''}`));
+        if (k.status === 'erledigt') meta.append(document.createTextNode(' · erledigt'));
+        a.append(meta, el('p', 'evk-inhalt', k.inhalt.length > 220 ? k.inhalt.slice(0, 220) + ' …' : k.inhalt));
+        a.addEventListener('click', (ev) => {
+          if (k.seite === seite) {
+            ev.preventDefault();
+            panel.hidden = true;
+            if (!aktiv) umschalten(true);
+            const pin = [...ebene.children][wurzelKommentare().findIndex((x) => x.id === k.id)] as HTMLElement | undefined;
+            pin?.scrollIntoView({ block: 'center' });
+            setTimeout(() => fadenOeffnen(k.id), 250);
+          }
+        });
+        liste.append(a);
+      }
+    }
+  }
+
+  // ---------- Modus ----------
+  function umschalten(an: boolean) {
+    aktiv = an;
+    speicher.schreiben(an);
+    document.documentElement.classList.toggle('evk-aktiv', an);
+    knopf.setAttribute('aria-pressed', String(an));
+    label.textContent = an ? 'Kommentarmodus beenden' : 'Kommentieren';
+    hinweis.hidden = !an;
+    rahmen.hidden = true;
+    if (!an) popSchliessen();
+    pinsZeichnen();
+  }
+
+  const istWidget = (t: EventTarget | null) => t instanceof Node && wurzel.contains(t);
+
+  document.addEventListener('mousemove', (e) => {
+    if (!aktiv || istWidget(e.target) || !pop.hidden) { rahmen.hidden = true; return; }
+    const t = e.target as Element;
+    if (!t || t === document.documentElement || t === document.body) { rahmen.hidden = true; return; }
+    const r = t.getBoundingClientRect();
+    Object.assign(rahmen.style, { left: `${r.left - 3}px`, top: `${r.top - 3}px`, width: `${r.width + 6}px`, height: `${r.height + 6}px` });
+    rahmen.hidden = false;
+  }, { passive: true });
+
+  document.addEventListener('click', (e) => {
+    if (!aktiv || istWidget(e.target)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (!pop.hidden) { popSchliessen(); return; }
+    rahmen.hidden = true;
+    if (!eingerichtet || !ich) {
+      pop.replaceChildren(el('p', 'evk-meldung', 'Der Kommentarmodus ist noch nicht vollständig eingerichtet oder Sie sind nicht angemeldet. Bitte laden Sie die Seite neu.'));
+      popPlatzieren(e.clientX, e.clientY);
+      return;
+    }
+    neuerKommentar(e.target as Element, e.clientX, e.clientY);
+  }, true);
+
+  // Formulare und Links auf der Seite sollen im Modus nichts auslösen.
+  document.addEventListener('submit', (e) => { if (aktiv && !istWidget(e.target)) e.preventDefault(); }, true);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (!pop.hidden) popSchliessen();
+      else if (!panel.hidden) panel.hidden = true;
+      else if (aktiv) umschalten(false);
+    }
+  });
+
+  knopf.addEventListener('click', () => umschalten(!aktiv));
+  $('[data-evk-panel-auf]').addEventListener('click', () => { panel.hidden = false; panelZeichnen(); });
+  $('[data-evk-panel-zu]').addEventListener('click', () => { panel.hidden = true; });
+  wurzel.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b) =>
+    b.addEventListener('click', () => {
+      filter = b.dataset.filter as typeof filter;
+      wurzel.querySelectorAll('[data-filter]').forEach((x) => x.classList.toggle('ist-aktiv', x === b));
+      panelZeichnen();
+    }),
+  );
+  $('[data-evk-kopieren]').addEventListener('click', async (e) => {
+    const b = e.currentTarget as HTMLButtonElement;
+    try {
+      const r = await fetch('/api/kommentare?format=md&status=offen', { credentials: 'same-origin' });
+      await navigator.clipboard.writeText(await r.text());
+      b.textContent = 'Kopiert';
+    } catch (err) {
+      b.textContent = 'Kopieren fehlgeschlagen';
+    }
+    setTimeout(() => (b.textContent = 'Als Markdown kopieren'), 2000);
+  });
+
+  let neuZeichnen = 0;
+  const spaeter = () => { cancelAnimationFrame(neuZeichnen); neuZeichnen = requestAnimationFrame(pinsZeichnen); };
+  addEventListener('resize', spaeter);
+  addEventListener('load', spaeter);
+  if ('ResizeObserver' in window) new ResizeObserver(spaeter).observe(document.body);
+
+  // ---------- Start ----------
+  async function start() {
+    wurzel.hidden = false;
+    try {
+      const d = await api('/api/ich');
+      ich = d.ich;
+      eingerichtet = d.eingerichtet;
+    } catch (e) { eingerichtet = false; }
+    if (!eingerichtet) knopf.title = 'Kommentarmodus ist noch nicht eingerichtet';
+    if (eingerichtet && ich) {
+      try { kommentare = (await api(`/api/kommentare?seite=${encodeURIComponent(seite)}`)).kommentare; } catch (e) {}
+    }
+    zaehlen();
+    const param = new URLSearchParams(location.search).get('kommentare');
+    const ziel = location.hash.match(/^#evk-(\d+)$/);
+    if (param === 'aus') umschalten(false);
+    else if (param === 'an' || ziel || speicher.lesen()) umschalten(true);
+    if (ziel) {
+      const id = Number(ziel[1]);
+      const idx = wurzelKommentare().findIndex((k) => k.id === id);
+      const pin = ebene.children[idx] as HTMLElement | undefined;
+      pin?.scrollIntoView({ block: 'center' });
+      setTimeout(() => fadenOeffnen(id), 300);
+    }
+  }
+  start();
+</script>
