@@ -1,4 +1,5 @@
 import { json, fehler, vorbereiten, zeile, text, zahl } from '../../_lib/kommentare.js';
+import { abgleichen, issueAnlegen, antwortSpiegeln, imHintergrund } from '../../_lib/github.js';
 
 // GET  /api/kommentare                 alle Kommentare (für Übersicht)
 // GET  /api/kommentare?seite=/pfad/    Kommentare einer Seite
@@ -9,6 +10,8 @@ import { json, fehler, vorbereiten, zeile, text, zahl } from '../../_lib/komment
 export async function onRequestGet(context) {
   const { antwort } = await vorbereiten(context);
   if (antwort) return antwort;
+  // Erst Änderungen aus GitHub übernehmen (geschlossene Tickets, Rückfragen der Nachtschicht).
+  try { await abgleichen(context.env); } catch (e) { console.error('[github]', e.message || e); }
   const url = new URL(context.request.url);
   const seite = url.searchParams.get('seite');
   const status = url.searchParams.get('status');
@@ -81,6 +84,17 @@ export async function onRequestPost(context) {
     await db.prepare("UPDATE kommentare SET status = 'offen', erledigt_von = NULL, aktualisiert = ? WHERE id = ? AND status = 'erledigt'")
       .bind(jetzt, parentId).run();
   }
+
+  // Nach GitHub spiegeln (neues Ticket oder Antwort im Ticket).
+  const origin = new URL(context.request.url).origin;
+  imHintergrund(context, async () => {
+    if (parentId) {
+      const eltern = await db.prepare('SELECT * FROM kommentare WHERE id = ?').bind(parentId).first();
+      await antwortSpiegeln(context.env, neu, eltern);
+    } else {
+      await issueAnlegen(context.env, neu, origin);
+    }
+  });
   return json({ kommentar: zeile(neu) }, 201);
 }
 

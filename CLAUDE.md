@@ -46,3 +46,14 @@ Auf Staging können angemeldete Personen (Cloudflare Access, @evana.de, @evana.a
 - API: `functions/api/` (Cloudflare Pages Functions), Daten in D1 (`evana-kommentare`, Binding `DB`), Anmeldung über das Access-JWT (`ACCESS_TEAM`, `ACCESS_AUD`).
 - Kommentare abarbeiten: `/api/kommentare?format=md&status=offen` liefert alle offenen Punkte als Markdown, nach Seite gruppiert, mit Link `#evk-<id>` zur Stelle. Nach dem Umsetzen den Faden auf der Seite als erledigt markieren.
 - Lokal testen: `npm run build && npx wrangler pages dev dist --d1 DB=evana-kommentare --binding KOMMENTARE_DEV_USER=name@evana.de`
+- GitHub-Spiegel (`functions/_lib/github.js`): Mit dem Secret `GITHUB_TOKEN` im Pages-Projekt wird jeder Kommentar ein Issue mit Label `kommentar`. Antworten werden Issue-Kommentare, Erledigen schließt das Issue. Geschlossene Issues und neue Issue-Kommentare fließen beim Laden der Kommentare zurück (höchstens einmal pro Minute). Nachtrag und sofortiger Abgleich: `POST /api/kommentare/github`.
+
+## Nachtschicht
+
+Eine geplante Claude-Aufgabe arbeitet nachts die offenen Issues mit Label `kommentar` ab, sobald mindestens 5 offen sind.
+
+- Arbeitet auf einem Branch `nachtschicht/JJJJ-MM-TT` und öffnet einen Pull Request mit `Closes #n` für jedes umgesetzte Issue. Nie direkt auf `main` pushen.
+- Klare Änderungen (Text, Layout, Reihenfolge) setzt sie um. Alles, was neue Zahlen, Produktaussagen, Kunden oder Rechtliches betrifft oder dem Faktendokument widerspricht, setzt sie nicht um. Dort schreibt sie eine kurze Rückfrage als Issue-Kommentar mit `<!-- nachtschicht -->` in der ersten Zeile und vergibt das Label `rueckfrage`.
+- Issues mit Label `rueckfrage` oder `warten` lässt sie liegen, solange darauf keine neue Antwort gekommen ist.
+- Vor dem Pull Request: `npm run build` und `npm run check:text` müssen sauber laufen.
+- Ben prüft morgens die Vorschau des Branches und merged. Der Merge schließt die Issues, die Fäden auf der Seite springen dann auf erledigt.
