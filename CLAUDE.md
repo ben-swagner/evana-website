@@ -50,10 +50,4 @@ Auf Staging können angemeldete Personen (Cloudflare Access, @evana.de, @evana.a
 
 ## Nachtschicht
 
-Eine geplante Claude-Aufgabe arbeitet nachts die offenen Issues mit Label `kommentar` ab, sobald mindestens 5 offen sind.
-
-- Arbeitet auf einem Branch `nachtschicht/JJJJ-MM-TT` und öffnet einen Pull Request mit `Closes #n` für jedes umgesetzte Issue. Nie direkt auf `main` pushen.
-- Klare Änderungen (Text, Layout, Reihenfolge) setzt sie um. Alles, was neue Zahlen, Produktaussagen, Kunden oder Rechtliches betrifft oder dem Faktendokument widerspricht, setzt sie nicht um. Dort schreibt sie eine kurze Rückfrage als Issue-Kommentar mit `<!-- nachtschicht -->` in der ersten Zeile und vergibt das Label `rueckfrage`.
-- Issues mit Label `rueckfrage` oder `warten` lässt sie liegen, solange darauf keine neue Antwort gekommen ist.
-- Vor dem Pull Request: `npm run build` und `npm run check:text` müssen sauber laufen.
-- Ben prüft morgens die Vorschau des Branches und merged. Der Merge schließt die Issues, die Fäden auf der Seite springen dann auf erledigt.
+Eine geplante Claude-Aufgabe ("EVANA Nachtschicht", jede Nacht gegen 1:40 Uhr) arbeitet die offenen Issues mit Label `kommentar` ab, sobald mindestens 5 offen sind. Sie arbeitet nur auf dem Zweig `nachtschicht` (Vorschau https://nachtschicht.evana-website.pages.dev) und öffnet einen Pull Request nach `main`, den Ben prüft und merged. Die verbindliche Anleitung steht in `docs/nachtschicht.md`.
