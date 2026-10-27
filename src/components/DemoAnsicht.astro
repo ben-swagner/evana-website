@@ -49,7 +49,7 @@ const maxEnden = demo.art === 'report' ? Math.max(...demo.vertragsenden.map((v) 
     <>
       <div class="eingang">
         <p class="label">Dokument</p>
-        <div class="dok gross"><DokIcon /><div><span class="dateiname">{demo.dokument}</span><small>{demo.seiten}</small></div></div>
+        <div class="dok gross"><DokIcon /><div><span class="dateiname">{demo.dokument.split('_').map((teil, i, alle) => <>{teil}{i < alle.length - 1 && <>_<wbr /></>}</>)}</span><small>{demo.seiten}</small></div></div>
       </div>
       <div class="pfeil" aria-hidden="true"></div>
       <div class="ergebnis">
@@ -150,7 +150,7 @@ const maxEnden = demo.art === 'report' ? Math.max(...demo.vertragsenden.map((v) 
   .dok.gross { position: relative; min-width: 0; padding: 18px 16px; margin: 0 10px 12px 0; transform: rotate(-1.5deg);
     box-shadow: 6px 6px 0 -1px var(--weiss), 6px 6px 0 0 var(--linie), 12px 12px 0 -1px var(--weiss), 12px 12px 0 0 var(--linie), var(--schatten-dokument); }
   .dok.gross > div { min-width: 0; }
-  .dateiname { display: block; overflow-wrap: anywhere; font-weight: 600; color: var(--headline); line-height: 1.3; }
+  .dateiname { display: block; overflow-wrap: break-word; font-weight: 600; color: var(--headline); line-height: 1.3; }
   .felder { width: 100%; border-collapse: collapse; font-size: .92rem; }
   .felder th { text-align: left; font-weight: 400; color: var(--hilfsgrau); padding: 7px 10px; }
   .felder td { text-align: right; font-weight: 600; color: var(--headline); padding: 7px 10px; white-space: nowrap; }
