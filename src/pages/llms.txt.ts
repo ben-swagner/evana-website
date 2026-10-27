@@ -7,7 +7,7 @@ export const GET: APIRoute = () => {
   const zeilen = [
     `# ${firma.marke}`,
     '',
-    `> ${firma.name} entwickelt seit ${firma.gegruendet} KI für Immobiliendokumente. EVANA macht aus Mietverträgen, Grundbuchauszügen, Gutachten und Protokollen strukturierte Daten, ordnet Dokumente automatisch Objekten zu und beantwortet Fragen mit Fundstelle. Sitz: ${firma.ort}, ${firma.herkunft}.`,
+    `> ${firma.name} entwickelt seit ${firma.gegruendet} KI für Immobiliendokumente. EVANA macht aus Mietverträgen, Grundbuchauszügen, Gutachten und Protokollen strukturierte Daten, ordnet Dokumente automatisch Objekten zu und beantwortet Fragen mit Fundstelle. Sitz: ${firma.ort}.`,
     '',
     '## Kennzahlen',
     `- Dokumenttypen: ${zahlen.dokumenttypen}`,

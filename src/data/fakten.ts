@@ -9,7 +9,8 @@ export const firma = {
   // Der Name: EVAluation und ANAlytics.
   bedeutung: { ev: 'EV', evWort: 'aluation', ana: 'ANA', anaWort: 'lytics' },
   gegruendet: 2015,
-  herkunft: 'DFKI-Campus Saarbrücken',
+  // DFKI-Herkunft wird nicht mehr genannt (Entscheidung Ben, 27.10.2026)
+  herkunft: 'Saarbrücken',
   strasse: 'Dudweilerstraße 17',
   plz: '66111',
   ort: 'Saarbrücken',
@@ -39,21 +40,31 @@ export const zahlen = {
   dokumenttypen: '460+',
   erkennungsrate: '95 %',
   betreutesVermoegen: 'über 200 Mrd. €',
+  // Kurzform für Kennzahl-Kacheln (Freigabe Ben, 27.10.2026)
+  betreutesVermoegenKurz: '200+ Mrd. €',
   datenpunkte: '20 Mio.',
   zeitersparnis: '25 %',
   stundenProAsset: 'über 40 Stunden',
+  stundenProAssetKurz: '40+ Std.',
+  // TÜV-Saarland-Case: Gesamtzahl der ausgewerteten Gutachtenseiten. Vorgabe Ben 27.10.2026, von EVANA bestätigen lassen.
+  tuevSeitenGesamt: '100.000+ Seiten',
   evaAntwortzeit: 'unter 30 Sekunden',
 };
 
+// Produktname für die Gesamtplattform, wird bei EVANA immer wieder genutzt (Freigabe Ben, 27.10.2026)
+export const plattform = {
+  name: 'EVANA Document Cloud',
+};
+
 export const sicherheit = [
-  { titel: 'ISO 27001', text: 'Zertifiziertes Informationssicherheits-Managementsystem, auditiert durch TÜV Saarland.' },
+  { titel: 'ISO 27001-zertifiziert', text: 'Zertifiziertes Informationssicherheits-Managementsystem, auditiert durch TÜV Saarland.' },
   { titel: 'DORA-konform', text: 'Erfüllt die Anforderungen des Digital Operational Resilience Act für Finanzunternehmen und ihre IKT-Dienstleister.' },
   { titel: 'BaFin-ready', text: 'Geeignet für Banken, Versicherer und KVGs mit aufsichtsrechtlichen Pflichten.' },
   { titel: 'DSGVO-konform', text: 'Verarbeitung nach europäischem Datenschutzrecht, mit Rechte- und Löschkonzept.' },
-  { titel: 'Penetrationstests', text: 'Regelmäßige unabhängige Audits und Penetrationstests, jährlich durch TÜV Austria.' },
-  { titel: 'Hosting in der EU', text: 'EVANA Secure-Cloud auf Microsoft Azure, Ihre Daten bleiben in der EU.' },
-  { titel: 'Rechte bis aufs Dokument', text: 'Granulare Rollen und Zugriffsrechte von der Gesellschaft bis zum einzelnen Dokument.' },
-  { titel: 'SSO und SCIM', text: 'Anmeldung und Benutzerverwaltung über Ihre bestehende Identity-Lösung.' },
+  { titel: 'Pentest-geprüft', text: 'Unabhängige Prüfer greifen EVANA jedes Jahr gezielt an, um Schwachstellen zu finden. Aktuell übernimmt das TÜV Austria.' },
+  { titel: 'In der EU gehostet', text: 'EVANA Secure-Cloud auf Microsoft Azure, Ihre Daten bleiben in der EU.' },
+  { titel: 'Zugriff nach Ihren Regeln', text: 'Sie legen fest, wer welche Gesellschaft, welches Objekt und sogar welches einzelne Dokument sehen darf.' },
+  { titel: 'Login mit Ihrem Firmenkonto', text: 'Ihr Team meldet sich mit dem gewohnten Firmenzugang an. Neue Kolleginnen und Kollegen erhalten ihren Zugang automatisch (SSO und SCIM).' },
 ];
 
 // Siegel und Partnerschaften (Datei: public/brand/evana-partner-2026.png zeigt TÜV Saarland, ISO 27001, BSFZ und Microsoft).

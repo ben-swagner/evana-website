@@ -22,8 +22,14 @@ import { sicherheit } from '../../data/fakten';
   .liste { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0; }
   .liste div { padding: 20px 22px; background: var(--weiss); border-radius: 20px; }
   .liste dt { font-weight: 700; color: var(--headline); display: flex; align-items: center; gap: 10px; }
-  .liste dt::before { content: ''; width: 10px; height: 10px; border-radius: 3px; background: var(--petrol); flex: none; }
-  .liste dd { margin: 4px 0 0 20px; font-size: .95rem; }
+  /* Kleine EVANA-Dreiecke als Symbol, abwechselnd in den drei Markenfarben */
+  .liste dt::before {
+    content: ''; width: 16px; height: 14px; flex: none; background: var(--petrol);
+    -webkit-mask: url('/brand/evana-dreieck.svg') center / contain no-repeat; mask: url('/brand/evana-dreieck.svg') center / contain no-repeat;
+  }
+  .liste div:nth-child(3n+2) dt::before { background: var(--magenta); }
+  .liste div:nth-child(3n) dt::before { background: var(--orange); }
+  .liste dd { margin: 4px 0 0 26px; font-size: .95rem; }
   @media (max-width: 900px) { .raster { grid-template-columns: 1fr; } }
   @media (max-width: 560px) { .liste { grid-template-columns: 1fr; } }
 </style>

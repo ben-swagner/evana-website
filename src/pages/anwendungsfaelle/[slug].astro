@@ -31,9 +31,9 @@ const szenenTitel: Record<string, string> = {
 };
 const szenenHinweis: Record<string, string> = {
   router: '',
-  qa: 'Beispieldaten',
-  mcp: 'Tippen Sie auf eine KI, um den Abgleich neu zu starten. Beispieldaten.',
-  report: 'Wählen Sie links ein Objekt aus oder fragen Sie EVA. Beispieldaten.',
+  qa: '',
+  mcp: 'Tippen Sie auf eine KI, um den Abgleich neu zu starten.',
+  report: 'Wählen Sie links ein Objekt aus oder fragen Sie EVA.',
 };
 ---
 <Basis
@@ -50,7 +50,6 @@ const szenenHinweis: Record<string, string> = {
       ) : (
         <>
           <DemoAnsicht demo={fall.demo} />
-          <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
         </>
       )}
     </div>

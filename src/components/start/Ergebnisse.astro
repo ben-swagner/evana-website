@@ -1,8 +1,8 @@
 ---
-import { zahlen } from '../../data/fakten';
+import { zahlen, plattform } from '../../data/fakten';
 const faelle = [
   { kunde: 'Ampega', kontext: 'Asset Manager der Talanx', wert: '100+ Objekte', text: 'in zwei Wochen vollständig in EVANA 360 übernommen.', href: '/news/ampega-onboarding-100-objekte/' },
-  { kunde: 'TÜV Saarland', kontext: 'Immobilienbewertung', wert: '300 Seiten', text: 'je Bewertungsgutachten automatisch ausgewertet, rund 40 Felder pro Gutachten.', href: '/referenzen/tuev-saarland/' },
+  { kunde: 'TÜV Saarland', kontext: 'Immobilienbewertung', wert: zahlen.tuevSeitenGesamt, text: 'aus Bewertungsgutachten automatisch ausgewertet. Jedes Gutachten hat bis zu 300 Seiten, EVANA liest rund 40 Felder daraus aus.', href: '/referenzen/tuev-saarland/' },
   { kunde: 'Wirtgen Invest', kontext: 'Bestandshalter', wert: '25.000 Dokumente', text: 'aus vier Objekten klassifiziert und umbenannt, in wenigen Tagen statt Monaten.', href: '/referenzen/wirtgen-invest/' },
   { kunde: 'Aachener Grundvermögen', kontext: 'Kapitalverwaltung', wert: '15.000 Dokumente', text: 'aus internationalen Beständen automatisch ausgelesen und als strukturierte Daten bereitgestellt.', href: '/referenzen/aachener-grundvermoegen-datenextraktion/' },
 ];
@@ -11,19 +11,24 @@ const faelle = [
   <div class="container">
     <div class="kopf">
       <p class="eyebrow">Ergebnisse</p>
-      <h2>Was Kunden mit EVANA erreicht haben</h2>
+      <h2>Was Asset Manager, Bewerter und Bestandshalter mit EVANA erreichen</h2>
       <p class="lead">
-        Teams sparen bis zu {zahlen.zeitersparnis} Zeit bei der Dokumentenarbeit, beim Ablegen allein{' '}
-        {zahlen.stundenProAsset} pro Asset und Jahr. Unsere Kunden verwalten zusammen {zahlen.betreutesVermoegen}.
+        Mit der {plattform.name} sparen Teams Zeit bei der gesamten Dokumentenarbeit, vom Ablegen bis zur Transaktion.
+        So sieht das in Zahlen aus.
       </p>
     </div>
+    <dl class="kennzahlen">
+      <div><dt>weniger Zeit für die gesamte Dokumentenarbeit</dt><dd><small>bis zu</small> {zahlen.zeitersparnis}</dd></div>
+      <div><dt>gespart beim Ablegen, pro Asset und Jahr</dt><dd>{zahlen.stundenProAssetKurz}</dd></div>
+      <div><dt>verwaltetes Vermögen unserer Kunden</dt><dd>{zahlen.betreutesVermoegenKurz}</dd></div>
+    </dl>
     <ol class="faelle">
       {faelle.map((f) => (
         <li>
           <div class="wer"><strong>{f.kunde}</strong><span>{f.kontext}</span></div>
           <p class="wert">{f.wert}</p>
           <p class="text">{f.text}</p>
-          <a href={f.href} aria-label={`Referenz ${f.kunde} lesen`}>Zur Referenz</a>
+          <a href={f.href} aria-label={`Use Case ${f.kunde} lesen`}>Zum Use Case</a>
         </li>
       ))}
     </ol>
@@ -31,6 +36,13 @@ const faelle = [
 </section>
 
 <style>
+  .kopf h2 { max-width: 24ch; }
+  .kennzahlen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 0 0 clamp(28px, 4vw, 44px); }
+  .kennzahlen div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; padding: 24px 28px; border-radius: var(--radius); background: var(--petrol-dunkel); }
+  .kennzahlen dd { margin: 0; font-size: clamp(2rem, 3.6vw, 2.8rem); font-weight: 700; line-height: 1; color: var(--orange); }
+  .kennzahlen dd small { font-size: .45em; font-weight: 600; }
+  .kennzahlen dt { color: #d6e6e9; font-size: .95rem; }
+  @media (max-width: 760px) { .kennzahlen { grid-template-columns: 1fr; } }
   .faelle { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .faelle li { display: grid; grid-template-columns: 1.1fr .9fr 1.6fr auto; gap: 24px; align-items: baseline; padding: 26px 30px; background: var(--mist); border-radius: var(--radius); }
   .wer strong { display: block; font-size: 1.15rem; color: var(--headline); }

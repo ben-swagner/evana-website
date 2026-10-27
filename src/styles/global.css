@@ -109,6 +109,7 @@ a:hover { color: var(--petrol-dunkel); }
 .btn-primaer:hover { background: #e48a1c; color: var(--weiss); }
 .btn-sekundaer { background: transparent; color: var(--petrol); border-color: var(--petrol); }
 .btn-sekundaer:hover { background: var(--petrol); color: var(--weiss); }
+.btn-gross { min-height: 58px; padding: 16px 34px; font-size: 1.05rem; }
 .auf-dunkel .btn-sekundaer { color: var(--weiss); border-color: rgba(255,255,255,.55); }
 .auf-dunkel .btn-sekundaer:hover { background: var(--weiss); color: var(--petrol-dunkel); }
 

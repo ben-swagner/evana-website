@@ -21,7 +21,7 @@ Astro-Projekt mit reinem Static-Output. Staging auf Cloudflare Pages, Produktion
 
 **CTA:** Primär immer `cta.demo` (Heyflow-Flow auf demo.evana.ai). Kein Pricing auf der Website, Ausnahme ist die ROI-Sprint-Seite.
 
-**Bilder:** halbabstrakt, flat, UI-artig, keine Personen, keine Fotorealistik. Das Logo nie generieren, immer die Dateien aus `public/brand/` nutzen. Beispieldaten in UI-Szenen mit "Beispielhafte Darstellung" kennzeichnen.
+**Bilder:** halbabstrakt, flat, UI-artig, keine Personen, keine Fotorealistik. Das Logo nie generieren, immer die Dateien aus `public/brand/` nutzen. UI-Szenen tragen keinen Hinweis "Beispielhafte Darstellung" (Entscheidung Ben, 27.10.2026). Beispieldaten trotzdem plausibel halten und nie echte Kunden als Demo-Objekt zeigen.
 
 ## Struktur
 

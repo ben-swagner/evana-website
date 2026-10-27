@@ -1,7 +1,7 @@
 ---
-// Rahmen für UI-Szenen: weiße Karte mit Kopfzeile auf Mist-Fläche. Immer mit Hinweis "Beispielhafte Darstellung".
+// Rahmen für UI-Szenen: weiße Karte mit Kopfzeile auf Mist-Fläche. Optional mit Bildunterschrift (hinweis). Ohne Hinweis "Beispielhafte Darstellung", Entscheidung vom 27.10.2026.
 interface Props { titel: string; meta?: string; class?: string; hinweis?: string }
-const { titel, meta, class: klasse, hinweis = 'Beispielhafte Darstellung' } = Astro.props;
+const { titel, meta, class: klasse, hinweis } = Astro.props;
 ---
 <figure class:list={['fenster', klasse]}>
   <div class="rahmen">
@@ -12,7 +12,7 @@ const { titel, meta, class: klasse, hinweis = 'Beispielhafte Darstellung' } = As
   </div>
   <div class="inhalt"><slot /></div>
   </div>
-  <figcaption class="beispiel-hinweis">{hinweis}</figcaption>
+  {hinweis && <figcaption class="beispiel-hinweis">{hinweis}</figcaption>}
 </figure>
 
 <style>

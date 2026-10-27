@@ -1,4 +1,5 @@
 ---
+import { cta } from '../../data/fakten';
 const immobilien = [
   { titel: 'Asset Management', text: 'Kennzahlen, Mietverträge und ESG-Daten objektübergreifend abfragen.', href: '/loesungen/asset-management/' },
   { titel: 'Property und Facility Management', text: 'Protokolle auswerten, Mängel und Fristen im Blick behalten.', href: '/loesungen/property-facility-management/' },
@@ -16,34 +17,45 @@ const weitere = [
 <section class="sektion">
   <div class="container">
     <div class="kopf">
-      <p class="eyebrow">Für wen</p>
+      <p class="eyebrow">Lösungen nach Rolle</p>
       <h2>Gebaut für die Immobilienwirtschaft</h2>
-      <p class="lead">EVANA kennt die Dokumente und Abläufe Ihrer Rolle. Wählen Sie Ihren Bereich.</p>
+      <p class="lead">EVANA kennt die Dokumente und Abläufe Ihrer Rolle. Für jede Rolle zeigen wir Ihnen, welche Arbeit EVANA übernimmt.</p>
     </div>
 
     <ul class="rollen">
       {immobilien.map((r) => (
-        <li><a href={r.href}><strong>{r.titel}</strong><span>{r.text}</span></a></li>
+        <li><a href={r.href}><strong>{r.titel}</strong><span>{r.text}</span><em class="pfeil-link">Lösung ansehen</em></a></li>
       ))}
     </ul>
 
     <div class="weitere">
-      <p>Überall, wo viele Dokumente über Standorte und Verträge entscheiden, hilft EVANA ebenfalls:</p>
+      <h3>Weitere Einsatzfelder</h3>
+      <p>EVANA arbeitet überall, wo viele Dokumente über Standorte und Verträge entscheiden. Auch in diesen Branchen übernimmt EVANA die Dokumentenarbeit:</p>
       <ul>{weitere.map((w) => <li><a href={w.href}>{w.titel}</a></li>)}</ul>
+      <p class="individuell">
+        Ihre Branche ist nicht dabei? EVANA lernt neue Dokumenttypen und Datenfelder schnell dazu. Gemeinsam mit Ihnen entwickeln wir eine individuelle Lösung.
+        <a href={cta.demo}>Sprechen Sie uns an</a>
+      </p>
     </div>
   </div>
 </section>
 
 <style>
   .rollen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
-  .rollen a { display: grid; align-content: start; gap: 8px; height: 100%; padding: 24px; border-radius: var(--radius); background: var(--mist); text-decoration: none; color: var(--text); }
+  .rollen a { display: grid; grid-template-rows: auto 1fr auto; gap: 8px; height: 100%; padding: 24px; border-radius: var(--radius); background: var(--mist); text-decoration: none; color: var(--text); transition: background-color .15s; }
   .rollen a:hover { background: var(--tint-petrol); }
   .rollen strong { font-size: 1.12rem; color: var(--headline); line-height: 1.25; }
   .rollen span { font-size: .95rem; }
   .rollen a:hover strong { color: var(--petrol); }
-  .weitere { margin-top: 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
-  .weitere p { color: var(--hilfsgrau); }
-  .weitere ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-  .weitere a { display: inline-block; padding: 8px 16px; border-radius: 999px; background: var(--mist); font-weight: 600; text-decoration: none; color: var(--petrol-dunkel); }
-  .weitere a:hover { background: var(--tint-petrol); }
+  .pfeil-link { margin-top: 10px; font-style: normal; font-weight: 700; font-size: .9rem; color: var(--petrol); display: inline-flex; align-items: center; gap: 6px; }
+  .pfeil-link::after { content: '→'; transition: transform .15s; }
+  .rollen a:hover .pfeil-link::after { transform: translateX(4px); }
+  .weitere { margin-top: 48px; padding: clamp(24px, 3vw, 36px); border-radius: var(--radius); background: var(--tint-petrol); }
+  .weitere h3 { font-size: 1.3rem; }
+  .weitere > p { margin-top: 8px; max-width: 70ch; }
+  .weitere ul { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .weitere ul a { display: inline-block; padding: 10px 18px; border-radius: 999px; background: var(--weiss); font-weight: 600; text-decoration: none; color: var(--petrol-dunkel); }
+  .weitere ul a:hover { background: var(--petrol); color: var(--weiss); }
+  .individuell { margin-top: 22px !important; }
+  .individuell a { font-weight: 700; margin-left: 4px; }
 </style>

@@ -1,15 +1,26 @@
 ---
-// Zwei Bausteine, die EVANA aktuell stark setzen will: Report und Document Router.
+// Zwei Bausteine, die EVANA aktuell stark setzen will. Der Report ist das Hauptthema (EXPO REAL 2026) und steht links, der Document Router rechts.
 ---
 <section class="sektion sektion-mist">
   <div class="container">
     <div class="kopf">
-      <p class="eyebrow">Neu auf der Plattform</p>
+      <p class="eyebrow">Neu auf EVANA</p>
       <h2>Vom Posteingang bis zum fertigen Objektbericht</h2>
-      <p class="lead">Der Document Router ordnet jedes neue Dokument automatisch dem richtigen Objekt zu. Der Report zeigt, was daraus folgt: alle Kennzahlen, Fristen und offenen Punkte eines Objekts auf einer Seite.</p>
+      <p class="lead">Der Report zeigt alle Kennzahlen, Fristen und offenen Punkte eines Objekts auf einer Seite. Damit er immer aktuell bleibt, ordnet der Document Router jedes neue Dokument automatisch dem richtigen Objekt zu.</p>
     </div>
     <div class="paar">
-      <a href="/produkte/document-router/" class="karte router">
+      <div class="karte report">
+        <span class="marke">Im Vertrieb besonders gefragt</span>
+        <h3>Report</h3>
+        <p>Alle Daten auf einen Blick, direkt aus den Dokumenten und immer aktuell. Mit Export als CSV, Excel oder per API.</p>
+        <div class="kacheln" aria-hidden="true">
+          <span><b>7.940 m²</b>Mietfläche</span>
+          <span><b>23</b>Mietverträge</span>
+          <span class="warn"><b>3</b>Fällige Prüfungen</span>
+        </div>
+        <a href="/produkte/report/" class="btn btn-primaer btn-gross">Report ansehen</a>
+      </div>
+      <div class="karte router">
         <span class="marke">Neu seit der EXPO REAL 2026</span>
         <h3>Document Router</h3>
         <p>Rechnungen, Protokolle und Nachträge kommen per Mail, Post und Portal. Der Router erkennt Dokumenttyp und Objekt, benennt die Datei und legt sie ab.</p>
@@ -19,44 +30,31 @@
           <span class="knoten"></span>
           <span class="ziel">Bürozentrum Mainufer<small>Technik / Wartung</small></span>
         </div>
-        <span class="mehr">Document Router ansehen</span>
-      </a>
-      <a href="/produkte/report/" class="karte report">
-        <span class="marke">Im Vertrieb besonders gefragt</span>
-        <h3>Report</h3>
-        <p>Alle Daten auf einen Blick, direkt aus den Dokumenten und immer aktuell. Mit Export als CSV, Excel oder per API.</p>
-        <div class="kacheln" aria-hidden="true">
-          <span><b>7.940 m²</b>Mietfläche</span>
-          <span><b>23</b>Mietverträge</span>
-          <span class="warn"><b>3</b>Fällige Prüfungen</span>
-        </div>
-        <span class="mehr">Report ansehen</span>
-      </a>
+        <a href="/produkte/document-router/" class="btn btn-sekundaer btn-gross">Document Router ansehen</a>
+      </div>
     </div>
-    <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
   </div>
 </section>
 
 <style>
-  .paar { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .karte { display: grid; align-content: start; gap: 12px; padding: clamp(26px, 3.5vw, 40px); border-radius: var(--radius-gross); text-decoration: none; color: var(--text); }
-  .router { background: var(--petrol-dunkel); color: #d6e6e9; }
-  .router h3 { color: var(--weiss); }
-  .report { background: var(--tint-orange); }
+  .paar { display: grid; grid-template-columns: 1.15fr .85fr; gap: 14px; }
+  .karte { display: grid; align-content: start; gap: 12px; padding: clamp(26px, 3.5vw, 40px); border-radius: var(--radius-gross); color: var(--text); }
+  .karte .btn { justify-self: start; margin-top: 10px; }
+  .report { background: var(--petrol-dunkel); color: #d6e6e9; }
+  .report h3 { color: var(--weiss); }
+  .router { background: var(--tint-orange); }
   .karte h3 { font-size: clamp(1.6rem, 2.6vw, 2.2rem); }
+  .report h3 { font-size: clamp(1.9rem, 3.2vw, 2.7rem); }
   .marke { justify-self: start; font-size: .8rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: var(--orange); color: var(--weiss); }
-  .report .marke { background: var(--magenta); }
-  .mehr { margin-top: 6px; font-weight: 700; color: var(--orange); }
-  .report .mehr { color: var(--petrol); }
+  .router .marke { background: var(--magenta); }
   .szene { display: grid; grid-template-columns: 1fr auto 1fr; grid-template-rows: auto auto; gap: 8px 14px; align-items: center; margin: 10px 0 4px; }
-  .szene .dok { grid-column: 1; background: var(--weiss); color: var(--headline); border-radius: 10px; padding: 8px 12px; font-size: .82rem; }
+  .szene .dok { grid-column: 1; background: var(--weiss); color: var(--headline); border-radius: 10px; padding: 8px 12px; font-size: .82rem; box-shadow: var(--schatten-dokument); }
   .szene .knoten { grid-column: 2; grid-row: 1 / 3; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 8px rgba(245,158,52,.2); }
-  .szene .ziel { grid-column: 3; grid-row: 1 / 3; background: var(--tint-petrol); color: var(--petrol-dunkel); border-radius: 14px; padding: 12px 14px; font-weight: 700; font-size: .9rem; }
+  .szene .ziel { grid-column: 3; grid-row: 1 / 3; background: var(--weiss); color: var(--petrol-dunkel); border-radius: 14px; padding: 12px 14px; font-weight: 700; font-size: .9rem; }
   .szene small { display: block; font-weight: 400; }
   .kacheln { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 4px; }
-  .kacheln span { background: var(--weiss); border-radius: 14px; padding: 12px; font-size: .8rem; color: var(--hilfsgrau); }
-  .kacheln b { display: block; font-size: 1.2rem; color: var(--petrol-dunkel); }
+  .kacheln span { background: var(--weiss); border-radius: 14px; padding: 14px; font-size: .82rem; color: var(--hilfsgrau); }
+  .kacheln b { display: block; font-size: 1.35rem; color: var(--petrol-dunkel); }
   .kacheln .warn b { color: var(--tint-orange-text); }
-  .karte:hover .mehr { text-decoration: underline; }
   @media (max-width: 860px) { .paar { grid-template-columns: 1fr; } }
 </style>

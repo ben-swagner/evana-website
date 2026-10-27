@@ -37,9 +37,9 @@ export type Anwendungsfall = {
 export const anwendungsfaelle: Anwendungsfall[] = [
   {
     slug: 'dokumente-befragen',
-    tab: 'Dokumente befragen',
+    tab: 'Fragen in Ihrer Sprache',
     titel: 'Fragen an den ganzen Bestand stellen',
-    kurz: 'Sie fragen in normaler Sprache, EVA durchsucht alle Verträge, Gutachten und Scans und antwortet mit der genauen Fundstelle.',
+    kurz: 'Sie fragen in Ihrer Sprache, EVA durchsucht alle Verträge, Gutachten und Scans und antwortet mit der genauen Fundstelle. Das gilt auch für Verträge, die in einer anderen Sprache verfasst sind.',
     vorher: 'Für eine Frage zu Fristen oder Konditionen öffnet Ihr Team Dutzende PDFs, blättert Nachträge durch und gleicht Tabellen von Hand ab. Bei einem Portfolio dauert das Tage.',
     mitEvana: 'EVA wertet den gesamten Datenraum in einem Durchgang aus und antwortet mit Fundstelle je Dokument. Jede Aussage lässt sich mit einem Klick im Original prüfen.',
     details: [

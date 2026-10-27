@@ -4,7 +4,7 @@ const zeilen = [
   {
     kriterium: 'Dokumente verstehen',
     allgemein: 'Liest Text, kennt aber die Eigenheiten von Grundbuchauszug, Gutachten oder Nachtrag nicht.',
-    evana: `Erkennt über ${zahlen.dokumenttypen.replace('+', '')} Dokumenttypen der Immobilienwirtschaft mit ${zahlen.erkennungsrate} Erkennungsrate.`,
+    evana: `Erkennt über ${zahlen.dokumenttypen.replace('+', '')} Dokumenttypen der Immobilienwirtschaft mit ${zahlen.erkennungsrate} Erkennungsrate. Ein Confidence-Score zeigt, wie sicher jedes Ergebnis ist. Auf Wunsch prüft Ihr Team die unsicheren Fälle (Human in the Loop).`,
   },
   {
     kriterium: 'Menge',
@@ -12,9 +12,14 @@ const zeilen = [
     evana: 'Arbeitet mit dem ganzen Bestand, auch mit Millionen Dokumenten über viele Objekte.',
   },
   {
+    kriterium: 'Nutzungslimit',
+    allgemein: 'Bei großen Aufgaben ist das Kontingent oft mitten in der Arbeit aufgebraucht.',
+    evana: 'EVANA kennt kein Tokenlimit. Auch ein kompletter Datenraum wird in einem Durchgang fertig.',
+  },
+  {
     kriterium: 'Belege',
     allgemein: 'Die Herkunft einer Antwort lässt sich oft nur mühsam prüfen.',
-    evana: 'Jede Antwort nennt Datei, Seite und Absatz im Original.',
+    evana: 'EVA gibt zu jeder Antwort Datei, Seite und Absatz im Original an.',
   },
   {
     kriterium: 'Ordnung',
@@ -79,7 +84,7 @@ const zeilen = [
 
   .bruecke { display: flex; gap: 22px; align-items: center; margin-top: 40px; padding: 26px 30px; background: var(--tint-orange); border-radius: var(--radius); }
   .bruecke img { width: 56px; height: auto; flex: none; }
-  .bruecke p { max-width: 78ch; }
+  .bruecke p { flex: 1; }
   .bruecke strong { color: var(--headline); }
   .bruecke a { font-weight: 600; margin-left: 4px; }
 

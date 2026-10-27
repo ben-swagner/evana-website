@@ -16,15 +16,20 @@ const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlun
       <p class="lead">
         Übergeben Sie EVA Ihre Due-Diligence-Checkliste. Sie beantwortet jede Frage aus dem gesamten Datenraum
         und belegt jede Antwort mit ihren Fundstellen. Was früher Tage manueller Prüfung gekostet hat, liegt jetzt
-        nach kurzer Zeit vor, und Ihr Team konzentriert sich auf die Entscheidung.
+        nach kurzer Zeit vor. Ihr Team konzentriert sich auf die Entscheidung.
+      </p>
+      <p class="mehr-eva">
+        Der Fragenkatalog ist nur eine von vielen Aufgaben. EVA beantwortet auch einzelne Fragen zu jedem Dokument,
+        behält Fristen und Verlängerungen im Blick, fasst lange Gutachten zusammen und schreibt im Datenraum
+        Antwortentwürfe auf Bieterfragen.
       </p>
       <dl class="fakten">
         <div><dt>Antwortzeit pro Frage</dt><dd>{zahlen.evaAntwortzeit}</dd></div>
-        <div><dt>Antworten mit Fundstelle</dt><dd>jede einzelne</dd></div>
+        <div><dt>Human in the Loop</dt><dd>Ihr Team gibt frei</dd></div>
       </dl>
       <div class="aktionen">
-        <a href="/produkte/eva/" class="btn btn-sekundaer">EVA kennenlernen</a>
-        <a href={cta.demo} class="btn btn-primaer">{cta.demoLabel}</a>
+        <a href="/produkte/eva/" class="btn btn-sekundaer btn-gross">Alles, was EVA kann</a>
+        <a href={cta.demo} class="btn btn-primaer btn-gross">{cta.demoLabel}</a>
       </div>
     </div>
 
@@ -44,7 +49,6 @@ const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlun
           </li>
         ))}
       </ul>
-      <p class="beispiel-hinweis">Beispielhafte Darstellung</p>
     </div>
   </div>
 </section>
@@ -52,6 +56,7 @@ const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlun
 <style>
   .raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
   .lead { margin-top: 20px; }
+  .mehr-eva { margin-top: 16px; max-width: 60ch; }
   .fakten { display: flex; flex-wrap: wrap; gap: 32px; margin: 32px 0 0; }
   .fakten dt { font-size: .85rem; color: #8fb1b8; }
   .fakten dd { margin: 2px 0 0; font-size: 1.6rem; font-weight: 700; color: var(--orange); }
