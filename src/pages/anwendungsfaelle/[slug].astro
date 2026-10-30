@@ -99,7 +99,7 @@ const szenenHinweis: Record<string, string> = {
     </section>
   )}
 
-  {fall.slug === 'dokumente-befragen' && <EvaKatalog />}
+  {fall.slug === 'dokumente-befragen' && <EvaKatalog freigabe={false} />}
 
   {fall.abgrenzung && (
     <section class="sektion">

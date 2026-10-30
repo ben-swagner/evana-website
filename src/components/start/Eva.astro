@@ -1,5 +1,8 @@
 ---
 import { cta, zahlen } from '../../data/fakten';
+// freigabe=false blendet die Kennzahl Human in the Loop aus (auf der Seite Dokumente befragen wirkt sie fehl am Platz).
+interface Props { freigabe?: boolean }
+const { freigabe = true } = Astro.props;
 const katalog = [
   { frage: 'Liegen für alle Mietverträge gültige Unterschriften vor?', treffer: 14, status: 'ok' },
   { frage: 'Bestehen offene Wartungsmängel mit hoher Dringlichkeit?', treffer: 3, status: 'kritisch' },
@@ -25,7 +28,7 @@ const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlun
       </p>
       <dl class="fakten">
         <div><dt>Antwortzeit pro Frage</dt><dd>{zahlen.evaAntwortzeit}</dd></div>
-        <div><dt>Human in the Loop</dt><dd>Ihr Team gibt frei</dd></div>
+        {freigabe && <div><dt>Human in the Loop</dt><dd>Ihr Team gibt frei</dd></div>}
       </dl>
       <div class="aktionen">
         <a href="/produkte/eva/" class="btn btn-sekundaer btn-gross">Alles, was EVA kann</a>
