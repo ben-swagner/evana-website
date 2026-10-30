@@ -58,9 +58,10 @@ const szenenHinweis: Record<string, string> = {
   <section class="sektion">
     <div class="container zwei">
       <div class="karte heute">
-        <h2>Heute</h2>
+        <h2>Ohne EVANA</h2>
         <p>{fall.vorher}</p>
       </div>
+      <span class="vs" aria-hidden="true">vs</span>
       <div class="karte mit">
         <h2>Mit EVANA</h2>
         <p>{fall.mitEvana}</p>
@@ -164,7 +165,8 @@ const szenenHinweis: Record<string, string> = {
 
 <style>
   .buehne { padding-block: clamp(40px, 6vw, 80px); }
-  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .zwei { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
+  .vs { align-self: center; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--orange); color: var(--weiss); font-weight: 700; font-size: 1.05rem; box-shadow: 0 0 0 6px rgba(245,158,52,.18); }
   .karte { border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); }
   .karte h2 { font-size: 1.4rem; margin-bottom: 12px; }
   .heute { background: var(--mist); }
@@ -207,5 +209,5 @@ const szenenHinweis: Record<string, string> = {
   .weitere strong { color: var(--petrol); }
   .weitere span { font-size: .92rem; }
   @media (max-width: 1000px) { .fragen { grid-template-columns: 1fr 1fr; } .schritte { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 760px) { .zwei, .meta, .details, .fragen, .schritte { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .vs { justify-self: center; } .zwei, .meta, .details, .fragen, .schritte { grid-template-columns: 1fr; } }
 </style>
