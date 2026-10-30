@@ -72,7 +72,7 @@ export const anwendungsfaelle: Anwendungsfall[] = [
       'Fasse mir das Bewertungsgutachten in fünf Sätzen zusammen.',
     ],
     schritte: [
-      { titel: 'Frage stellen', text: 'Sie fragen in normaler Sprache, zu einem Dokument, einem Objekt oder dem ganzen Bestand.' },
+      { titel: 'Aufgabe geben', text: 'Sie fragen EVA oder geben ihr einen Auftrag in normaler Sprache. Das geht für ein Dokument, ein Objekt oder den ganzen Bestand.' },
       { titel: 'EVA sucht', text: 'EVA durchsucht alle Unterlagen, auch Scans, Bilder und fremdsprachige Verträge.' },
       { titel: 'Antwort mit Fundstelle', text: 'Sie erhalten die Antwort mit Datei, Seite und Absatz, auf Wunsch als Tabelle.' },
       { titel: 'Prüfen und weiterarbeiten', text: 'Ein Klick führt zur Stelle im Original. Ergebnisse exportieren Sie als Excel oder übernehmen sie in den Report.' },
