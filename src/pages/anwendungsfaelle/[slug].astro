@@ -42,7 +42,7 @@ const szenenHinweis: Record<string, string> = {
   description={fall.seo.description}
   schema={nurGueltig([brotkrumen(pfad), faqSchema(fall.faq ?? [])])}
 >
-  <Seitenkopf titel={fall.titel} lead={fall.kurz} pfad={[pfad[0]]} />
+  <Seitenkopf titel={fall.titel} lead={fall.kurz} pfad={pfad} />
 
   <section class="sektion sektion-mist buehne">
     <div class="container">
