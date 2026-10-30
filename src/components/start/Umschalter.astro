@@ -6,12 +6,14 @@
 // immer im HTML, damit Suchmaschinen sie vollständig sehen.
 import DemoAnsicht from '../DemoAnsicht.astro';
 import { anwendungsfaelle } from '../../data/anwendungsfaelle';
+interface Props { titel?: string }
+const { titel = 'Was Sie mit EVANA erledigen' } = Astro.props;
 ---
 <section class="sektion sektion-mist" id="anwendungsfaelle">
   <div class="container">
     <div class="kopf">
       <p class="eyebrow">Anwendungsfälle</p>
-      <h2>Was Sie mit EVANA erledigen</h2>
+      <h2>{titel}</h2>
       <p class="lead">Sechs Aufgaben, die heute in vielen Teams Stunden kosten. Wählen Sie eine aus und sehen Sie, wie sie mit EVANA aussieht.</p>
     </div>
 
