@@ -97,7 +97,7 @@ export const anwendungsfaelle: Anwendungsfall[] = [
     details: [
       { titel: 'Dokumenttyp erkannt', text: `Über 460 Dokumenttypen der Immobilienwirtschaft, mit einer Erkennungsrate von 95 %.` },
       { titel: 'Sie bestimmen die Schwelle', text: 'Ein einstellbarer Confidence-Threshold legt fest, was automatisch abgelegt und was geprüft wird.' },
-      { titel: 'Dubletten erkannt', text: 'Doppelte Dateien und Versionen werden erkannt, bevor sie die Akte füllen.' },
+      { titel: 'Duplikate erkannt', text: 'Doppelte Dateien und Versionen werden erkannt, bevor sie die Akte füllen.' },
     ],
     fuerWen: ['Property Management', 'Facility Management', 'Asset Management'],
     produkte: ['EVANA 360', 'Document Router'],
@@ -123,7 +123,7 @@ export const anwendungsfaelle: Anwendungsfall[] = [
     },
     faq: [
       { frage: 'Wie erkennt EVANA, zu welchem Objekt ein Dokument gehört?', antwort: 'EVANA liest Dokumenttyp, Adresse, Mieter und weitere Angaben aus dem Inhalt und ordnet das Dokument dem passenden Objekt zu. Was unsicher ist, landet zur Prüfung bei Ihrem Team.' },
-      { frage: 'Was passiert mit doppelten Dateien?', antwort: 'EVANA erkennt Dubletten und Versionen, bevor sie die Akte füllen, und sortiert sie aus.' },
+      { frage: 'Was passiert mit doppelten Dateien?', antwort: 'EVANA erkennt Duplikate und Versionen, bevor sie die Akte füllen, und sortiert sie aus.' },
       { frage: 'Funktioniert das auch für bestehende Bestände?', antwort: 'Ja. Bei Wirtgen Invest hat EVANA rund 25.000 Dokumente aus vier Objekten klassifiziert und umbenannt, in wenigen Tagen statt Monaten.' },
     ],
     seo: {
