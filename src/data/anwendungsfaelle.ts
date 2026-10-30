@@ -118,7 +118,7 @@ export const anwendungsfaelle: Anwendungsfall[] = [
     szene: 'router',
     abgrenzung: {
       titel: 'Anwendungsfall und Document Router',
-      text: 'Der Anwendungsfall beschreibt die Aufgabe: Ordnung in Ihre Dokumente bringen, ob einmalig beim Übernehmen eines ganzen Bestands oder laufend im Alltag. Der Document Router ist das Werkzeug für den laufenden Posteingang. Für die Übernahme großer Bestände klassifiziert EVANA AI tausende Dokumente in einem Durchgang, wie bei Wirtgen Invest.',
+      text: 'Der Anwendungsfall beschreibt die Aufgabe: Ordnung in Ihre Dokumente bringen, ob einmalig beim Übernehmen eines ganzen Bestands oder laufend im Alltag. Der Document Router ist das Werkzeug für den laufenden Posteingang. Für die Übernahme großer Bestände klassifiziert EVANA AI tausende Dokumente in einem Durchgang.',
       link: { label: 'Document Router ansehen', href: '/produkte/document-router/' },
     },
     faq: [
