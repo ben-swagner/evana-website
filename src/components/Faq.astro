@@ -7,9 +7,7 @@ const { eintraege, titel = 'Häufige Fragen', hell = false } = Astro.props;
 {eintraege.length > 0 && (
   <section class:list={['sektion', { 'sektion-mist': !hell }]}>
     <div class="container raster">
-      <div>
-        <h2>{titel}</h2>
-      </div>
+      <h2>{titel}</h2>
       <div class="liste">
         {eintraege.map((e, i) => (
           <details open={i === 0}>
@@ -23,8 +21,10 @@ const { eintraege, titel = 'Häufige Fragen', hell = false } = Astro.props;
 )}
 
 <style>
-  .raster { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
-  .liste { display: grid; gap: 10px; }
+  /* Überschrift über den Fragen, damit links kein Leerraum entsteht, wenn die Liste wächst */
+  .raster { display: grid; gap: clamp(20px, 3vw, 32px); }
+  .raster > h2 { margin: 0; }
+  .liste { display: grid; gap: 10px; max-width: 960px; }
   details { background: var(--weiss); border-radius: 20px; padding: 0 24px; }
   .sektion:not(.sektion-mist) details { background: var(--mist); }
   summary {
@@ -39,5 +39,4 @@ const { eintraege, titel = 'Häufige Fragen', hell = false } = Astro.props;
   }
   details[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
   details p { padding-bottom: 22px; max-width: 70ch; }
-  @media (max-width: 860px) { .raster { grid-template-columns: 1fr; } }
 </style>
