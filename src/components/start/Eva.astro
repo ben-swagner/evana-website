@@ -4,10 +4,11 @@ import { cta, zahlen } from '../../data/fakten';
 interface Props { freigabe?: boolean }
 const { freigabe = true } = Astro.props;
 const katalog = [
-  { frage: 'Liegen für alle Mietverträge gültige Unterschriften vor?', treffer: 14, status: 'ok' },
-  { frage: 'Bestehen offene Wartungsmängel mit hoher Dringlichkeit?', treffer: 3, status: 'kritisch' },
-  { frage: 'Sind alle Energieausweise aktuell und gültig?', treffer: 9, status: 'handeln' },
-  { frage: 'Gibt es Sonderkündigungsrechte einzelner Mieter?', treffer: 6, status: 'ok' },
+  // Bei "In Ordnung" zeigt die Zeile, wie viele Verträge geprüft wurden, sonst wie viele Fundstellen es gibt.
+  { frage: 'Liegen für alle Mietverträge gültige Unterschriften vor?', treffer: '14 Verträge geprüft', status: 'ok' },
+  { frage: 'Bestehen offene Wartungsmängel mit hoher Dringlichkeit?', treffer: '3 Fundstellen', status: 'kritisch' },
+  { frage: 'Sind alle Energieausweise aktuell und gültig?', treffer: '9 Fundstellen', status: 'handeln' },
+  { frage: 'Gibt es Sonderkündigungsrechte einzelner Mieter?', treffer: '14 Verträge geprüft', status: 'ok' },
 ];
 const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlungsbedarf', kritisch: 'Kritisch' };
 ---
@@ -47,7 +48,7 @@ const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlun
             <p>{k.frage}</p>
             <div class="zeile">
               <span class={`status ${k.status}`}>{statusText[k.status]}</span>
-              <span class="treffer">{k.treffer} Fundstellen</span>
+              <span class="treffer">{k.treffer}</span>
             </div>
           </li>
         ))}
