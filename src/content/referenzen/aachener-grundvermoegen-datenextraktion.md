@@ -3,7 +3,7 @@ titel: "Aachener Grundvermögen: von 15.000 Dokumenten zur Entscheidungsgrundlag
 kunde: "Aachener Grundvermögen KVG"
 anonym: false
 branche: "Immobilien-Kapitalverwaltung"
-kurz: "Mit KI-Datenextraktion von EVANA hat die Aachener Grundvermögen KVG rund 15.000 internationale Dokumente in eine konsistente, sofort auswertbare Datenbasis überführt."
+kurz: "Mit KI-Datenextraktion von EVANA hat die Aachener Grundvermögen KVG ihren internationalen Dokumentenbestand in eine konsistente, sofort auswertbare Datenbasis überführt."
 datum: 2026-07-03
 kennzahlen:
   - wert: "15.000"
