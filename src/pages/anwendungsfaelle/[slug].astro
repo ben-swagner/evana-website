@@ -139,14 +139,16 @@ const szenenHinweis: Record<string, string> = {
 
   <section class="sektion sektion-mist">
     <div class="container meta">
-      <div>
-        <h2 class="klein">Besonders gefragt bei</h2>
-        <ul class="pillen">{fall.fuerWen.map((f) => <li>{f}</li>)}</ul>
+      <div class="meta-karte">
+        <h2 class="klein">Für diese Teams gemacht</h2>
+        <ul class="teams">{fall.fuerWen.map((f) => <li>{f}</li>)}</ul>
       </div>
-      <div>
-        <h2 class="klein">Dahinter steckt</h2>
-        <ul class="pillen petrol">
-          {produktLinks.map(({ name, p }) => <li>{p ? <a href={`/produkte/${p.slug}/`}>{name}</a> : name}</li>)}
+      <div class="meta-karte">
+        <h2 class="klein">Diese Produkte nutzen Sie dafür</h2>
+        <ul class="produkte">
+          {produktLinks.map(({ name, p }) => (
+            <li>{p ? <a href={`/produkte/${p.slug}/`}><strong>{name}</strong><span>{p.kurz}</span></a> : <strong>{name}</strong>}</li>
+          ))}
         </ul>
       </div>
     </div>
@@ -198,12 +200,17 @@ const szenenHinweis: Record<string, string> = {
   .refs a:hover { background: var(--tint-petrol); }
   .refs span { font-size: .85rem; font-weight: 700; color: var(--petrol); }
 
-  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-  .klein { font-size: 1rem; color: var(--hilfsgrau); margin-bottom: 12px; }
-  .pillen { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .pillen li { padding: 8px 16px; border-radius: 999px; background: var(--weiss); font-weight: 600; color: var(--headline); }
-  .pillen.petrol li { background: var(--tint-petrol); color: var(--petrol-dunkel); }
-  .pillen a { text-decoration: none; }
+  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+  .meta-karte { background: var(--weiss); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); }
+  .klein { font-size: 1.2rem; margin-bottom: 16px; }
+  .teams { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .teams li { position: relative; padding: 12px 16px 12px 40px; border-radius: 14px; background: var(--mist); font-weight: 600; color: var(--headline); }
+  .teams li::before { content: ''; position: absolute; left: 16px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--orange); }
+  .produkte { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .produkte li > a, .produkte li > strong { display: grid; gap: 2px; padding: 12px 16px; border-radius: 14px; background: var(--tint-petrol); text-decoration: none; }
+  .produkte strong { color: var(--petrol-dunkel); }
+  .produkte span { font-size: .92rem; color: var(--text); }
+  .produkte a:hover { background: var(--mist); }
   .weitere ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
   .weitere a { display: grid; gap: 4px; padding: 18px 20px; text-decoration: none; color: var(--text); background: var(--mist); border-radius: 18px; height: 100%; }
   .weitere a:hover { background: var(--tint-petrol); }
