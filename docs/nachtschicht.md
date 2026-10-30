@@ -23,7 +23,7 @@ Ein Issue ist ein Auftrag, wenn alle Bedingungen gelten:
 
 - Steht das Issue schon mit `Closes` im offenen Pull Request von `nachtschicht`, ist es bereits umgesetzt. Es zählt nur dann wieder, wenn seit dem letzten Lauf eine neue Rückmeldung dazugekommen ist (siehe unten). Sonst bleibt es unangetastet.
 
-**Rückmeldungen aus dem Rundgang:** Im Rundgang der Vorschau kann jede angemeldete Person zu einer Änderung Passt, Anders oder Rückgängig wählen. Das wird eine Antwort im Faden des ursprünglichen Kommentars und damit ein Issue-Kommentar mit `<!-- evk -->`, der mit `Rückmeldung zur Umsetzung:` beginnt. Es gibt drei Fälle:
+**Rückmeldungen aus dem Rundgang:** Im Rundgang der Vorschau kann jede angemeldete Person zu einer Änderung Passt, Anders oder Rückgängig wählen. Die Vorschau schickt das an `/api/rueckmeldung` (`functions/api/rueckmeldung.js`). Daraus wird ein Issue-Kommentar mit `<!-- evk -->`, dessen Antworttext mit `Rückmeldung zur Umsetzung:` beginnt. Gibt es den Faden in der Datenbank, steht die Rückmeldung auch im Faden auf der Seite. Es gibt drei Fälle:
 
 - `Passt so.`: nichts tun, die Zeile `Closes` bleibt.
 - `Bitte anders. <Text>`: die Umsetzung nach dem Text überarbeiten, neuer Commit mit `Refs #<nummer>`. Ist der Wunsch unklar oder betrifft er Fakten, gilt wie immer: Rückfrage.

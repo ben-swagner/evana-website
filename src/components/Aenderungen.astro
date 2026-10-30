@@ -15,6 +15,7 @@ const liste = daten.aenderungen;
       <p class="nsr-zaehler"></p>
       <p class="nsr-text"></p>
       <p class="nsr-hinweis"></p>
+      <button type="button" class="nsr-hin" data-aktion="hin" hidden>Zur Stelle</button>
       <div class="nsr-rueck">
         <p class="nsr-bisher" hidden></p>
         <div class="nsr-wahl" role="group" aria-label="Rückmeldung zur Änderung">
@@ -90,7 +91,10 @@ const liste = daten.aenderungen;
       $<HTMLButtonElement>('[data-aktion="zurueck"]').disabled = index === 0;
       $<HTMLButtonElement>('[data-aktion="weiter"]').textContent = index === liste.length - 1 ? 'Fertig' : 'Weiter';
       entfernen();
-      if (e.seite !== pfad) { $('.nsr-hinweis').textContent = 'Diese Änderung liegt auf einer anderen Seite.'; return; }
+      const anderswo = e.seite !== pfad;
+      $<HTMLDivElement>('.nsr-rueck').hidden = anderswo;
+      $<HTMLButtonElement>('.nsr-hin').hidden = !anderswo;
+      if (anderswo) { $('.nsr-hinweis').textContent = 'Diese Änderung liegt auf einer anderen Seite.'; return; }
       liste.forEach((x, i) => { if (x.seite === pfad && i !== index) markieren(x, false); });
       const ziele = markieren(e, true);
       $('.nsr-hinweis').textContent = ziele.length ? '' : 'Die Stelle ließ sich nicht finden.';
@@ -101,6 +105,9 @@ const liste = daten.aenderungen;
     // Sie landet auch im GitHub-Issue, dort liest die Nachtschicht sie in der nächsten Nacht.
     const bisher = new Map<number, { autor: string; inhalt: string }>();
     let geladen = false;
+    // Eigene Rückmeldungen merkt sich der Browser zusätzlich, falls die Kommentarliste hier nicht abrufbar ist.
+    try { for (const [id, v] of Object.entries(JSON.parse(localStorage.getItem('nsr-rueck') || '{}'))) bisher.set(Number(id), v as { autor: string; inhalt: string }); } catch {}
+    const merken = () => { try { localStorage.setItem('nsr-rueck', JSON.stringify(Object.fromEntries(bisher))); } catch {} };
     const laden = async () => {
       if (geladen) return; geladen = true;
       try {
@@ -136,20 +143,25 @@ const liste = daten.aenderungen;
       if (wahl === 'anders' && !zusatz) { status.textContent = 'Bitte kurz schreiben, was anders sein soll.'; return; }
       const satz = wahl === 'passt' ? 'Passt so.' : wahl === 'anders' ? `Bitte anders. ${zusatz}` : `Bitte rückgängig machen.${zusatz ? ' ' + zusatz : ''}`;
       status.textContent = 'Wird gesendet …';
-      let ok = true;
-      for (const id of e.kommentare) {
-        try {
-          const r = await fetch('/api/kommentare', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ parentId: id, inhalt: `${PRAEFIX} ${satz}` }) });
-          if (!r.ok) ok = false; else { const { kommentar } = await r.json(); bisher.set(id, { autor: kommentar.autor, inhalt: satz }); }
-        } catch { ok = false; }
-      }
+      let ok = false;
+      let meldung = '';
+      try {
+        const r = await fetch('/api/rueckmeldung', {
+          method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ paare: e.issues.map((n, j) => ({ issue: n, kommentar: e.kommentare[j] })), inhalt: `${PRAEFIX} ${satz}` }),
+        });
+        const d = await r.json().catch(() => ({}));
+        ok = r.ok;
+        if (ok) { e.kommentare.forEach((id) => bisher.set(id, { autor: d.autor || 'Sie', inhalt: satz })); merken(); }
+        else meldung = d.fehler || `Fehler ${r.status}`;
+      } catch { meldung = 'Keine Verbindung.'; }
       if (ok) {
         feld.value = ''; form.hidden = true;
         status.textContent = wahl === 'passt' ? 'Danke, ist vermerkt.' : 'Danke. Die Nachtschicht setzt das in der nächsten Nacht um.';
         rueckZeigen();
       } else {
         status.innerHTML = '';
-        status.append('Das Senden hat hier nicht geklappt. Antworten Sie bitte direkt im Faden auf ');
+        status.append(`Das Senden hat nicht geklappt (${meldung}). Antworten Sie bitte direkt im Faden auf `);
         const a = document.createElement('a'); a.href = `${STAGING}${e.seite}#evk-${e.kommentare[0]}`; a.target = '_blank'; a.textContent = 'Staging'; status.append(a, '.');
       }
     };
@@ -191,6 +203,7 @@ const liste = daten.aenderungen;
       if (a === 'zu') einklappen(true);
       if (a === 'auf') einklappen(false);
       if (a === 'senden') senden();
+      if (a === 'hin') { location.href = `${liste[index].seite}?aenderung=${index}`; }
     });
     if (pr) { const k = $('.nsr-kopf strong'); k.textContent = `Neu in der Nachtschicht (PR #${pr})`; }
 
@@ -216,6 +229,8 @@ const liste = daten.aenderungen;
   .nsr-text { margin-top: 4px; color: var(--headline); font-weight: 600; }
   .nsr-hinweis { margin-top: 6px; font-size: 13px; color: var(--hilfsgrau); }
   .nsr-hinweis:empty { display: none; }
+  .nsr-rueck[hidden], .nsr-hin[hidden] { display: none; }
+  .nsr-hin { margin-top: 10px; font: 700 13px/1 var(--font); padding: 9px 14px; border-radius: 10px; border: 1.5px solid var(--petrol); background: var(--tint-petrol); color: var(--petrol-dunkel); cursor: pointer; }
   .nsr-rueck { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--linie); }
   .nsr-bisher { font-size: 13px; color: var(--petrol-dunkel); background: var(--tint-petrol); border-radius: 8px; padding: 6px 10px; margin-bottom: 8px; }
   .nsr-bisher[hidden], .nsr-form[hidden] { display: none; }
