@@ -10,7 +10,8 @@ const quelle = readFileSync(new URL('../docs/animation/evana-goes-next-level.htm
 const szenen = {
   router: { level: '1', schleife: false, breit: true },
   mcp: { level: '2', schleife: true, breit: false },
-  qa: { level: '3', schleife: true, breit: false },
+  // qa spielt einmal durch und bleibt dann stehen, damit man in Ruhe lesen kann
+  qa: { level: '3', schleife: true, einmal: true, breit: false },
   report: { level: 'erp', schleife: false, breit: true },
 };
 
@@ -46,7 +47,7 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
   // Skalierung auf die Bühne statt auf 1600 x 900
   html = html.replace('Math.min(innerWidth / 1600, innerHeight / 900)', `Math.min(innerWidth / ${w}, innerHeight / 690)`);
   // Szene in Schleife statt zur nächsten Szene
-  html = html.replace('sLater(() => show(cur + 1), dur);', 'sLater(() => show(cur), dur);');
+  html = html.replace('sLater(() => show(cur + 1), dur);', cfg.einmal ? '' : 'sLater(() => show(cur), dur);');
   // Start: direkt die Szene, ggf. mit Autoplay
   html = html.replace(
     "if (new URLSearchParams(location.search).has('autoplay')) setAuto(true); else show(0);",
