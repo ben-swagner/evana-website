@@ -1,0 +1,156 @@
+---
+// Rundgang durch die Änderungen der Nachtschicht. Erscheint nur in der Vorschau des Zweigs "nachtschicht"
+// (Cloudflare setzt CF_PAGES_BRANCH) oder lokal mit AENDERUNGEN=true. Die Liste steht in src/data/nachtschicht.json
+// und wird von jeder Nachtschicht neu geschrieben. Jede Änderung wird auf ihrer Seite orange markiert.
+import daten from '../data/nachtschicht.json';
+const liste = daten.aenderungen;
+---
+{liste.length > 0 && (
+  <div id="nsr" class="nsr" data-liste={JSON.stringify(liste)} data-datum={daten.datum} data-pr={daten.pr}>
+    <div class="nsr-kopf">
+      <strong>Neu in der Nachtschicht</strong>
+      <button type="button" class="nsr-klein" data-aktion="zu" aria-label="Rundgang einklappen">×</button>
+    </div>
+    <div class="nsr-inhalt">
+      <p class="nsr-zaehler"></p>
+      <p class="nsr-text"></p>
+      <p class="nsr-hinweis"></p>
+      <div class="nsr-knoepfe">
+        <button type="button" data-aktion="zurueck">Zurück</button>
+        <button type="button" data-aktion="weiter" class="nsr-primaer">Weiter</button>
+        <button type="button" data-aktion="liste">Alle</button>
+      </div>
+      <ol class="nsr-liste" hidden></ol>
+    </div>
+    <button type="button" class="nsr-auf" data-aktion="auf" hidden></button>
+  </div>
+)}
+
+<script>
+  type Eintrag = { issues: number[]; seite: string; stelle: string; text: string };
+  const wurzel = document.getElementById('nsr');
+  if (wurzel) {
+    const liste: Eintrag[] = JSON.parse(wurzel.dataset.liste || '[]');
+    const pr = wurzel.dataset.pr;
+    const lesen = (k: string) => { try { return sessionStorage.getItem(k); } catch { return null; } };
+    const schreiben = (k: string, v: string) => { try { sessionStorage.setItem(k, v); } catch {} };
+    const pfad = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+    const param = new URLSearchParams(location.search).get('aenderung');
+    const gueltig = (i: number) => Number.isInteger(i) && i >= 0 && i < liste.length;
+    const gespeichert = Number(lesen('nsr-index') ?? -1);
+    // Reihenfolge: Link mit ?aenderung, dann der zuletzt angesehene Punkt dieser Seite, dann der erste Punkt dieser Seite
+    let index = param !== null ? Number(param) : gueltig(gespeichert) && liste[gespeichert].seite === pfad ? gespeichert : liste.findIndex((e) => e.seite === pfad);
+    if (!gueltig(index)) index = gueltig(gespeichert) ? gespeichert : 0;
+
+    const $ = <T extends Element>(s: string) => wurzel.querySelector<T>(s)!;
+    const marken: HTMLElement[] = [];
+    const entfernen = () => { marken.splice(0).forEach((m) => m.remove()); };
+
+    const markieren = (e: Eintrag, aktiv: boolean) => {
+      let ziele: Element[] = [];
+      try { ziele = Array.from(document.querySelectorAll(e.stelle)); } catch {}
+      ziele.forEach((el, j) => {
+        const r = el.getBoundingClientRect();
+        const m = document.createElement('div');
+        m.className = 'nsr-marke' + (aktiv ? ' aktiv' : '');
+        Object.assign(m.style, { left: `${r.left + scrollX - 6}px`, top: `${r.top + scrollY - 6}px`, width: `${r.width + 12}px`, height: `${r.height + 12}px` });
+        if (j === 0) { const l = document.createElement('span'); l.textContent = e.issues.map((n) => `#${n}`).join(' '); m.appendChild(l); }
+        document.body.appendChild(m);
+        marken.push(m);
+      });
+      return ziele;
+    };
+
+    const zeigen = (scrollen: boolean) => {
+      schreiben('nsr-index', String(index));
+      const e = liste[index];
+      $('.nsr-zaehler').textContent = `${index + 1} von ${liste.length} · ${e.issues.map((n) => `#${n}`).join(', ')}`;
+      $('.nsr-text').textContent = e.text;
+      $<HTMLButtonElement>('[data-aktion="zurueck"]').disabled = index === 0;
+      $<HTMLButtonElement>('[data-aktion="weiter"]').textContent = index === liste.length - 1 ? 'Fertig' : 'Weiter';
+      entfernen();
+      if (e.seite !== pfad) { $('.nsr-hinweis').textContent = 'Diese Änderung liegt auf einer anderen Seite.'; return; }
+      liste.forEach((x, i) => { if (x.seite === pfad && i !== index) markieren(x, false); });
+      const ziele = markieren(e, true);
+      $('.nsr-hinweis').textContent = ziele.length ? '' : 'Die Stelle ließ sich nicht finden.';
+      if (scrollen && ziele[0]) ziele[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    const gehe = (i: number) => {
+      if (i < 0 || i >= liste.length) return;
+      index = i;
+      if (liste[i].seite !== pfad) { schreiben('nsr-index', String(i)); location.href = `${liste[i].seite}?aenderung=${i}`; return; }
+      zeigen(true);
+    };
+
+    // Liste aller Änderungen, nach Seite gruppiert
+    const ol = $<HTMLOListElement>('.nsr-liste');
+    let letzteSeite = '';
+    liste.forEach((e, i) => {
+      if (e.seite !== letzteSeite) { const k = document.createElement('li'); k.className = 'nsr-seite'; k.textContent = e.seite; ol.appendChild(k); letzteSeite = e.seite; }
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = `${e.issues.map((n) => `#${n}`).join(', ')}: ${e.text}`;
+      b.addEventListener('click', () => { ol.hidden = true; gehe(i); });
+      li.appendChild(b); ol.appendChild(li);
+    });
+
+    const auf = $<HTMLButtonElement>('.nsr-auf');
+    const kommentare = new Set(liste.flatMap((e) => e.issues)).size;
+    auf.textContent = `Änderungen ansehen (${kommentare} Kommentare)`;
+    const einklappen = (zu: boolean) => {
+      wurzel.classList.toggle('zu', zu); auf.hidden = !zu; schreiben('nsr-zu', zu ? '1' : '0');
+      if (zu) entfernen(); else zeigen(false);
+    };
+
+    wurzel.addEventListener('click', (ev) => {
+      const a = (ev.target as HTMLElement).closest<HTMLElement>('[data-aktion]')?.dataset.aktion;
+      if (a === 'weiter') { if (index === liste.length - 1) einklappen(true); else gehe(index + 1); }
+      if (a === 'zurueck') gehe(index - 1);
+      if (a === 'liste') ol.hidden = !ol.hidden;
+      if (a === 'zu') einklappen(true);
+      if (a === 'auf') einklappen(false);
+    });
+    if (pr) { const k = $('.nsr-kopf strong'); k.textContent = `Neu in der Nachtschicht (PR #${pr})`; }
+
+    // Markierungen nach Laden von Schriften, Bildern und bei Größenänderung neu setzen
+    const neu = () => { if (!wurzel.classList.contains('zu')) zeigen(false); };
+    addEventListener('resize', neu);
+    addEventListener('load', () => setTimeout(neu, 300));
+    document.addEventListener('toggle', neu, true);
+    if (lesen('nsr-zu') === '1' && param === null) einklappen(true);
+    else setTimeout(() => zeigen(param !== null), 400);
+  }
+</script>
+
+<style is:global>
+  .nsr { position: fixed; right: 16px; bottom: 16px; z-index: 2147483550; width: min(360px, calc(100vw - 32px));
+    background: var(--weiss); border-radius: 18px; box-shadow: 0 20px 60px -20px rgba(0,67,79,.45), 0 0 0 1px var(--linie);
+    font: 400 15px/1.45 var(--font); color: var(--text); }
+  .nsr-kopf { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px 16px; background: var(--petrol-dunkel); color: var(--weiss); border-radius: 18px 18px 0 0; }
+  .nsr-kopf strong { font-size: 14px; }
+  .nsr-klein { background: none; border: 0; color: var(--weiss); font-size: 20px; line-height: 1; cursor: pointer; padding: 0 4px; }
+  .nsr-inhalt { padding: 14px 16px 16px; }
+  .nsr-zaehler { font-size: 12px; font-weight: 700; color: var(--orange); letter-spacing: .04em; }
+  .nsr-text { margin-top: 4px; color: var(--headline); font-weight: 600; }
+  .nsr-hinweis { margin-top: 6px; font-size: 13px; color: var(--hilfsgrau); }
+  .nsr-hinweis:empty { display: none; }
+  .nsr-knoepfe { display: flex; gap: 8px; margin-top: 12px; }
+  .nsr-knoepfe button, .nsr-auf { font: 700 13px/1 var(--font); padding: 9px 14px; border-radius: 10px; border: 1.5px solid var(--petrol); background: var(--weiss); color: var(--petrol); cursor: pointer; }
+  .nsr-knoepfe button:disabled { opacity: .4; cursor: default; }
+  .nsr-knoepfe .nsr-primaer { background: var(--orange); border-color: var(--orange); color: var(--weiss); }
+  .nsr-knoepfe button:last-child { margin-left: auto; }
+  .nsr-liste { list-style: none; margin: 12px 0 0; padding: 0; max-height: 45vh; overflow: auto; display: grid; gap: 4px; }
+  .nsr-liste[hidden], .nsr-auf[hidden] { display: none; }
+  .nsr-liste .nsr-seite { font-size: 12px; font-weight: 700; color: var(--hilfsgrau); margin-top: 8px; }
+  .nsr-liste button { width: 100%; text-align: left; font: 400 13px/1.35 var(--font); color: var(--headline); background: var(--mist); border: 0; border-radius: 8px; padding: 7px 10px; cursor: pointer; }
+  .nsr-liste button:hover { background: var(--tint-petrol); }
+  .nsr.zu { width: auto; background: none; box-shadow: none; }
+  .nsr.zu .nsr-kopf, .nsr.zu .nsr-inhalt { display: none; }
+  .nsr-auf { background: var(--orange); border-color: var(--orange); color: var(--weiss); box-shadow: var(--schatten); }
+  .nsr-marke { position: absolute; z-index: 2147483450; pointer-events: none; border-radius: 14px; border: 2px dashed rgba(245,158,52,.7); }
+  .nsr-marke.aktiv { border: 3px solid var(--orange); box-shadow: 0 0 0 6px rgba(245,158,52,.18); }
+  .nsr-marke span { position: absolute; top: -12px; left: 12px; background: var(--orange); color: var(--weiss); font: 700 12px/1 var(--font); padding: 4px 8px; border-radius: 999px; }
+  .nsr-marke:not(.aktiv) span { background: var(--weiss); color: var(--tint-orange-text); box-shadow: 0 0 0 1.5px var(--orange); }
+</style>

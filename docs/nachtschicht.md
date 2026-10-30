@@ -53,17 +53,20 @@ Im Zweifel fragst du. Eine falsche Umsetzung muss Ben morgens wieder ausbauen, e
 
 **Schreibregeln für alle Texte auf der Website und in Kommentaren:** Deutsch, Sie-Form auf der Website. Niemals den Gedankenstrich "–" oder "—". Keine "Nicht X. Sondern Y."-Konstruktionen, auch nicht mit "sondern" verbunden. Keine Sätze ohne Subjekt und Verb als Stilmittel und keine Ketten kurzer Fragmente. Kein Komma vor "und". Kurze Sätze. Eigene Formulierungen bauen, den Kommentar nie wörtlich übernehmen, außer jemand will genau diesen Wortlaut.
 
+**Rundgang durch die Änderungen:** Schreibe `src/data/nachtschicht.json` bei jedem Lauf neu: `datum`, `pr` (Nummer des Pull Requests) und `aenderungen`, eine Liste in der Reihenfolge, in der man die Vorschau durchklicken soll. Jeder Eintrag hat `issues` (Nummern), `seite` (Pfad mit Schrägstrich am Ende), `stelle` (CSS-Selektor des geänderten Elements, möglichst eng gefasst) und `text` (ein kurzer Satz, was sich geändert hat). Mehrere Issues an derselben Stelle stehen in einem Eintrag. In der Vorschau des Zweigs `nachtschicht` zeigt `src/components/Aenderungen.astro` daraus unten rechts einen Rundgang mit Zurück, Weiter und einer Liste und markiert jede Stelle orange. Auf `main` und in der Produktion erscheint er nie. Die Datei wird zuletzt geschrieben, wenn die Nummer des Pull Requests feststeht (beim ersten Lauf also ein zweiter Push nach dem Anlegen des Pull Requests).
+
 ## 5. Prüfen
 
 1. `npm run build` und `npm run check:text` müssen sauber laufen. Schlägt etwas fehl, behebst du es oder nimmst den betreffenden Commit zurück und machst eine Rückfrage daraus.
 2. Prüfe jede geänderte Stelle im gebauten HTML unter `dist/` (stimmt der Text, ist nichts kaputt, gibt es keine verbotenen Farben).
-3. Halte dich an den Umfang des Kommentars. Keine Nebenbaustellen, keine Umbauten, um die niemand gebeten hat.
+3. Baue einmal mit `AENDERUNGEN=true npm run build` und prüfe, dass jeder Eintrag aus `src/data/nachtschicht.json` auf seiner Seite eine Stelle findet (der Rundgang zeigt sonst "Die Stelle ließ sich nicht finden.").
+4. Halte dich an den Umfang des Kommentars. Keine Nebenbaustellen, keine Umbauten, um die niemand gebeten hat.
 
 ## 6. Pull Request
 
 Pushe `nachtschicht` und lege den Pull Request nach `main` an (oder aktualisiere den bestehenden). Titel: `Nachtschicht JJJJ-MM-TT: <Anzahl> Kommentare umgesetzt`. Beschreibung auf Deutsch, in einfacher Sprache:
 
-- Link zur Vorschau: https://nachtschicht.evana-website.pages.dev
+- Link zur Vorschau: https://nachtschicht.evana-website.pages.dev (mit dem Hinweis, dass der Rundgang unten rechts durch alle Änderungen führt)
 - je umgesetztem Issue eine Zeile `Closes #<nummer>: <was sich geändert hat, ein Satz>` (das `Closes` schließt die Issues beim Merge, die Fäden auf der Seite springen dann auf erledigt)
 - Liste der Rückfragen mit Issue-Nummer
 - Liste der übersprungenen Issues mit Grund
