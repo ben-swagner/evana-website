@@ -53,6 +53,8 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
     "if (new URLSearchParams(location.search).has('autoplay')) setAuto(true); else show(0);",
     cfg.schleife ? `auto = true; document.body.classList.add("auto"); show(${index});` : `show(${index});`,
   );
+  // Hinweis unter EVA antwortet nur mit Quelle: verständlicher formuliert (Kommentar aus dem Staging-Review)
+  html = html.replace('Findet EVA nichts Belastbares, erfindet sie nichts und meldet die Lücke.', 'Findet EVA keine belastbare Quelle, sagt sie das offen und meldet die Lücke.');
   // Tastatursteuerung der Präsentation abschalten
   html = html.replace("document.addEventListener('keydown', e => {", "document.addEventListener('keydown_aus', e => {");
   writeFileSync(new URL(`../public/szenen/${name}.html`, import.meta.url), html);
