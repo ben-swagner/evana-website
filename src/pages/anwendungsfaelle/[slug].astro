@@ -18,7 +18,8 @@ interface Props { fall: Anwendungsfall }
 const { fall } = Astro.props;
 const andere = anwendungsfaelle.filter((a) => a.slug !== fall.slug);
 const referenzen = (await getCollection('referenzen'))
-  .filter((r) => r.data.anwendungsfaelle.includes(fall.slug))
+  // Nur Kundenprojekte. Technologiepartner wie MongoDB passen nicht unter die Überschrift.
+  .filter((r) => r.data.anwendungsfaelle.includes(fall.slug) && r.data.branche !== 'Technologie')
   .sort((a, b) => Number(a.data.anonym) - Number(b.data.anonym))
   .slice(0, 3);
 const produktLinks = fall.produkte.map((n) => ({ name: n, p: produkte.find((p) => p.name === n) }));
@@ -126,7 +127,7 @@ const szenenHinweis: Record<string, string> = {
   {referenzen.length > 0 && (
     <section class="sektion">
       <div class="container">
-        <h2 class="t">Referenzen zu diesem Anwendungsfall</h2>
+        <h2 class="t">So setzen Kunden EVANA dafür ein</h2>
         <ul class="refs">
           {referenzen.map((r) => (
             <li><a href={`/referenzen/${r.id}/`}><span>{r.data.anonym ? r.data.branche : r.data.kunde}</span><strong>{r.data.titel}</strong></a></li>
