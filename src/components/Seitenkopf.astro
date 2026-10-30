@@ -10,8 +10,10 @@ interface Props {
   demo?: boolean;
   zweitLink?: Krume;
   schmal?: boolean;
+  // breiterer Lead, damit ein langer Einleitungssatz nicht mit einem einzelnen Wort endet
+  leadBreit?: boolean;
 }
-const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false } = Astro.props;
+const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false, leadBreit = false } = Astro.props;
 ---
 <section class:list={['seitenkopf', { schmal }]}>
   <div class="container">
@@ -22,7 +24,7 @@ const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false } = Astro
       </nav>
     )}
     <h1>{titel}</h1>
-    {lead && <p class="lead">{lead}</p>}
+    {lead && <p class:list={['lead', { breit: leadBreit }]}>{lead}</p>}
     <slot />
     {(demo || zweitLink) && (
       <div class="aktionen">
@@ -40,5 +42,6 @@ const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false } = Astro
   h1 { max-width: 20ch; font-size: clamp(2.1rem, 4.6vw, 3.6rem); }
   .schmal h1 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); max-width: 26ch; }
   .lead { margin-top: 22px; }
+  .lead.breit { max-width: 68ch; }
   .aktionen { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
 </style>
