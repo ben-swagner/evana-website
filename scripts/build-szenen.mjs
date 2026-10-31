@@ -10,7 +10,8 @@ const quelle = readFileSync(new URL('../docs/animation/evana-goes-next-level.htm
 const szenen = {
   router: { level: '1', schleife: false, breit: true },
   mcp: { level: '2', schleife: true, breit: false },
-  qa: { level: '3', schleife: true, breit: false },
+  // qa spielt einmal durch und bleibt dann stehen, damit man in Ruhe lesen kann
+  qa: { level: '3', schleife: true, einmal: true, breit: false },
   report: { level: 'erp', schleife: false, breit: true },
 };
 
@@ -46,12 +47,32 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
   // Skalierung auf die Bühne statt auf 1600 x 900
   html = html.replace('Math.min(innerWidth / 1600, innerHeight / 900)', `Math.min(innerWidth / ${w}, innerHeight / 690)`);
   // Szene in Schleife statt zur nächsten Szene
-  html = html.replace('sLater(() => show(cur + 1), dur);', 'sLater(() => show(cur), dur);');
+  html = html.replace('sLater(() => show(cur + 1), dur);', cfg.einmal ? '' : 'sLater(() => show(cur), dur);');
   // Start: direkt die Szene, ggf. mit Autoplay
   html = html.replace(
     "if (new URLSearchParams(location.search).has('autoplay')) setAuto(true); else show(0);",
     cfg.schleife ? `auto = true; document.body.classList.add("auto"); show(${index});` : `show(${index});`,
   );
+  // Hinweis unter EVA antwortet nur mit Quelle: verständlicher formuliert (Kommentar aus dem Staging-Review)
+  html = html.replace('Findet EVA nichts Belastbares, erfindet sie nichts und meldet die Lücke.', 'Findet EVA keine belastbare Quelle, sagt sie das offen und meldet die Lücke.');
+  // Ruhigeres Tempo (Kommentare aus dem Staging-Review): Die Szene wechselt langsamer
+  // und hält an, solange die Maus über der Animation steht. Schritte laufen nacheinander,
+  // damit eine Pause alle folgenden Schritte mit verschiebt.
+  const schrittweise = `const schritte = (liste, ende) => { let k = 0; const weiter = () => { if (k >= liste.length) { if (ende) ende(); return; } const [ms, fn] = liste[k]; sLater(function los(){ if (document.querySelector('body:hover')) { sLater(los, 800); return; } fn(); k++; weiter(); }, ms); }; weiter(); };`;
+  if (name === 'mcp') {
+    html = html.replace(
+      /function autoChat\(\)\{\n\s*\['DeutschlandGPT', 'Copilot'\][^\n]*\n\s*\}/,
+      `function autoChat(){\n    ${schrittweise}\n    schritte(['ChatGPT', 'DeutschlandGPT', 'Copilot'].map(name => [11000, () => { ai = name; runChat(); }]), () => sLater(() => show(cur), 11000));\n  }`,
+    );
+    // Die Schleife startet jetzt am Ende der Schritte neu, nicht nach fester Dauer
+    html = html.replace('data-level="2" data-dur="18000"', 'data-level="2" data-dur="86400000"');
+  }
+  if (name === 'qa') {
+    html = html.replace(
+      /function autoQA\(\)\{\n\s*sLater\(\(\) => select\(1\), 8000\);\n\s*sLater\(\(\) => select\(2\), 13500\);\n\s*sLater\(\(\) => goBtn\.click\(\), 17500\);\n\s*sLater\(\(\) => select\(3\), 19500\);/,
+      `function autoQA(){\n    ${schrittweise}\n    schritte([[12000, () => select(1)], [11000, () => select(2)], [7000, () => goBtn.click()], [2500, () => select(3)]]);`,
+    );
+  }
   // Tastatursteuerung der Präsentation abschalten
   html = html.replace("document.addEventListener('keydown', e => {", "document.addEventListener('keydown_aus', e => {");
   writeFileSync(new URL(`../public/szenen/${name}.html`, import.meta.url), html);

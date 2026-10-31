@@ -34,8 +34,8 @@ const dialog = [
 ];
 
 const funktionen = [
-  { titel: 'Sofort verstehen', text: 'EVA fasst lange Verträge und Gutachten in wenigen Sätzen zusammen. So wissen Sie schnell, worum es geht.' },
   { titel: 'Gezielt fragen', text: 'Sie fragen nach Fristen, Bedingungen oder Mängeln in normaler Sprache und bekommen eine präzise Antwort, ohne ein Dokument zu öffnen.' },
+  { titel: 'Sofort verstehen', text: 'EVA fasst lange Verträge und Gutachten in wenigen Sätzen zusammen. So wissen Sie schnell, worum es geht.' },
   { titel: 'Daten auf Knopfdruck', text: 'Verbrauchswerte, Kennzahlen oder Flächen liefert EVA strukturiert als Tabelle, fertig zur Weiterverarbeitung.' },
   { titel: 'Auch aus Bildern', text: 'EVA erkennt Inhalte in Scans, Lageplänen und Fotos und bezieht sie in die Antwort ein.' },
   { titel: 'Immer belegt', text: 'Jede Antwort verweist auf die exakte Stelle im Originaldokument. Sie können jede Aussage selbst prüfen.' },
@@ -81,8 +81,8 @@ const schema = nurGueltig([
   schema={schema}
 >
   <Seitenkopf
-    titel="Fragen Sie Ihre Dokumente einfach EVA"
-    lead={`EVA ist die KI-Assistentin in Ihren EVANA-Datenräumen. Sie befragen Verträge, Gutachten und Scans in ganz normaler Sprache, und EVA liefert die Antwort in ${zahlen.evaAntwortzeit}, belegt mit der Fundstelle.`}
+    titel="EVA kennt Ihre Dokumente und antwortet mit Beleg"
+    lead={`EVA ist die KI-Assistentin in Ihren EVANA-Datenräumen. Sie stellen Ihre Fragen zu Verträgen, Gutachten und Scans in ganz normaler Sprache, und EVA liefert die Antwort in ${zahlen.evaAntwortzeit}, belegt mit der Fundstelle.`}
     pfad={pfad}
     zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
   />
@@ -105,7 +105,7 @@ const schema = nurGueltig([
         <div class="eingabe" aria-hidden="true"><span>Ihre Frage an EVA</span><i></i></div>
       </Fenster>
       <div class="seitentext">
-        <h2>Sie fragen. EVA belegt.</h2>
+        <h2>Sie fragen.<br />EVA belegt.</h2>
         <p>Die Antwort steckt in einem von Tausenden Dokumenten. Ihre Teams verwalten pro Objekt Verträge, Protokolle, Gutachten und Scans in vielen Formaten und Sprachen. Mit EVA stellen Sie Ihre Frage einfach in normaler Sprache, und EVA wertet den ganzen Datenraum aus.</p>
         <p>Jede Aussage ist mit der Fundstelle im Originaldokument verknüpft. Sie entscheiden schneller und auf gesicherter Basis.</p>
       </div>
@@ -171,16 +171,16 @@ const schema = nurGueltig([
       </article>
       <article class="karte">
         <p class="eyebrow">Offene Modellwahl</p>
-        <h2 class="h3">Ihr bevorzugtes KI-Modell an Ihren Dokumenten</h2>
+        <h2 class="h3">Ihr KI-Modell an Ihren Dokumenten</h2>
         <p>Binden Sie Claude, Microsoft Copilot oder Ihr bevorzugtes Sprachmodell direkt an Ihre Immobiliendokumente an. Es gibt keinen Vendor-Lock-in und keine starren Pipelines. Sie behalten die Kontrolle über Modellwahl und Datenfluss.</p>
         <a href="/produkte/integrationen/" class="mehr">Zu den Integrationen</a>
       </article>
     </div>
   </section>
 
-  <Funktionen eyebrow="Für wen" titel="Wer mit EVA Zeit gewinnt" eintraege={rollen} variante="zeilen" mist />
+  <Funktionen eyebrow="Für wen" titel="In diesen Bereichen spart EVA Zeit" eintraege={rollen} variante="zeilen" mist />
 
-  <Anwendungen slugs={['dokumente-befragen', 'transaktion-due-diligence', 'reports-und-fristen']} titel="So setzen Kunden EVA ein" />
+  <Anwendungen slugs={['dokumente-befragen', 'transaktion-due-diligence', 'reports-und-fristen']} titel="So können Sie EVA einsetzen" />
 
   <Referenzen produkte={['EVA']} titel="EVA in der Praxis" mist />
 
@@ -216,7 +216,7 @@ const schema = nurGueltig([
 
   .zahlen-sektion { padding-bottom: clamp(56px, 8vw, 104px); }
 
-  .katalog-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+  .katalog-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
   .katalog-raster .lead { margin-top: 20px; }
   .absatz { margin-top: 16px; }
   .katalog-raster .btn { margin-top: 30px; }
@@ -233,9 +233,9 @@ const schema = nurGueltig([
   .katalog .beispiel-hinweis { color: var(--hilfsgrau); }
 
   .zwei-karten { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .karte { background: var(--mist); border-radius: var(--radius-gross); padding: clamp(28px, 4vw, 44px); }
+  .karte { display: flex; flex-direction: column; align-items: flex-start; background: var(--mist); border-radius: var(--radius-gross); padding: clamp(28px, 4vw, 44px); }
   .h3 { font-size: clamp(1.4rem, 2.2vw, 1.8rem); line-height: 1.2; margin-bottom: 14px; }
-  .mehr { display: inline-block; margin-top: 18px; font-weight: 700; }
+  .mehr { display: inline-block; margin-top: auto; padding-top: 18px; font-weight: 700; }
 
   @media (max-width: 900px) {
     .szene-raster, .katalog-raster, .zwei-karten { grid-template-columns: 1fr; }

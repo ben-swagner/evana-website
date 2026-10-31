@@ -30,7 +30,7 @@ const ziele = [
 
 const schritte = [
   { titel: 'Eingang', text: 'Rechnungen, Protokolle und Nachträge kommen per Mail, Post und Portal. Der Router nimmt sie auf, E-Mail-Anhänge eingeschlossen.' },
-  { titel: 'Erkennen', text: `EVANA AI bestimmt den Dokumenttyp aus mehr als ${typen} Typen der Immobilienwirtschaft, mit einer Erkennungsrate von ${zahlen.erkennungsrate}.` },
+  { titel: 'Erkennen', text: `EVANA AI bestimmt den Dokumenttyp aus mehr als ${typen} Typen der Immobilienwirtschaft, mit einer Erkennungsrate von ${zahlen.erkennungsrate.replace(' ', '\u00A0')}.` },
   { titel: 'Zuordnen', text: 'Der Router erkennt, zu welchem Objekt das Dokument gehört, und wählt den passenden Ordner in der Akte.' },
   { titel: 'Benennen und ablegen', text: 'Die Datei bekommt einen sauberen Namen und liegt strukturiert am richtigen Ort, durchsuchbar und für EVA befragbar.' },
 ];
@@ -43,8 +43,8 @@ const umbenennung = [
 
 const kontrolle = [
   { titel: 'Sie bestimmen die Schwelle', text: 'Ein einstellbarer Confidence-Threshold legt fest, was automatisch abgelegt und was von Ihrem Team geprüft wird.' },
-  { titel: 'Dubletten erkannt', text: 'Doppelte Dateien und Versionen werden erkannt, bevor sie die Akte füllen.' },
-  { titel: 'Auch aus dem Postfach', text: 'Mails und Anhänge werden automatisch archiviert, ausgelesen und dem passenden Objekt zugeordnet. Die Suche im Postfach entfällt.' },
+  { titel: 'Duplikate erkannt', text: 'Doppelte Dateien und Versionen werden erkannt, bevor sie die Akte füllen.' },
+  { titel: 'Auch aus dem Postfach', text: 'Mails und Anhänge werden automatisch archiviert, ausgelesen und dem passenden Objekt zugeordnet. Die eigene Suche im Postfach entfällt.' },
 ];
 
 const faq = [
@@ -71,6 +71,7 @@ const schema = nurGueltig([
     titel="Ihre Ablage sortiert sich ab jetzt selbst"
     lead="Was täglich in Ihrem Posteingang landet, ordnet der EVANA Document Router automatisch dem richtigen Objekt zu, klassifiziert es, benennt es sauber und legt es ab. Ihre Ablage bleibt aktuell, ohne dass jemand per Hand sortieren muss."
     pfad={pfad}
+    leadBreit
     zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
   >
     <p class="neu"><span aria-hidden="true"></span>Neu seit der EXPO REAL 2026</p>
@@ -214,11 +215,13 @@ const schema = nurGueltig([
   .stunden .lead { margin-top: 18px; }
 
   .namen { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-  .namen li { display: grid; grid-template-columns: minmax(0, .7fr) 64px minmax(0, 1.3fr); align-items: center; padding: 16px 20px; border-radius: var(--radius); background: var(--weiss); box-shadow: var(--schatten-dokument); }
+  .namen li { display: grid; grid-template-columns: minmax(0, .7fr) 64px minmax(0, 1.3fr); align-items: stretch; }
+  .vorher, .nachher { padding: 16px 20px; border-radius: var(--radius); background: var(--weiss); box-shadow: var(--schatten-dokument); }
+  .vorher { display: flex; align-items: center; }
   .vorher { font-size: .92rem; color: var(--hilfsgrau); text-decoration: line-through; text-decoration-color: var(--magenta); word-break: break-all; }
-  .pfeil { position: relative; height: 4px; margin-inline: 12px; border-radius: 2px; background: var(--verlauf); }
+  .pfeil { position: relative; align-self: center; height: 4px; margin-inline: 12px; border-radius: 2px; background: var(--verlauf); }
   .pfeil::after { content: ''; position: absolute; right: -4px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--orange); }
-  .nachher { display: grid; gap: 2px; }
+  .nachher { display: grid; gap: 2px; align-content: center; }
   .nachher strong { color: var(--headline); font-weight: 600; word-break: break-all; }
   .nachher small { color: var(--petrol); font-size: .84rem; font-weight: 600; }
 
@@ -230,6 +233,7 @@ const schema = nurGueltig([
   .kontroll-karten h3 { margin-bottom: 6px; }
 
   .danach { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+  @media (min-width: 1101px) { .danach { grid-template-columns: max-content minmax(0, 1fr); } .danach h2 { white-space: nowrap; } }
   .danach ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .danach a { display: grid; gap: 4px; padding: 20px 24px; border-radius: 20px; background: rgba(255,255,255,.07); color: #d6e6e9; text-decoration: none; transition: background-color .15s; }
   .danach a:hover { background: rgba(255,255,255,.13); color: var(--weiss); }
@@ -246,7 +250,7 @@ const schema = nurGueltig([
   }
   @media (max-width: 640px) {
     .namen li { grid-template-columns: 1fr; gap: 10px; }
-    .pfeil { width: 4px; height: 22px; margin: 0 0 0 12px; background: linear-gradient(180deg, var(--petrol), var(--magenta) 55%, var(--orange)); }
+    .pfeil { align-self: start; width: 4px; height: 22px; margin: 0 0 0 12px; background: linear-gradient(180deg, var(--petrol), var(--magenta) 55%, var(--orange)); }
     .pfeil::after { right: auto; left: -3px; top: auto; bottom: -4px; margin: 0; }
   }
 </style>

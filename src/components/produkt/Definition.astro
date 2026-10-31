@@ -23,6 +23,6 @@ const { frage, kern, text, mist = false } = Astro.props;
   }
   h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; color: var(--eyebrow); margin-bottom: 14px; }
   .def { font-size: clamp(1.25rem, 2.2vw, 1.6rem); line-height: 1.45; color: var(--headline); max-width: 54ch; }
-  .def strong { color: var(--petrol-dunkel); }
+  .def strong { display: block; margin-bottom: .5em; color: var(--petrol-dunkel); }
   @media (max-width: 640px) { .raster { grid-template-columns: 1fr; } .marke { display: none; } }
 </style>

@@ -29,7 +29,7 @@ export const zielgruppen: Zielgruppe[] = [
     navLabel: 'Asset Management',
     kurz: 'Kennzahlen, Mietverträge und Fristen objektübergreifend abfragen und berichten.',
     titel: 'Asset Management mit Antworten aus jedem Dokument',
-    lead: 'Sie verantworten Vermietung, Rendite und die Berichte an Ihre Investoren. EVANA liest Mietverträge, Gutachten und Protokolle Ihres gesamten Bestands und liefert Ihnen Kennzahlen, Fristen und Antworten mit Fundstelle.',
+    lead: 'Für Vermietung, Rendite und Investorenberichte brauchen Sie verlässliche Zahlen aus Ihrem Bestand. EVANA liest Mietverträge, Gutachten und Protokolle aller Objekte und liefert Ihnen Kennzahlen, Fristen und Antworten mit Fundstelle.',
     seo: {
       title: 'KI für das Asset Management von Immobilien | EVANA',
       description: 'EVANA liest Mietverträge, Gutachten und Protokolle Ihres Portfolios und liefert Asset Managern Kennzahlen, Fristen und Antworten mit Fundstelle.',
@@ -348,7 +348,7 @@ export const zielgruppen: Zielgruppe[] = [
     navLabel: 'Corporate Real Estate',
     kurz: 'Standorte, Mietverträge und Betreiberpflichten im Konzern zentral steuern.',
     titel: 'Corporate Real Estate mit einer Datenbasis für alle Standorte',
-    lead: 'Im Konzern liegen Immobiliendokumente verteilt über Standorte, Gesellschaften und Dienstleister. EVANA führt sie in einer Struktur zusammen, erkennt Dubletten und stellt die Daten Ihren Systemen bereit, von SAP RE-FX bis zum Reporting.',
+    lead: 'Im Konzern liegen Immobiliendokumente verteilt über Standorte, Gesellschaften und Dienstleister. EVANA führt sie in einer Struktur zusammen, erkennt Duplikate und stellt die Daten Ihren Systemen bereit, von SAP RE-FX bis zum Reporting.',
     seo: {
       title: 'KI-Dokumentenmanagement für Corporate Real Estate | EVANA',
       description: 'Standortdokumente im Konzern zentral strukturieren, Fristen steuern und Daten an SAP RE-FX und Reporting übergeben: EVANA für Corporate Real Estate.',
@@ -396,7 +396,7 @@ export const zielgruppen: Zielgruppe[] = [
       },
       {
         frage: 'Wie läuft die Einführung über viele Standorte?',
-        antwort: 'Bei einem globalen Technologiekonzern erfolgte die Einführung schrittweise pro Standort. Das Team sammelte die Dokumente zentral, EVANA klassifizierte und bereinigte sie und erkannte Dubletten automatisch.',
+        antwort: 'Bei einem globalen Technologiekonzern erfolgte die Einführung schrittweise pro Standort. Das Team sammelte die Dokumente zentral, EVANA klassifizierte und bereinigte sie und erkannte Duplikate automatisch.',
       },
       {
         frage: 'Können externe Dienstleister mit EVANA arbeiten?',

@@ -72,9 +72,9 @@ export const anwendungsfaelle: Anwendungsfall[] = [
       'Fasse mir das Bewertungsgutachten in fünf Sätzen zusammen.',
     ],
     schritte: [
-      { titel: 'Frage stellen', text: 'Sie fragen in normaler Sprache, zu einem Dokument, einem Objekt oder dem ganzen Bestand.' },
+      { titel: 'Aufgabe geben', text: 'Sie fragen EVA oder geben ihr einen Auftrag in normaler Sprache. Das geht für ein Dokument, ein Objekt oder den ganzen Bestand.' },
       { titel: 'EVA sucht', text: 'EVA durchsucht alle Unterlagen, auch Scans, Bilder und fremdsprachige Verträge.' },
-      { titel: 'Antwort mit Fundstelle', text: 'Sie erhalten die Antwort mit Datei, Seite und Absatz, auf Wunsch als Tabelle.' },
+      { titel: 'Antwort mit Fundstelle', text: 'Sie erhalten die Antwort mit Datei, Seite und Absatz. Betrifft sie viele Dokumente, bekommen Sie alle Fundstellen auf Wunsch als Tabelle.' },
       { titel: 'Prüfen und weiterarbeiten', text: 'Ein Klick führt zur Stelle im Original. Ergebnisse exportieren Sie als Excel oder übernehmen sie in den Report.' },
     ],
     faq: [
@@ -90,14 +90,14 @@ export const anwendungsfaelle: Anwendungsfall[] = [
   {
     slug: 'dokumente-automatisch-ablegen',
     tab: 'Automatisch ablegen',
-    titel: 'Eingehende Dokumente landen von selbst am richtigen Ort',
+    titel: 'Eingehende Dokumente landen am richtigen Ort',
     kurz: 'EVANA erkennt Dokumenttyp und Objekt, benennt die Datei sinnvoll um und legt sie in der richtigen Akte ab. Auch E-Mail-Anhänge.',
     vorher: 'Rechnungen, Protokolle und Nachträge kommen per Mail, Post und Portal. Jemand muss jede Datei öffnen, zuordnen, umbenennen und ablegen. Über 40 Stunden pro Asset und Jahr gehen allein dafür verloren.',
     mitEvana: 'Der Document Router liest jedes eingehende Dokument, ordnet es dem richtigen Objekt zu und legt es strukturiert ab. Was unsicher ist, landet zur Prüfung bei Ihrem Team.',
     details: [
       { titel: 'Dokumenttyp erkannt', text: `Über 460 Dokumenttypen der Immobilienwirtschaft, mit einer Erkennungsrate von 95 %.` },
       { titel: 'Sie bestimmen die Schwelle', text: 'Ein einstellbarer Confidence-Threshold legt fest, was automatisch abgelegt und was geprüft wird.' },
-      { titel: 'Dubletten erkannt', text: 'Doppelte Dateien und Versionen werden erkannt, bevor sie die Akte füllen.' },
+      { titel: 'Duplikate erkannt', text: 'Doppelte Dateien und Versionen werden erkannt, bevor sie die Akte füllen.' },
     ],
     fuerWen: ['Property Management', 'Facility Management', 'Asset Management'],
     produkte: ['EVANA 360', 'Document Router'],
@@ -118,12 +118,12 @@ export const anwendungsfaelle: Anwendungsfall[] = [
     szene: 'router',
     abgrenzung: {
       titel: 'Anwendungsfall und Document Router',
-      text: 'Der Anwendungsfall beschreibt die Aufgabe: Ordnung in Ihre Dokumente bringen, ob einmalig beim Übernehmen eines ganzen Bestands oder laufend im Alltag. Der Document Router ist das Werkzeug für den laufenden Posteingang. Für die Übernahme großer Bestände klassifiziert EVANA AI tausende Dokumente in einem Durchgang, wie bei Wirtgen Invest.',
+      text: 'Der Anwendungsfall beschreibt die Aufgabe: Ordnung in Ihre Dokumente bringen, ob einmalig beim Übernehmen eines ganzen Bestands oder laufend im Alltag. Der Document Router ist das Werkzeug für den laufenden Posteingang. Für die Übernahme großer Bestände klassifiziert EVANA AI tausende Dokumente in einem Durchgang.',
       link: { label: 'Document Router ansehen', href: '/produkte/document-router/' },
     },
     faq: [
       { frage: 'Wie erkennt EVANA, zu welchem Objekt ein Dokument gehört?', antwort: 'EVANA liest Dokumenttyp, Adresse, Mieter und weitere Angaben aus dem Inhalt und ordnet das Dokument dem passenden Objekt zu. Was unsicher ist, landet zur Prüfung bei Ihrem Team.' },
-      { frage: 'Was passiert mit doppelten Dateien?', antwort: 'EVANA erkennt Dubletten und Versionen, bevor sie die Akte füllen, und sortiert sie aus.' },
+      { frage: 'Was passiert mit doppelten Dateien?', antwort: 'EVANA erkennt Duplikate und Versionen, bevor sie die Akte füllen, und sortiert sie aus.' },
       { frage: 'Funktioniert das auch für bestehende Bestände?', antwort: 'Ja. Bei Wirtgen Invest hat EVANA rund 25.000 Dokumente aus vier Objekten klassifiziert und umbenannt, in wenigen Tagen statt Monaten.' },
     ],
     seo: {

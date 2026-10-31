@@ -172,3 +172,15 @@ export function imHintergrund(context, arbeit) {
   if (context.waitUntil) context.waitUntil(p);
   return p;
 }
+
+// Rückmeldung aus dem Rundgang der Nachtschicht-Vorschau direkt ins Issue schreiben.
+// Wird genutzt, wenn der Faden in der Datenbank dieser Umgebung fehlt (etwa wenn die Vorschau
+// eine eigene Datenbank hat). Schreibt nur in offene Kommentar-Issues aus dem Kommentarmodus.
+export async function rueckmeldungDirekt(env, nummer, name, inhalt) {
+  if (!aktiv(env)) throw new Error('GITHUB_TOKEN fehlt in dieser Umgebung.');
+  const issue = await gh(env, `/issues/${nummer}`);
+  const passt = !issue.pull_request && issue.state === 'open'
+    && (issue.labels || []).some((l) => l.name === LABEL) && String(issue.body || '').startsWith(MARKE);
+  if (!passt) throw new Error(`Issue #${nummer} ist kein offener Kommentar.`);
+  await gh(env, `/issues/${nummer}/comments`, 'POST', { body: `${MARKE}\n**${name}** antwortet:\n\n${inhalt}` });
+}

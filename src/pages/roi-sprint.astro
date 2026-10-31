@@ -47,7 +47,7 @@ const aufgaben = [
     dokumente: ['Betriebsgenehmigungen', 'Brandschutznachweise', 'Energieausweise'],
   },
   {
-    titel: 'Revision: Unterlagen vollständig, bevor die Prüfung kommt',
+    titel: 'Revision: Unterlagen komplett vor der Prüfung',
     text: 'Wartungsprotokolle, Prüfberichte, Versicherungspolicen und TÜV-Nachweise landen je Standort in einem Vollständigkeitsreport. Fehlende Dokumente sind markiert, bevor die Prüfung beginnt.',
     dokumente: ['Wartungsprotokolle', 'Prüfberichte', 'Versicherungspolicen'],
   },
@@ -198,9 +198,9 @@ const euro = (n: number) => `${n.toLocaleString('de-DE')} €`;
       <ul class="aufgaben">
         {aufgaben.map((a) => (
           <li>
-            <h3>{a.titel}</h3>
+            <h3>{a.titel.split(': ')[0]}:<br />{a.titel.split(': ').slice(1).join(': ')}</h3>
             <p>{a.text}</p>
-            {a.zusatz && <p class="zusatz">{a.zusatz}</p>}
+            {a.zusatz ? <p class="zusatz">{a.zusatz}</p> : <span aria-hidden="true"></span>}
             <ul class="doktypen">{a.dokumente.map((d) => <li>{d}</li>)}</ul>
           </li>
         ))}
@@ -355,11 +355,11 @@ const euro = (n: number) => `${n.toLocaleString('de-DE')} €`;
   .rechner-hinweis { margin-top: 20px; max-width: 75ch; font-size: .95rem; color: var(--hilfsgrau); }
 
   .aufgaben { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-  .aufgaben > li { display: flex; flex-direction: column; gap: 12px; padding: 28px; background: var(--mist); border-radius: var(--radius); }
+  .aufgaben > li { display: grid; grid-row: span 4; grid-template-rows: subgrid; gap: 12px; padding: 28px 24px; background: var(--mist); border-radius: var(--radius); }
   .aufgaben h3 { font-size: 1.2rem; }
   .zusatz { font-weight: 600; color: var(--petrol-dunkel); }
-  .doktypen { list-style: none; margin: auto 0 0; padding: 6px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
-  .doktypen li { font-size: .8rem; font-weight: 600; color: var(--petrol-dunkel); background: var(--weiss); border-radius: 999px; padding: 4px 10px; }
+  .doktypen { list-style: none; margin: 0; padding: 6px 0 0; display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+  .doktypen li { font-size: .92rem; font-weight: 600; color: var(--petrol-dunkel); background: var(--weiss); border-radius: 14px; padding: 10px 14px; }
 
   .angebot { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
   .angebot .lead { margin-top: 18px; }

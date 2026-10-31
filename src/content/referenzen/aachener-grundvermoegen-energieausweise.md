@@ -3,7 +3,7 @@ titel: "Aachener Grundvermögen digitalisiert 900 Energieausweise in zwei Tagen"
 kunde: "Aachener Grundvermögen"
 anonym: false
 branche: "Immobilien-Kapitalverwaltung"
-kurz: "Die Aachener Grundvermögen Unternehmensgruppe hat mit EVANA 900 Energieausweise in Papierform automatisiert erfasst, Dubletten bereinigt und die Daten in zwei Tagen strukturiert bereitgestellt."
+kurz: "Die Aachener Grundvermögen Unternehmensgruppe hat mit EVANA 900 Energieausweise in Papierform automatisiert erfasst, Duplikate bereinigt und die Daten in zwei Tagen strukturiert bereitgestellt."
 datum: 2026-04-02
 kennzahlen:
   - wert: "900"
@@ -23,7 +23,7 @@ zielgruppen:
 altUrl: "/aachener-grundvermogen-energiemanagement/"
 bild: "https://evana.ai/wp-content/uploads/2026/04/Aachener-Energieausweise.png"
 seoTitle: "Aachener Grundvermögen: 900 Energieausweise digitalisiert"
-seoDescription: "900 Energieausweise in Papierform automatisiert erfasst, Dubletten bereinigt und in zwei Tagen strukturiert bereitgestellt. Mit der KI von EVANA."
+seoDescription: "900 Energieausweise in Papierform automatisiert erfasst, Duplikate bereinigt und in zwei Tagen strukturiert bereitgestellt. Mit der KI von EVANA."
 ---
 
 Die Aachener Grundvermögen Unternehmensgruppe verwaltete einen umfangreichen Bestand von 900 Energieausweisen. Gemeinsam mit EVANA entstand eine KI-gestützte Lösung, die den gesamten Bestand innerhalb von zwei Tagen analysierte, bereinigte und digital bereitstellte.
@@ -34,7 +34,7 @@ Die 900 Energieausweise lagen ausschließlich in Papierform vor, teils doppelt u
 
 ## Lösung
 
-EVANA entwickelte eine Lösung zur automatisierten Erfassung, Dublettenprüfung und strukturierten Digitalisierung des gesamten Bestands. Nach dem Upload analysiert die KI jedes Dokument, erkennt doppelt vorhandene Energieausweise und sortiert sie aus. Aus den verbleibenden Dokumenten extrahiert sie alle relevanten Informationen und stellt sie strukturiert bereit.
+EVANA entwickelte eine Lösung zur automatisierten Erfassung, Duplikatprüfung und strukturierten Digitalisierung des gesamten Bestands. Nach dem Upload analysiert die KI jedes Dokument, erkennt doppelt vorhandene Energieausweise und sortiert sie aus. Aus den verbleibenden Dokumenten extrahiert sie alle relevanten Informationen und stellt sie strukturiert bereit.
 
 ## Ergebnis
 

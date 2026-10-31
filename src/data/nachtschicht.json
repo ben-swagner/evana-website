@@ -1,0 +1,844 @@
+{
+  "datum": "2026-10-31",
+  "pr": 43,
+  "aenderungen": [
+    {
+      "issues": [
+        4
+      ],
+      "kommentare": [
+        41
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": ".zwei",
+      "text": "Links steht jetzt Ohne EVANA, rechts Mit EVANA, dazwischen ein vs-Knopf."
+    },
+    {
+      "issues": [
+        6
+      ],
+      "kommentare": [
+        43
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": "section:has(.fragen) .kopf",
+      "text": "Die Beispiele sprechen jetzt von Fragen und Aufgaben."
+    },
+    {
+      "issues": [
+        7
+      ],
+      "kommentare": [
+        44
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": "section:has(.schritte) .kopf h2, .schritte li:first-child",
+      "text": "Der erste Schritt heißt Aufgabe geben, die Überschrift wurde angepasst."
+    },
+    {
+      "issues": [
+        8
+      ],
+      "kommentare": [
+        45
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": ".schritte li:nth-child(3)",
+      "text": "Die Tabelle ist jetzt für Antworten mit vielen Fundstellen beschrieben."
+    },
+    {
+      "issues": [
+        9
+      ],
+      "kommentare": [
+        46
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": ".eva-sektion .lead",
+      "text": "Hier steht jetzt in einem Bruchteil der Zeit."
+    },
+    {
+      "issues": [
+        10
+      ],
+      "kommentare": [
+        47
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": ".eva-sektion .fakten",
+      "text": "Human in the Loop ist auf dieser Seite ausgeblendet. Auf der Startseite bleibt es."
+    },
+    {
+      "issues": [
+        11
+      ],
+      "kommentare": [
+        48
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": ".katalog ul",
+      "text": "Bei In Ordnung steht jetzt die Zahl geprüfter Verträge. Das gilt auch auf der Startseite."
+    },
+    {
+      "issues": [
+        12
+      ],
+      "kommentare": [
+        49
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": "section:has(.refs)",
+      "text": "Neue Überschrift. Die MongoDB-Karte fällt weg, weil MongoDB kein Kunde ist."
+    },
+    {
+      "issues": [
+        13,
+        14,
+        15
+      ],
+      "kommentare": [
+        50,
+        51,
+        52
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": ".meta",
+      "text": "Teams und Produkte stehen jetzt in zwei eigenen Karten, die Teams untereinander."
+    },
+    {
+      "issues": [
+        16,
+        17
+      ],
+      "kommentare": [
+        53,
+        54
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": ".raster:has(details)",
+      "text": "Häufige Fragen steht jetzt über den Fragen. Das gilt auf allen Seiten."
+    },
+    {
+      "issues": [
+        18
+      ],
+      "kommentare": [
+        55
+      ],
+      "seite": "/anwendungsfaelle/dokumente-befragen/",
+      "stelle": ".weitere ul",
+      "text": "Alle fünf weiteren Anwendungsfälle stehen in einer Reihe."
+    },
+    {
+      "issues": [
+        20
+      ],
+      "kommentare": [
+        57
+      ],
+      "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "stelle": ".pfad",
+      "text": "Die Brotkrumen nennen jetzt den aktuellen Anwendungsfall. Das gilt auf allen Anwendungsfällen."
+    },
+    {
+      "issues": [
+        22
+      ],
+      "kommentare": [
+        59
+      ],
+      "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "stelle": ".zwei",
+      "text": "Ohne EVANA gegen Mit EVANA wie bei Dokumente befragen."
+    },
+    {
+      "issues": [
+        21
+      ],
+      "kommentare": [
+        58
+      ],
+      "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "stelle": ".details > div:nth-child(3)",
+      "text": "Duplikate statt Dubletten, auch in der FAQ und auf der Seite Document Router."
+    },
+    {
+      "issues": [
+        23
+      ],
+      "kommentare": [
+        60
+      ],
+      "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "stelle": ".abgrenzung p",
+      "text": "Wirtgen Invest ist aus dem Text gestrichen."
+    },
+    {
+      "issues": [
+        28
+      ],
+      "kommentare": [
+        65
+      ],
+      "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "stelle": "section:has(.refs)",
+      "text": "Neue Überschrift wie bei Dokumente befragen."
+    },
+    {
+      "issues": [
+        29
+      ],
+      "kommentare": [
+        66
+      ],
+      "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "stelle": ".meta",
+      "text": "Teams und Produkte in zwei eigenen Karten."
+    },
+    {
+      "issues": [
+        30
+      ],
+      "kommentare": [
+        67
+      ],
+      "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "stelle": ".raster:has(details)",
+      "text": "Häufige Fragen steht über den Fragen."
+    },
+    {
+      "issues": [
+        31
+      ],
+      "kommentare": [
+        68
+      ],
+      "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/",
+      "stelle": ".weitere ul",
+      "text": "Alle fünf weiteren Anwendungsfälle in einer Reihe."
+    },
+    {
+      "issues": [
+        24
+      ],
+      "kommentare": [
+        61
+      ],
+      "seite": "/produkte/document-router/",
+      "stelle": ".seitenkopf .lead",
+      "text": "Die Einleitung ist etwas breiter, muss steht nicht mehr allein in der letzten Zeile."
+    },
+    {
+      "issues": [
+        25
+      ],
+      "kommentare": [
+        62
+      ],
+      "seite": "/anwendungsfaelle/",
+      "stelle": "#anwendungsfaelle .kopf h2",
+      "text": "Neue Überschrift. Die Startseite behält ihre."
+    },
+    {
+      "issues": [
+        34
+      ],
+      "kommentare": [
+        71
+      ],
+      "seite": "/anwendungsfaelle/daten-extrahieren/",
+      "stelle": ".zwei",
+      "text": "Ohne EVANA gegen Mit EVANA."
+    },
+    {
+      "issues": [
+        33
+      ],
+      "kommentare": [
+        70
+      ],
+      "seite": "/anwendungsfaelle/daten-extrahieren/",
+      "stelle": ".dok.gross",
+      "text": "Das Dokument steht jetzt gerade."
+    },
+    {
+      "issues": [
+        36
+      ],
+      "kommentare": [
+        73
+      ],
+      "seite": "/referenzen/aachener-grundvermoegen-datenextraktion/",
+      "stelle": ".seitenkopf .kunde",
+      "text": "Der Demo-Button unter dieser Zeile ist weg. Das gilt auf allen Referenzen, unten im Abschluss bleibt er."
+    },
+    {
+      "issues": [
+        37
+      ],
+      "kommentare": [
+        74
+      ],
+      "seite": "/referenzen/aachener-grundvermoegen-datenextraktion/",
+      "stelle": ".seitenkopf .lead",
+      "text": "Die Einleitung nennt die 15.000 nicht mehr."
+    },
+    {
+      "issues": [
+        38,
+        39
+      ],
+      "kommentare": [
+        75,
+        76
+      ],
+      "seite": "/anwendungsfaelle/transaktion-due-diligence/",
+      "stelle": ".buehne figure",
+      "text": "Die Animation läuft einmal durch und bleibt stehen. Der Satz unten links ist neu formuliert."
+    },
+    {
+      "issues": [
+        40
+      ],
+      "kommentare": [
+        77
+      ],
+      "seite": "/anwendungsfaelle/transaktion-due-diligence/",
+      "stelle": ".zwei",
+      "text": "Ohne EVANA gegen Mit EVANA."
+    },
+    {
+      "issues": [
+        42
+      ],
+      "kommentare": [
+        79
+      ],
+      "seite": "/anwendungsfaelle/transaktion-due-diligence/",
+      "stelle": ".weitere ul",
+      "text": "Alle fünf weiteren Anwendungsfälle in einer Reihe."
+    },
+    {
+      "issues": [
+        44,
+        45,
+        47
+      ],
+      "kommentare": [
+        86,
+        87,
+        89
+      ],
+      "seite": "/anwendungsfaelle/reports-und-fristen/",
+      "stelle": ".zwei",
+      "text": "Ohne EVANA gegen Mit EVANA, Teams und Produkte in zwei Karten, weitere Anwendungsfälle in einer Reihe. Das kam schon mit der letzten Runde auf alle Anwendungsfälle."
+    },
+    {
+      "issues": [
+        49,
+        50,
+        51
+      ],
+      "kommentare": [
+        91,
+        92,
+        93
+      ],
+      "seite": "/anwendungsfaelle/ki-und-systeme-anbinden/",
+      "stelle": ".zwei",
+      "text": "Auch hier gelten Ohne EVANA gegen Mit EVANA, die zwei Karten für Teams und Produkte und die Reihe mit den weiteren Anwendungsfällen."
+    },
+    {
+      "issues": [
+        48
+      ],
+      "kommentare": [
+        90
+      ],
+      "seite": "/anwendungsfaelle/ki-und-systeme-anbinden/",
+      "stelle": ".buehne figure, figure.szene",
+      "text": "Jede KI bleibt elf Sekunden stehen, auch ChatGPT. Solange die Maus über der Animation steht, hält sie an."
+    },
+    {
+      "issues": [
+        52
+      ],
+      "kommentare": [
+        94
+      ],
+      "seite": "/loesungen/asset-management/",
+      "stelle": ".seitenkopf .lead",
+      "text": "Die Einleitung beginnt jetzt mit dem Bedarf an verlässlichen Zahlen."
+    },
+    {
+      "issues": [
+        53
+      ],
+      "kommentare": [
+        95
+      ],
+      "seite": "/loesungen/asset-management/",
+      "stelle": "section:has(.fragen) .kopf h2",
+      "text": "Neue Überschrift: Fragen Sie EVA so, wie Sie eine Kollegin fragen würden. Gilt auf allen Lösungsseiten."
+    },
+    {
+      "issues": [
+        86,
+        87
+      ],
+      "kommentare": [
+        128,
+        129
+      ],
+      "seite": "/loesungen/asset-management/",
+      "stelle": ".faelle",
+      "text": "Alle vier Titel stehen in zwei Zeilen. Bei Automatisch ablegen fällt von selbst weg."
+    },
+    {
+      "issues": [
+        54,
+        89
+      ],
+      "kommentare": [
+        96,
+        131
+      ],
+      "seite": "/loesungen/asset-management/",
+      "stelle": "#referenzen",
+      "text": "Überschrift ohne in Ihrer Rolle, Aachener Grundvermögen KVG passt in eine Zeile."
+    },
+    {
+      "issues": [
+        90,
+        91
+      ],
+      "kommentare": [
+        132,
+        133
+      ],
+      "seite": "/loesungen/asset-management/",
+      "stelle": ".wissen",
+      "text": "Titel bricht nach dem Doppelpunkt um, die Texte darunter stehen auf gleicher Höhe."
+    },
+    {
+      "issues": [
+        55
+      ],
+      "kommentare": [
+        97
+      ],
+      "seite": "/loesungen/asset-management/",
+      "stelle": "footer .raster",
+      "text": "Gleiche Abstände zwischen Anwendungsfälle, Produkt und Unternehmen. Gilt auf jeder Seite."
+    },
+    {
+      "issues": [
+        62
+      ],
+      "kommentare": [
+        104
+      ],
+      "seite": "/loesungen/oeffentliche-hand/",
+      "stelle": ".aufgaben",
+      "text": "Die Dokumenttypen stehen in jeder Karte untereinander. Gilt auf allen Lösungsseiten."
+    },
+    {
+      "issues": [
+        82
+      ],
+      "kommentare": [
+        124
+      ],
+      "seite": "/produkte/",
+      "stelle": ".zahlen-sektion dl, .zahlen dl",
+      "text": "Die Kachel zeigt 200+ Mrd. € in einer Zeile."
+    },
+    {
+      "issues": [
+        69
+      ],
+      "kommentare": [
+        111
+      ],
+      "seite": "/produkte/",
+      "stelle": ".sicherheit .siegel",
+      "text": "Mit der Maus über einem Punkt erscheint eine kurze Erklärung. Gilt auf allen Produktseiten."
+    },
+    {
+      "issues": [
+        71,
+        72
+      ],
+      "kommentare": [
+        113,
+        114
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": ".seitenkopf",
+      "text": "Neue Hauptüberschrift und Einleitung ohne Sie befragen Verträge."
+    },
+    {
+      "issues": [
+        73
+      ],
+      "kommentare": [
+        115
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": ".seitentext h2",
+      "text": "EVA belegt steht in der zweiten Zeile."
+    },
+    {
+      "issues": [
+        76,
+        103,
+        110
+      ],
+      "kommentare": [
+        118,
+        145,
+        152
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": ".definition .def",
+      "text": "Nach dem fetten Satz beginnt eine neue Zeile. Gilt auf allen Produktseiten."
+    },
+    {
+      "issues": [
+        77
+      ],
+      "kommentare": [
+        119
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": ".zahlen dl",
+      "text": "unter 30 Sekunden steht in einer Zeile, der Wortlaut bleibt."
+    },
+    {
+      "issues": [
+        78
+      ],
+      "kommentare": [
+        120
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": ".karten",
+      "text": "Gezielt fragen steht jetzt vor Sofort verstehen."
+    },
+    {
+      "issues": [
+        79
+      ],
+      "kommentare": [
+        121
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": ".katalog",
+      "text": "Der Fragenkatalog steht mittig neben dem Text."
+    },
+    {
+      "issues": [
+        80
+      ],
+      "kommentare": [
+        122
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": ".zwei-karten",
+      "text": "Beide Überschriften einzeilig, die Links unten auf gleicher Höhe."
+    },
+    {
+      "issues": [
+        81,
+        83
+      ],
+      "kommentare": [
+        123,
+        125
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": ".zeilen-raster",
+      "text": "Neue Überschrift In diesen Bereichen spart EVA Zeit. Sie scrollt nicht mehr mit."
+    },
+    {
+      "issues": [
+        93,
+        94
+      ],
+      "kommentare": [
+        135,
+        136
+      ],
+      "seite": "/produkte/eva/",
+      "stelle": "ul.faelle",
+      "text": "Neue Überschrift So können Sie EVA einsetzen. Anwendungsfall ansehen steht überall auf gleicher Höhe."
+    },
+    {
+      "issues": [
+        95
+      ],
+      "kommentare": [
+        137
+      ],
+      "seite": "/produkte/report/",
+      "stelle": "h1",
+      "text": "Blick steht jetzt in der zweiten Zeile."
+    },
+    {
+      "issues": [
+        96,
+        97,
+        98
+      ],
+      "kommentare": [
+        138,
+        139,
+        140
+      ],
+      "seite": "/produkte/report/",
+      "stelle": ".buehne .app",
+      "text": "Der nachgebaute Objektbericht liegt ganz auf der farbigen Fläche, der weiße Bereich gehört nur zur Überschrift."
+    },
+    {
+      "issues": [
+        101
+      ],
+      "kommentare": [
+        143
+      ],
+      "seite": "/produkte/report/",
+      "stelle": ".export-text",
+      "text": "Exportieren Sie Ihre Daten."
+    },
+    {
+      "issues": [
+        102
+      ],
+      "kommentare": [
+        144
+      ],
+      "seite": "/produkte/report/",
+      "stelle": "ul.faelle",
+      "text": "Gleicher Block wie auf der Seite EVA: Links auf gleicher Höhe."
+    },
+    {
+      "issues": [
+        105
+      ],
+      "kommentare": [
+        147
+      ],
+      "seite": "/produkte/document-router/",
+      "stelle": ".schritte li:nth-child(2)",
+      "text": "95 % bleibt zusammen, keine kurze letzte Zeile mehr."
+    },
+    {
+      "issues": [
+        106
+      ],
+      "kommentare": [
+        148
+      ],
+      "seite": "/produkte/document-router/",
+      "stelle": ".namen",
+      "text": "Jeder alte Dateiname hat eine eigene Karte, der Pfeil steht dazwischen."
+    },
+    {
+      "issues": [
+        107
+      ],
+      "kommentare": [
+        149
+      ],
+      "seite": "/produkte/document-router/",
+      "stelle": ".kontroll-karten",
+      "text": "Duplikate statt Dubletten, jetzt auch in Wissensartikeln und Referenzen."
+    },
+    {
+      "issues": [
+        108
+      ],
+      "kommentare": [
+        150
+      ],
+      "seite": "/produkte/document-router/",
+      "stelle": ".kontroll-karten li:nth-child(3)",
+      "text": "Die eigene Suche im Postfach entfällt."
+    },
+    {
+      "issues": [
+        109
+      ],
+      "kommentare": [
+        151
+      ],
+      "seite": "/produkte/document-router/",
+      "stelle": ".danach",
+      "text": "Abgelegt heißt sofort nutzbar steht in einer Zeile."
+    },
+    {
+      "issues": [
+        111
+      ],
+      "kommentare": [
+        153
+      ],
+      "seite": "/produkte/evana-360/",
+      "stelle": ".zwei",
+      "text": "Ohne EVANA gegen Mit EVANA statt drei Karten."
+    },
+    {
+      "issues": [
+        112,
+        113
+      ],
+      "kommentare": [
+        154,
+        155
+      ],
+      "seite": "/produkte/evana-360/",
+      "stelle": ".karten",
+      "text": "Umbruch nach dem Komma in der Überschrift und neue Zeilen in drei Karten."
+    },
+    {
+      "issues": [
+        114
+      ],
+      "kommentare": [
+        156
+      ],
+      "seite": "/produkte/evana-360/",
+      "stelle": ".sys-raster",
+      "text": "Karten mittig zum Text und breiter, jede Karte zweizeilig."
+    },
+    {
+      "issues": [
+        115,
+        116
+      ],
+      "kommentare": [
+        157,
+        158
+      ],
+      "seite": "/produkte/evana-360/",
+      "stelle": ".seitenkopf",
+      "text": "Überschrift in zwei Zeilen, angebunden rutscht in die Zeile davor."
+    },
+    {
+      "issues": [
+        117
+      ],
+      "kommentare": [
+        159
+      ],
+      "seite": "/produkte/evana-360/",
+      "stelle": ".auf-dunkel .kopf h2",
+      "text": "Umbruch nach dem Komma."
+    },
+    {
+      "issues": [
+        118,
+        119
+      ],
+      "kommentare": [
+        160,
+        161
+      ],
+      "seite": "/produkte/evana-360/",
+      "stelle": "section:has(.karten.aufMist) .karten",
+      "text": "Neue Zeile vor Sie treffen und vor Die Inhalte."
+    },
+    {
+      "issues": [
+        120,
+        121
+      ],
+      "kommentare": [
+        162,
+        163
+      ],
+      "seite": "/produkte/evana-360/",
+      "stelle": "section:has(.bausteine)",
+      "text": "Umbruch nach dem Komma, alle fünf Bausteine in einer Reihe."
+    },
+    {
+      "issues": [
+        122,
+        123
+      ],
+      "kommentare": [
+        164,
+        165
+      ],
+      "seite": "/produkte/evana-tdr/",
+      "stelle": ".seitenkopf .lead",
+      "text": "Jeder Satz der Einleitung steht in einer eigenen Zeile."
+    },
+    {
+      "issues": [
+        124
+      ],
+      "kommentare": [
+        166
+      ],
+      "seite": "/produkte/evana-tdr/",
+      "stelle": "figure.szene",
+      "text": "Jeder Bieter bleibt rund elf Sekunden stehen, unter der Maus hält die Animation an."
+    },
+    {
+      "issues": [
+        126
+      ],
+      "kommentare": [
+        172
+      ],
+      "seite": "/produkte/evana-tdr/",
+      "stelle": ".log-raster",
+      "text": "Block etwas breiter, Überschrift zweizeilig, sollen steht nicht mehr allein."
+    },
+    {
+      "issues": [
+        128
+      ],
+      "kommentare": [
+        174
+      ],
+      "seite": "/produkte/evana-tdr/",
+      "stelle": "section:has(.karten) .kopf .lead",
+      "text": "Selbstbewussterer Satz ohne virtuellen Aktenordner."
+    },
+    {
+      "issues": [
+        129
+      ],
+      "kommentare": [
+        175
+      ],
+      "seite": "/produkte/evana-ai/",
+      "stelle": "h1",
+      "text": "Die Überschrift steht in zwei Zeilen."
+    },
+    {
+      "issues": [
+        130
+      ],
+      "kommentare": [
+        176
+      ],
+      "seite": "/produkte/evana-ai/",
+      "stelle": ".klass",
+      "text": "Die Linie hat links und rechts gleichen Abstand, der Knoten sitzt am rechten Ende."
+    },
+    {
+      "issues": [
+        92
+      ],
+      "kommentare": [
+        134
+      ],
+      "seite": "/roi-sprint/",
+      "stelle": ".aufgaben",
+      "text": "Umbruch nach dem Doppelpunkt, fette Hinweise und Dokumenttypen auf gleicher Höhe, Dokumenttypen untereinander."
+    }
+  ]
+}

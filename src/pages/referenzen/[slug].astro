@@ -28,7 +28,7 @@ const url = `/referenzen/${ref.id}/`;
     artikelSchema({ titel: d.titel, beschreibung: d.kurz, datum: d.datum, autor: 'EVANA Redaktion', url }),
   ]}
 >
-  <Seitenkopf titel={d.titel} lead={d.kurz} pfad={[{ label: 'Referenzen', href: '/referenzen/' }]} schmal>
+  <Seitenkopf titel={d.titel} lead={d.kurz} pfad={[{ label: 'Referenzen', href: '/referenzen/' }]} schmal demo={false}>
     <p class="kunde">{d.anonym ? `${d.branche}, anonymisiert` : `${d.kunde} · ${d.branche}`}</p>
   </Seitenkopf>
 

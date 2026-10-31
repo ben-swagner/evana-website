@@ -18,7 +18,8 @@ interface Props { fall: Anwendungsfall }
 const { fall } = Astro.props;
 const andere = anwendungsfaelle.filter((a) => a.slug !== fall.slug);
 const referenzen = (await getCollection('referenzen'))
-  .filter((r) => r.data.anwendungsfaelle.includes(fall.slug))
+  // Nur Kundenprojekte. Technologiepartner wie MongoDB passen nicht unter die Überschrift.
+  .filter((r) => r.data.anwendungsfaelle.includes(fall.slug) && r.data.branche !== 'Technologie')
   .sort((a, b) => Number(a.data.anonym) - Number(b.data.anonym))
   .slice(0, 3);
 const produktLinks = fall.produkte.map((n) => ({ name: n, p: produkte.find((p) => p.name === n) }));
@@ -41,7 +42,7 @@ const szenenHinweis: Record<string, string> = {
   description={fall.seo.description}
   schema={nurGueltig([brotkrumen(pfad), faqSchema(fall.faq ?? [])])}
 >
-  <Seitenkopf titel={fall.titel} lead={fall.kurz} pfad={[pfad[0]]} />
+  <Seitenkopf titel={fall.titel} lead={fall.kurz} pfad={pfad} />
 
   <section class="sektion sektion-mist buehne">
     <div class="container">
@@ -58,9 +59,10 @@ const szenenHinweis: Record<string, string> = {
   <section class="sektion">
     <div class="container zwei">
       <div class="karte heute">
-        <h2>Heute</h2>
+        <h2>Ohne EVANA</h2>
         <p>{fall.vorher}</p>
       </div>
+      <span class="vs" aria-hidden="true">vs</span>
       <div class="karte mit">
         <h2>Mit EVANA</h2>
         <p>{fall.mitEvana}</p>
@@ -78,8 +80,8 @@ const szenenHinweis: Record<string, string> = {
       <div class="container">
         <div class="kopf">
           <p class="eyebrow">Beispiele</p>
-          <h2>Fragen, die EVA jeden Tag beantwortet</h2>
-          <p class="lead">Sie fragen so, wie Sie eine Kollegin fragen würden. EVA antwortet aus Ihren Dokumenten und nennt die Fundstelle.</p>
+          <h2>Was EVA jeden Tag für Sie erledigt</h2>
+          <p class="lead">Sie stellen EVA eine Frage oder geben ihr eine Aufgabe, so wie Sie es bei einer Kollegin tun würden. EVA arbeitet mit Ihren Dokumenten und nennt die Fundstelle.</p>
         </div>
         <ul class="fragen">{fall.fragen.map((f) => <li>{f}</li>)}</ul>
       </div>
@@ -91,14 +93,14 @@ const szenenHinweis: Record<string, string> = {
       <div class="container">
         <div class="kopf">
           <p class="eyebrow">So funktioniert es</p>
-          <h2>Von der Frage zur belegten Antwort</h2>
+          <h2>Von der Aufgabe zum belegten Ergebnis</h2>
         </div>
         <ol class="schritte">{fall.schritte.map((s) => <li><strong>{s.titel}</strong><p>{s.text}</p></li>)}</ol>
       </div>
     </section>
   )}
 
-  {fall.slug === 'dokumente-befragen' && <EvaKatalog />}
+  {fall.slug === 'dokumente-befragen' && <EvaKatalog freigabe={false} />}
 
   {fall.abgrenzung && (
     <section class="sektion">
@@ -125,7 +127,7 @@ const szenenHinweis: Record<string, string> = {
   {referenzen.length > 0 && (
     <section class="sektion">
       <div class="container">
-        <h2 class="t">Referenzen zu diesem Anwendungsfall</h2>
+        <h2 class="t">So setzen Kunden EVANA dafür ein</h2>
         <ul class="refs">
           {referenzen.map((r) => (
             <li><a href={`/referenzen/${r.id}/`}><span>{r.data.anonym ? r.data.branche : r.data.kunde}</span><strong>{r.data.titel}</strong></a></li>
@@ -137,14 +139,16 @@ const szenenHinweis: Record<string, string> = {
 
   <section class="sektion sektion-mist">
     <div class="container meta">
-      <div>
-        <h2 class="klein">Besonders gefragt bei</h2>
-        <ul class="pillen">{fall.fuerWen.map((f) => <li>{f}</li>)}</ul>
+      <div class="meta-karte">
+        <h2 class="klein">Für diese Teams gemacht</h2>
+        <ul class="teams">{fall.fuerWen.map((f) => <li>{f}</li>)}</ul>
       </div>
-      <div>
-        <h2 class="klein">Dahinter steckt</h2>
-        <ul class="pillen petrol">
-          {produktLinks.map(({ name, p }) => <li>{p ? <a href={`/produkte/${p.slug}/`}>{name}</a> : name}</li>)}
+      <div class="meta-karte">
+        <h2 class="klein">Diese Produkte nutzen Sie dafür</h2>
+        <ul class="produkte">
+          {produktLinks.map(({ name, p }) => (
+            <li>{p ? <a href={`/produkte/${p.slug}/`}><strong>{name}</strong><span>{p.kurz}</span></a> : <strong>{name}</strong>}</li>
+          ))}
         </ul>
       </div>
     </div>
@@ -164,7 +168,8 @@ const szenenHinweis: Record<string, string> = {
 
 <style>
   .buehne { padding-block: clamp(40px, 6vw, 80px); }
-  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .zwei { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
+  .vs { align-self: center; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--orange); color: var(--weiss); font-weight: 700; font-size: 1.05rem; box-shadow: 0 0 0 6px rgba(245,158,52,.18); }
   .karte { border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); }
   .karte h2 { font-size: 1.4rem; margin-bottom: 12px; }
   .heute { background: var(--mist); }
@@ -195,17 +200,25 @@ const szenenHinweis: Record<string, string> = {
   .refs a:hover { background: var(--tint-petrol); }
   .refs span { font-size: .85rem; font-weight: 700; color: var(--petrol); }
 
-  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-  .klein { font-size: 1rem; color: var(--hilfsgrau); margin-bottom: 12px; }
-  .pillen { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .pillen li { padding: 8px 16px; border-radius: 999px; background: var(--weiss); font-weight: 600; color: var(--headline); }
-  .pillen.petrol li { background: var(--tint-petrol); color: var(--petrol-dunkel); }
-  .pillen a { text-decoration: none; }
-  .weitere ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+  .meta-karte { background: var(--weiss); border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); }
+  .klein { font-size: 1.2rem; margin-bottom: 16px; }
+  .teams { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .teams li { position: relative; padding: 12px 16px 12px 40px; border-radius: 14px; background: var(--mist); font-weight: 600; color: var(--headline); }
+  .teams li::before { content: ''; position: absolute; left: 16px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--orange); }
+  .produkte { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .produkte li > a, .produkte li > strong { display: grid; gap: 2px; padding: 12px 16px; border-radius: 14px; background: var(--tint-petrol); text-decoration: none; }
+  .produkte strong { color: var(--petrol-dunkel); }
+  .produkte span { font-size: .92rem; color: var(--text); }
+  .produkte a:hover { background: var(--mist); }
+  /* Fünf Karten: in einer Reihe, darunter drei plus zwei, mobil untereinander. So steht nie eine Karte allein. */
+  .weitere ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
   .weitere a { display: grid; gap: 4px; padding: 18px 20px; text-decoration: none; color: var(--text); background: var(--mist); border-radius: 18px; height: 100%; }
   .weitere a:hover { background: var(--tint-petrol); }
   .weitere strong { color: var(--petrol); }
   .weitere span { font-size: .92rem; }
+  @media (max-width: 1100px) { .weitere ul { grid-template-columns: repeat(6, minmax(0, 1fr)); } .weitere li { grid-column: span 2; } .weitere li:nth-child(n+4) { grid-column: span 3; } }
   @media (max-width: 1000px) { .fragen { grid-template-columns: 1fr 1fr; } .schritte { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 760px) { .zwei, .meta, .details, .fragen, .schritte { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .weitere ul { grid-template-columns: 1fr; } .weitere li, .weitere li:nth-child(n+4) { grid-column: auto; } }
+  @media (max-width: 760px) { .vs { justify-self: center; } .zwei, .meta, .details, .fragen, .schritte { grid-template-columns: 1fr; } }
 </style>

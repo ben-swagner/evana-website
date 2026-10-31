@@ -11,10 +11,10 @@ const liste = (nur ? nur.map((s) => produkte.find((p) => p.slug === s)) : produk
   <div class="container">
     <div class="kopf">
       <p class="eyebrow">Die Plattform</p>
-      <h2>{titel}</h2>
+      <h2>{titel.split('\n').map((t, i) => <>{i > 0 && <br />}{t}</>)}</h2>
       {lead && <p class="lead">{lead}</p>}
     </div>
-    <ul class="bausteine">
+    <ul class:list={['bausteine', { fuenf: liste.length === 5 }]}>
       {liste.map((p) => (
         <li>
           <a href={`/produkte/${p.slug}/`}>
@@ -35,5 +35,10 @@ const liste = (nur ? nur.map((s) => produkte.find((p) => p.slug === s)) : produk
     box-shadow: var(--schatten); transition: transform .15s;
   }
   .bausteine a:hover { transform: translateY(-3px); }
+  /* Fünf Karten: in einer Reihe, darunter drei plus zwei, mobil untereinander. So steht nie eine Karte allein. */
+  .bausteine.fuenf { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .fuenf a { padding: 22px 20px; }
+  @media (max-width: 1100px) { .bausteine.fuenf { grid-template-columns: repeat(6, minmax(0, 1fr)); } .fuenf li { grid-column: span 2; } .fuenf li:nth-child(n+4) { grid-column: span 3; } }
+  @media (max-width: 760px) { .bausteine.fuenf { grid-template-columns: 1fr; } .fuenf li, .fuenf li:nth-child(n+4) { grid-column: auto; } }
   .name { font-weight: 700; font-size: 1.25rem; color: var(--petrol); }
 </style>

@@ -136,6 +136,7 @@ const schema = nurGueltig([
 >
   <Seitenkopf
     titel="Alle Daten eines Objekts auf einen Blick"
+    titelBreit
     lead="Der EVANA Report bündelt alles, was in Ihren Dokumenten zu einem Objekt steckt: veraltete Nachweise, offene Mängel, Kündigungen und Fristen. So sehen Sie auf einer Seite, wo es hakt, und zu jedem Befund die Quelle."
     pfad={pfad}
     zweitLink={{ label: 'Plattform im Überblick', href: '/produkte/' }}
@@ -304,7 +305,7 @@ const schema = nurGueltig([
         <ul class="export" aria-label="Exportformate">
           <li>CSV</li><li>Excel</li><li>API</li>
         </ul>
-        <p class="export-text">Exportieren Sie die Daten auf Knopfdruck oder geben Sie sie per API an Ihre BI-Tools weiter.</p>
+        <p class="export-text">Exportieren Sie Ihre Daten auf Knopfdruck oder geben Sie sie per API an Ihre BI-Tools weiter.</p>
         <a href={cta.demo} class="btn btn-primaer">Report live sehen</a>
       </div>
     </div>
@@ -345,7 +346,7 @@ const schema = nurGueltig([
 
 <style>
   /* Bühne mit großer UI-Szene */
-  .buehne { padding-bottom: clamp(56px, 8vw, 104px); background: linear-gradient(180deg, var(--weiss) 0, var(--weiss) 120px, var(--mist) 120px); }
+  .buehne { padding-block: clamp(48px, 6vw, 80px) clamp(56px, 8vw, 104px); background: var(--mist); }
   .app { margin: 0; border-radius: var(--radius-gross); overflow: hidden; background: var(--weiss); box-shadow: 0 40px 90px -40px rgba(0, 67, 79, .45), var(--schatten); }
   .app-kopf { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 16px 24px; background: var(--petrol-dunkel); color: #b9d3d8; font-size: .88rem; }
   .krume strong { color: var(--weiss); }

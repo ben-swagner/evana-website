@@ -326,7 +326,7 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
   </section>
 
   <!-- LEVEL 2 -->
-  <section class="scene bg-light" data-level="2" data-dur="18000" aria-label="Level 2: KI via MCP">
+  <section class="scene bg-light" data-level="2" data-dur="86400000" aria-label="Level 2: KI via MCP">
     
     <div class="stage">
       <div class="pick-hint">Tippen Sie auf eine KI, um den Abgleich neu zu starten.</div>
@@ -373,7 +373,7 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
         <button class="q" type="button" aria-pressed="false" data-q="1"><small><span>Bieter B, Question 9</span><span class="state"></span></small><span class="qt">Can the main tenant exit the lease before the fixed term ends?</span></button>
         <button class="q" type="button" aria-pressed="false" data-q="2"><small><span>Bieter C, Question 21</span><span class="state"></span></small><span class="qt">Le locataire principal peut-il résilier son bail de manière anticipée ?</span></button>
         <button class="q" type="button" aria-pressed="false" data-q="3"><small><span>Bieter D, Frage 3</span><span class="state"></span></small><span class="qt">Liegt ein aktuelles Brandschutzgutachten vor?</span></button>
-        <div class="guard"><b>EVA antwortet nur mit Quelle.</b>Findet EVA nichts Belastbares, erfindet sie nichts und meldet die Lücke.</div>
+        <div class="guard"><b>EVA antwortet nur mit Quelle.</b>Findet EVA keine belastbare Quelle, sagt sie das offen und meldet die Lücke.</div>
       </div>
       <div class="draft">
         <div class="eva"><div class="av">EVA</div><div><b id="draftTitle">Antwortvorschlag</b><span id="draftFor">Frage auswählen</span></div></div>
@@ -658,7 +658,8 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
   aiBtns.forEach(b => b.addEventListener('click', () => { ai = b.dataset.ai; runChat(); }));
   reportBtn.addEventListener('click', () => { reportBtn.classList.add('done'); reportBtn.textContent = 'Report gespeichert'; });
   function autoChat(){
-    ['DeutschlandGPT', 'Copilot'].forEach((name, i) => sLater(() => { ai = name; runChat(); }, 6500 + i * 5800));
+    const schritte = (liste, ende) => { let k = 0; const weiter = () => { if (k >= liste.length) { if (ende) ende(); return; } const [ms, fn] = liste[k]; sLater(function los(){ if (document.querySelector('body:hover')) { sLater(los, 800); return; } fn(); k++; weiter(); }, ms); }; weiter(); };
+    schritte(['ChatGPT', 'DeutschlandGPT', 'Copilot'].map(name => [11000, () => { ai = name; runChat(); }]), () => sLater(() => show(cur), 11000));
   }
 
   /* ---------- Level 3 ---------- */

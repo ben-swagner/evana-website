@@ -1,10 +1,14 @@
 ---
 import { cta, zahlen } from '../../data/fakten';
+// freigabe=false blendet die Kennzahl Human in the Loop aus (auf der Seite Dokumente befragen wirkt sie fehl am Platz).
+interface Props { freigabe?: boolean }
+const { freigabe = true } = Astro.props;
 const katalog = [
-  { frage: 'Liegen für alle Mietverträge gültige Unterschriften vor?', treffer: 14, status: 'ok' },
-  { frage: 'Bestehen offene Wartungsmängel mit hoher Dringlichkeit?', treffer: 3, status: 'kritisch' },
-  { frage: 'Sind alle Energieausweise aktuell und gültig?', treffer: 9, status: 'handeln' },
-  { frage: 'Gibt es Sonderkündigungsrechte einzelner Mieter?', treffer: 6, status: 'ok' },
+  // Bei "In Ordnung" zeigt die Zeile, wie viele Verträge geprüft wurden, sonst wie viele Fundstellen es gibt.
+  { frage: 'Liegen für alle Mietverträge gültige Unterschriften vor?', treffer: '14 Verträge geprüft', status: 'ok' },
+  { frage: 'Bestehen offene Wartungsmängel mit hoher Dringlichkeit?', treffer: '3 Fundstellen', status: 'kritisch' },
+  { frage: 'Sind alle Energieausweise aktuell und gültig?', treffer: '9 Fundstellen', status: 'handeln' },
+  { frage: 'Gibt es Sonderkündigungsrechte einzelner Mieter?', treffer: '14 Verträge geprüft', status: 'ok' },
 ];
 const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlungsbedarf', kritisch: 'Kritisch' };
 ---
@@ -16,7 +20,7 @@ const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlun
       <p class="lead">
         Übergeben Sie EVA Ihre Due-Diligence-Checkliste. Sie beantwortet jede Frage aus dem gesamten Datenraum
         und belegt jede Antwort mit ihren Fundstellen. Was früher Tage manueller Prüfung gekostet hat, liegt jetzt
-        nach kurzer Zeit vor. Ihr Team konzentriert sich auf die Entscheidung.
+        in einem Bruchteil der Zeit vor. Ihr Team konzentriert sich auf die Entscheidung.
       </p>
       <p class="mehr-eva">
         Der Fragenkatalog ist nur eine von vielen Aufgaben. EVA beantwortet auch einzelne Fragen zu jedem Dokument,
@@ -25,7 +29,7 @@ const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlun
       </p>
       <dl class="fakten">
         <div><dt>Antwortzeit pro Frage</dt><dd>{zahlen.evaAntwortzeit}</dd></div>
-        <div><dt>Human in the Loop</dt><dd>Ihr Team gibt frei</dd></div>
+        {freigabe && <div><dt>Human in the Loop</dt><dd>Ihr Team gibt frei</dd></div>}
       </dl>
       <div class="aktionen">
         <a href="/produkte/eva/" class="btn btn-sekundaer btn-gross">Alles, was EVA kann</a>
@@ -44,7 +48,7 @@ const statusText: Record<string, string> = { ok: 'In Ordnung', handeln: 'Handlun
             <p>{k.frage}</p>
             <div class="zeile">
               <span class={`status ${k.status}`}>{statusText[k.status]}</span>
-              <span class="treffer">{k.treffer} Fundstellen</span>
+              <span class="treffer">{k.treffer}</span>
             </div>
           </li>
         ))}
