@@ -25,7 +25,7 @@ const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false, leadBrei
         {pfad.map((k) => <> <span aria-hidden="true">/</span> <a href={k.href}>{k.label}</a></>)}
       </nav>
     )}
-    <h1 class:list={{ breit: titelBreit }}>{titel}</h1>
+    <h1 class:list={{ breit: titelBreit }}>{titel.split('\n').map((t, i) => <>{i > 0 && <br />}{t}</>)}</h1>
     {lead && <p class:list={['lead', { breit: leadBreit }]}>{lead}</p>}
     <slot />
     {(demo || zweitLink) && (

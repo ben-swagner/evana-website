@@ -1,5 +1,6 @@
 ---
 // Funktionsliste in drei Varianten: Karten im Raster, nummerierte Schritte oder zweispaltige Zeilen.
+// Ein \n in Titel oder Kartentext erzeugt einen gewollten Zeilenumbruch.
 interface Eintrag { titel: string; text: string }
 interface Props {
   eyebrow?: string;
@@ -16,7 +17,7 @@ const { eyebrow, titel, lead, eintraege, variante = 'karten', mist = false, spal
   <div class:list={['container', variante === 'zeilen' && 'zeilen-raster']}>
     <div class="kopf">
       {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-      <h2>{titel}</h2>
+      <h2>{titel.split('\n').map((t, i) => <>{i > 0 && <br />}{t}</>)}</h2>
       {lead && <p class="lead">{lead}</p>}
       <slot name="nach-kopf" />
     </div>
@@ -26,7 +27,7 @@ const { eyebrow, titel, lead, eintraege, variante = 'karten', mist = false, spal
         {eintraege.map((e) => (
           <li>
             <h3>{e.titel}</h3>
-            <p>{e.text}</p>
+            <p>{e.text.split('\n').map((t, i) => <>{i > 0 && <br />}{t}</>)}</p>
           </li>
         ))}
       </ul>
