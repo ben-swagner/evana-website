@@ -26,7 +26,7 @@ const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false, leadBrei
       </nav>
     )}
     <h1 class:list={{ breit: titelBreit }}>{titel.split('\n').map((t, i) => <>{i > 0 && <br />}{t}</>)}</h1>
-    {lead && <p class:list={['lead', { breit: leadBreit }]}>{lead}</p>}
+    {lead && <p class:list={['lead', { breit: leadBreit }]}>{lead.split('\n').map((t, i) => <>{i > 0 && <br />}{t}</>)}</p>}
     <slot />
     {(demo || zweitLink) && (
       <div class="aktionen">
