@@ -754,10 +754,8 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
     sLater(() => select(0), 1700);
   }
   function autoQA(){
-    sLater(() => select(1), 8000);
-    sLater(() => select(2), 13500);
-    sLater(() => goBtn.click(), 17500);
-    sLater(() => select(3), 19500);
+    const schritte = (liste, ende) => { let k = 0; const weiter = () => { if (k >= liste.length) { if (ende) ende(); return; } const [ms, fn] = liste[k]; sLater(function los(){ if (document.querySelector('body:hover')) { sLater(los, 800); return; } fn(); k++; weiter(); }, ms); }; weiter(); };
+    schritte([[12000, () => select(1)], [11000, () => select(2)], [7000, () => goBtn.click()], [2500, () => select(3)]]);
   }
 
 /* ---------- Level 4: ERP dashboard ---------- */

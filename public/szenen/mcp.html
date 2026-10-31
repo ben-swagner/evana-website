@@ -326,7 +326,7 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
   </section>
 
   <!-- LEVEL 2 -->
-  <section class="scene bg-light" data-level="2" data-dur="18000" aria-label="Level 2: KI via MCP">
+  <section class="scene bg-light" data-level="2" data-dur="86400000" aria-label="Level 2: KI via MCP">
     
     <div class="stage">
       <div class="pick-hint">Tippen Sie auf eine KI, um den Abgleich neu zu starten.</div>
@@ -658,7 +658,8 @@ body.embed .controls,body.embed .hint,body.embed .reveal,body.embed #progBar,bod
   aiBtns.forEach(b => b.addEventListener('click', () => { ai = b.dataset.ai; runChat(); }));
   reportBtn.addEventListener('click', () => { reportBtn.classList.add('done'); reportBtn.textContent = 'Report gespeichert'; });
   function autoChat(){
-    ['DeutschlandGPT', 'Copilot'].forEach((name, i) => sLater(() => { ai = name; runChat(); }, 6500 + i * 5800));
+    const schritte = (liste, ende) => { let k = 0; const weiter = () => { if (k >= liste.length) { if (ende) ende(); return; } const [ms, fn] = liste[k]; sLater(function los(){ if (document.querySelector('body:hover')) { sLater(los, 800); return; } fn(); k++; weiter(); }, ms); }; weiter(); };
+    schritte(['ChatGPT', 'DeutschlandGPT', 'Copilot'].map(name => [11000, () => { ai = name; runChat(); }]), () => sLater(() => show(cur), 11000));
   }
 
   /* ---------- Level 3 ---------- */
