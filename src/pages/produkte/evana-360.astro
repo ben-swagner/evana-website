@@ -28,11 +28,10 @@ const treffer = [
   { typ: 'E-Mail-Anhang', datei: 'RE_Mietanpassung.eml · Anhang 1', zitat: ['Beigefügt finden Sie die berechnete ', 'VPI-Anpassung', ' für das laufende Jahr.'] },
 ];
 
-const weg = [
-  { titel: 'Vorher', text: 'Verträge liegen im Postfach, Pläne auf dem Server, Gutachten beim Dienstleister. Alles ist manuell sortiert, schlecht auffindbar und nie ganz aktuell.' },
-  { titel: 'Mit EVANA 360', text: `Die Plattform nimmt Unterlagen aus jeder Quelle an, klassifiziert sie automatisch in mehr als ${zahlen.dokumenttypen.replace('+', '')} Typen und legt sie strukturiert ab.` },
-  { titel: 'Das Ergebnis', text: 'Globale Suche, Anbindung an SAP und weitere Systeme, Befragung über EVA. Ihr Wissen ist jederzeit verfügbar.' },
-];
+const weg = {
+  ohne: 'Verträge liegen im Postfach, Pläne auf dem Server, Gutachten beim Dienstleister. Alles ist manuell sortiert, schlecht auffindbar und nie ganz aktuell.',
+  mit: `EVANA 360 nimmt Unterlagen aus jeder Quelle an, klassifiziert sie automatisch in mehr als ${zahlen.dokumenttypen.replace('+', '')} Typen und legt sie strukturiert ab. Über die globale Suche, die Anbindung an SAP und die Fragen an EVA ist Ihr Wissen jederzeit verfügbar.`,
+};
 
 const merkmale = [
   { titel: 'Automatische Klassifizierung', text: `Mehr als ${zahlen.dokumenttypen.replace('+', '')} Immobilien-Dokumenttypen werden mit ${zahlen.erkennungsrate} Erkennungsrate erkannt, benannt und im richtigen Schema abgelegt. Den Confidence-Threshold stellen Sie selbst ein.` },
@@ -117,12 +116,24 @@ const schema = nurGueltig([
 
   <Definition frage="Was ist EVANA 360?" kern={definition.kern} text={definition.text} />
 
-  <Funktionen
-    titel="Aus dem Datenfriedhof wird ein Bestandsdatenraum"
-    eintraege={weg}
-    variante="schritte"
-    mist
-  />
+  <section class="sektion sektion-mist">
+    <div class="container">
+      <div class="kopf">
+        <h2>Aus dem Datenfriedhof wird ein Bestandsdatenraum</h2>
+      </div>
+      <div class="zwei">
+        <div class="karte ohne">
+          <h3>Ohne EVANA</h3>
+          <p>{weg.ohne}</p>
+        </div>
+        <span class="vs" aria-hidden="true">vs</span>
+        <div class="karte mit">
+          <h3>Mit EVANA</h3>
+          <p>{weg.mit}</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <Funktionen
     eyebrow="Leistungsmerkmale"
@@ -223,6 +234,15 @@ const schema = nurGueltig([
   mark { background: var(--tint-orange); color: var(--tint-orange-text); border-radius: 4px; padding: 0 3px; font-weight: 600; }
   .treffer .fundstelle { justify-self: start; background: var(--weiss); }
 
+  .zwei { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: stretch; }
+  .zwei .karte { border-radius: var(--radius); padding: clamp(24px, 3vw, 36px); }
+  .zwei h3 { font-size: 1.4rem; margin-bottom: 12px; }
+  .ohne { background: var(--weiss); box-shadow: var(--schatten-dokument); }
+  .ohne h3 { color: var(--hilfsgrau); }
+  .mit { background: var(--petrol-dunkel); color: #d6e6e9; }
+  .mit h3 { color: var(--orange); }
+  .vs { align-self: center; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--orange); color: var(--weiss); font-weight: 700; font-size: 1.05rem; box-shadow: 0 0 0 6px rgba(245,158,52,.18); }
+  @media (max-width: 760px) { .zwei { grid-template-columns: 1fr; } .vs { justify-self: center; } }
   .sys-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
   .sys-raster .lead { margin-top: 18px; }
   .mehr { display: inline-block; margin-top: 22px; font-weight: 700; }
