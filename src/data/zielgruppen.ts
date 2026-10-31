@@ -29,7 +29,7 @@ export const zielgruppen: Zielgruppe[] = [
     navLabel: 'Asset Management',
     kurz: 'Kennzahlen, Mietverträge und Fristen objektübergreifend abfragen und berichten.',
     titel: 'Asset Management mit Antworten aus jedem Dokument',
-    lead: 'Sie verantworten Vermietung, Rendite und die Berichte an Ihre Investoren. EVANA liest Mietverträge, Gutachten und Protokolle Ihres gesamten Bestands und liefert Ihnen Kennzahlen, Fristen und Antworten mit Fundstelle.',
+    lead: 'Für Vermietung, Rendite und Investorenberichte brauchen Sie verlässliche Zahlen aus Ihrem Bestand. EVANA liest Mietverträge, Gutachten und Protokolle aller Objekte und liefert Ihnen Kennzahlen, Fristen und Antworten mit Fundstelle.',
     seo: {
       title: 'KI für das Asset Management von Immobilien | EVANA',
       description: 'EVANA liest Mietverträge, Gutachten und Protokolle Ihres Portfolios und liefert Asset Managern Kennzahlen, Fristen und Antworten mit Fundstelle.',
