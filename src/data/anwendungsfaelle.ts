@@ -90,7 +90,7 @@ export const anwendungsfaelle: Anwendungsfall[] = [
   {
     slug: 'dokumente-automatisch-ablegen',
     tab: 'Automatisch ablegen',
-    titel: 'Eingehende Dokumente landen von selbst am richtigen Ort',
+    titel: 'Eingehende Dokumente landen am richtigen Ort',
     kurz: 'EVANA erkennt Dokumenttyp und Objekt, benennt die Datei sinnvoll um und legt sie in der richtigen Akte ab. Auch E-Mail-Anhänge.',
     vorher: 'Rechnungen, Protokolle und Nachträge kommen per Mail, Post und Portal. Jemand muss jede Datei öffnen, zuordnen, umbenennen und ablegen. Über 40 Stunden pro Asset und Jahr gehen allein dafür verloren.',
     mitEvana: 'Der Document Router liest jedes eingehende Dokument, ordnet es dem richtigen Objekt zu und legt es strukturiert ab. Was unsicher ist, landet zur Prüfung bei Ihrem Team.',
