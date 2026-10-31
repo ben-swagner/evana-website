@@ -171,7 +171,7 @@ const schema = nurGueltig([
       </article>
       <article class="karte">
         <p class="eyebrow">Offene Modellwahl</p>
-        <h2 class="h3">Ihr bevorzugtes KI-Modell an Ihren Dokumenten</h2>
+        <h2 class="h3">Ihr KI-Modell an Ihren Dokumenten</h2>
         <p>Binden Sie Claude, Microsoft Copilot oder Ihr bevorzugtes Sprachmodell direkt an Ihre Immobiliendokumente an. Es gibt keinen Vendor-Lock-in und keine starren Pipelines. Sie behalten die Kontrolle über Modellwahl und Datenfluss.</p>
         <a href="/produkte/integrationen/" class="mehr">Zu den Integrationen</a>
       </article>
@@ -233,9 +233,9 @@ const schema = nurGueltig([
   .katalog .beispiel-hinweis { color: var(--hilfsgrau); }
 
   .zwei-karten { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .karte { background: var(--mist); border-radius: var(--radius-gross); padding: clamp(28px, 4vw, 44px); }
+  .karte { display: flex; flex-direction: column; align-items: flex-start; background: var(--mist); border-radius: var(--radius-gross); padding: clamp(28px, 4vw, 44px); }
   .h3 { font-size: clamp(1.4rem, 2.2vw, 1.8rem); line-height: 1.2; margin-bottom: 14px; }
-  .mehr { display: inline-block; margin-top: 18px; font-weight: 700; }
+  .mehr { display: inline-block; margin-top: auto; padding-top: 18px; font-weight: 700; }
 
   @media (max-width: 900px) {
     .szene-raster, .katalog-raster, .zwei-karten { grid-template-columns: 1fr; }
