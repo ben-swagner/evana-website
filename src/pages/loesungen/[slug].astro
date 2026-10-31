@@ -237,7 +237,7 @@ const schema = nurGueltig<Record<string, unknown>>([brotkrumen(pfad), faqSchema(
   .aufgaben > li { display: flex; flex-direction: column; gap: 10px; background: var(--weiss); border-radius: var(--radius); padding: 26px; box-shadow: var(--schatten-dokument); }
   .aufgaben h3 { font-size: 1.15rem; }
   .aufgaben p { font-size: .97rem; }
-  .doktypen { list-style: none; margin: auto 0 0; padding: 8px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .doktypen { list-style: none; margin: auto 0 0; padding: 8px 0 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
   .doktypen li { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 600; color: var(--petrol-dunkel); background: var(--mist); border-radius: 999px; padding: 4px 10px 4px 8px; }
   .doktypen :global(.mini) { width: 11px; height: 14px; flex: none; }
 
