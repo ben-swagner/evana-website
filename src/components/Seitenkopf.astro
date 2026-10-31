@@ -12,8 +12,10 @@ interface Props {
   schmal?: boolean;
   // breiterer Lead, damit ein langer Einleitungssatz nicht mit einem einzelnen Wort endet
   leadBreit?: boolean;
+  // breitere H1, damit das letzte Wort nicht allein in einer Zeile steht
+  titelBreit?: boolean;
 }
-const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false, leadBreit = false } = Astro.props;
+const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false, leadBreit = false, titelBreit = false } = Astro.props;
 ---
 <section class:list={['seitenkopf', { schmal }]}>
   <div class="container">
@@ -23,7 +25,7 @@ const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false, leadBrei
         {pfad.map((k) => <> <span aria-hidden="true">/</span> <a href={k.href}>{k.label}</a></>)}
       </nav>
     )}
-    <h1>{titel}</h1>
+    <h1 class:list={{ breit: titelBreit }}>{titel}</h1>
     {lead && <p class:list={['lead', { breit: leadBreit }]}>{lead}</p>}
     <slot />
     {(demo || zweitLink) && (
@@ -40,6 +42,7 @@ const { titel, lead, pfad = [], demo = true, zweitLink, schmal = false, leadBrei
   .pfad { font-size: .9rem; color: var(--hilfsgrau); margin-bottom: 28px; display: flex; flex-wrap: wrap; gap: 4px; }
   .pfad a { color: var(--hilfsgrau); }
   h1 { max-width: 20ch; font-size: clamp(2.1rem, 4.6vw, 3.6rem); }
+  h1.breit { max-width: 24ch; }
   .schmal h1 { font-size: clamp(1.9rem, 3.6vw, 2.8rem); max-width: 26ch; }
   .lead { margin-top: 22px; }
   .lead.breit { max-width: 68ch; }
