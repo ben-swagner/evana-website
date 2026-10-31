@@ -1,13 +1,13 @@
 ---
 titel: "KI-Integration in bestehende Dokumentenmanagementsysteme"
 datum: 2026-06-12
-kurz: "EVANA legt sich als KI-Schicht über vorhandene DMS, Netzlaufwerke und SharePoint. Sie erhalten automatische Klassifikation, Dublettenerkennung und intelligente Suche ohne Systemwechsel."
+kurz: "EVANA legt sich als KI-Schicht über vorhandene DMS, Netzlaufwerke und SharePoint. Sie erhalten automatische Klassifikation, Duplikaterkennung und intelligente Suche ohne Systemwechsel."
 thema: Integration
 faq:
   - frage: "Muss ich mein bestehendes DMS ersetzen, um KI zu nutzen?"
     antwort: "Nein. EVANA legt sich als KI-Schicht über bestehende Systeme, ob klassisches DMS, SharePoint oder Netzlaufwerk. Die vorhandene Infrastruktur bleibt erhalten und wird funktional erweitert."
   - frage: "Welche Funktionen ergänzt EVANA in einer bestehenden Dokumentenlandschaft?"
-    antwort: "Automatische Klassifikation, strukturierte Ablage nach Ihrer Logik, Dublettenerkennung, einheitliche Benennung, intelligente Suche mit der KI-Assistentin EVA sowie den Export in bestehende Zielsysteme und Formate."
+    antwort: "Automatische Klassifikation, strukturierte Ablage nach Ihrer Logik, Duplikaterkennung, einheitliche Benennung, intelligente Suche mit der KI-Assistentin EVA sowie den Export in bestehende Zielsysteme und Formate."
   - frage: "Wie viel Aufwand lässt sich durch die KI-Integration einsparen?"
     antwort: "Der manuelle Aufwand sinkt um bis zu 85 %, die Dokumentensuche wird deutlich schneller, und eine kostspielige Systemmigration entfällt."
 altUrl: /ki-integration-in-bestehende-dms/
@@ -26,7 +26,7 @@ Historisch gewachsene DMS, Netzlaufwerke und SharePoint-Strukturen haben keine e
 
 ### Lösung
 
-EVANA legt sich als intelligente KI-Schicht über die bestehenden Systeme. Automatische Klassifikation, strukturierte Ablage, Dublettenerkennung und intelligente Suche funktionieren ganz ohne Migration.
+EVANA legt sich als intelligente KI-Schicht über die bestehenden Systeme. Automatische Klassifikation, strukturierte Ablage, Duplikaterkennung und intelligente Suche funktionieren ganz ohne Migration.
 
 ### Ergebnis
 
@@ -63,7 +63,7 @@ Die wichtigsten Funktionen im Überblick:
 
 - Automatische Dokumentenklassifikation für eingehende und bestehende Dokumente
 - Strukturierte Ablage nach Ihrer definierten Logik, zum Beispiel nach Mieter, Vertragstyp oder Gewerk
-- Dublettenerkennung und automatische Eliminierung doppelter Dateien
+- Duplikaterkennung und automatische Eliminierung doppelter Dateien
 - Einheitliche Benennung von Dokumenten für eine konsistente Ablage
 - Intelligente Such- und Filtermöglichkeiten: Mit unserer KI-Assistentin EVA finden Sie das eine Dokument unter Millionen
 - Export in bestehende Zielsysteme und Formate
@@ -87,7 +87,7 @@ Der eigentliche Hebel der KI-Integration reicht über die schnellere Suche hinau
 Das bringt konkret:
 
 - Verlässliche Entscheidungen: Alle arbeiten mit demselben, aktuellen Informationsstand und vermeiden widersprüchliche Dateiversionen.
-- Weniger Fehler und Risiken: Veraltete Dokumente, Dubletten und blinde Flecken in der Ablage verschwinden.
+- Weniger Fehler und Risiken: Veraltete Dokumente, Duplikate und blinde Flecken in der Ablage verschwinden.
 - Mehr Transparenz und Compliance: Wer welches Dokument in welcher Version an welchem Ort hat, ist jederzeit nachvollziehbar. Das erleichtert Audits und regulatorische Anforderungen deutlich.
 - Schnellere Einarbeitung: Neue Mitarbeitende finden sich sofort zurecht, weil die Struktur logisch und einheitlich ist.
 

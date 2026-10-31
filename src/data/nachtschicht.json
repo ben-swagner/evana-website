@@ -15,7 +15,7 @@
     {"issues": [18], "kommentare": [55], "seite": "/anwendungsfaelle/dokumente-befragen/", "stelle": ".weitere ul", "text": "Alle fünf weiteren Anwendungsfälle stehen in einer Reihe."},
     {"issues": [20], "kommentare": [57], "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "stelle": ".pfad", "text": "Die Brotkrumen nennen jetzt den aktuellen Anwendungsfall. Das gilt auf allen Anwendungsfällen."},
     {"issues": [22], "kommentare": [59], "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "stelle": ".zwei", "text": "Ohne EVANA gegen Mit EVANA wie bei Dokumente befragen."},
-    {"issues": [21], "kommentare": [58], "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "stelle": ".details > div:nth-child(3)", "text": "Duplikate statt Dubletten, auch in der FAQ und auf der Seite Document Router."},
+    {"issues": [21], "kommentare": [58], "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "stelle": ".details > div:nth-child(3)", "text": "Duplikate statt Duplikate, auch in der FAQ und auf der Seite Document Router."},
     {"issues": [23], "kommentare": [60], "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "stelle": ".abgrenzung p", "text": "Wirtgen Invest ist aus dem Text gestrichen."},
     {"issues": [28], "kommentare": [65], "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "stelle": "section:has(.refs)", "text": "Neue Überschrift wie bei Dokumente befragen."},
     {"issues": [29], "kommentare": [66], "seite": "/anwendungsfaelle/dokumente-automatisch-ablegen/", "stelle": ".meta", "text": "Teams und Produkte in zwei eigenen Karten."},

@@ -5,7 +5,7 @@ kurz: "Ein globaler Technologiekonzern aus dem Bereich Optik und Optoelektronik 
 thema: Corporate Real Estate
 faq:
   - frage: "Wie wurde das Dokumentenmanagement im Corporate Real Estate eingeführt?"
-    antwort: "Die Einführung erfolgte schrittweise pro Standort. Das Team sammelte die Dokumente zentral, sichtete, klassifizierte und bereinigte sie. Während der Migration behielt das bestehende Dateisystem nur Leserechte, Dubletten erkannte und entfernte die Plattform automatisch."
+    antwort: "Die Einführung erfolgte schrittweise pro Standort. Das Team sammelte die Dokumente zentral, sichtete, klassifizierte und bereinigte sie. Während der Migration behielt das bestehende Dateisystem nur Leserechte, Duplikate erkannte und entfernte die Plattform automatisch."
   - frage: "Welche Ergebnisse hat das Unternehmen erzielt?"
     antwort: "Die Bearbeitungszeiten sanken um rund 60 %, relevante Dokumente erscheinen innerhalb von Sekunden, und externe Dienstleister rufen Unterlagen selbstständig ab und legen sie eigenständig ab."
   - frage: "Wie werden die Daten an andere Systeme angebunden?"
@@ -26,7 +26,7 @@ Ein globaler Player im Bereich Optik und Optoelektronik verwaltete über Jahrzeh
 
 ### Lösung
 
-EVANA startete schrittweise pro Standort. Die Plattform klassifizierte Dokumente, entfernte Dubletten, band externe Partner ein und überführte anschließend alle Prozesse auf eine einheitliche Basis.
+EVANA startete schrittweise pro Standort. Die Plattform klassifizierte Dokumente, entfernte Duplikate, band externe Partner ein und überführte anschließend alle Prozesse auf eine einheitliche Basis.
 
 ### Ergebnis
 
@@ -34,13 +34,13 @@ Die Bearbeitungszeiten sanken um rund 60 %, die Zusammenarbeit mit externen Dien
 
 ## Jahrzehnte an Dokumenten im Griff
 
-Wenn Gebäude bis zu 60 Jahre alt sind und Dokumentenablagen über Jahrzehnte durch wechselnde Verantwortliche wachsen, entsteht ein schwer durchdringbares Archiv. Welche Dokumente bereits digitalisiert vorliegen, wo sich Dubletten verstecken und welche Unterlagen fehlen, ließ sich bislang kaum effizient beantworten.
+Wenn Gebäude bis zu 60 Jahre alt sind und Dokumentenablagen über Jahrzehnte durch wechselnde Verantwortliche wachsen, entsteht ein schwer durchdringbares Archiv. Welche Dokumente bereits digitalisiert vorliegen, wo sich Duplikate verstecken und welche Unterlagen fehlen, ließ sich bislang kaum effizient beantworten.
 
 Genau hier setzt strukturiertes Dokumentenmanagement im Corporate Real Estate an. EVANA startete standortweise: Zunächst sammelte das Team die Dokumente zentral, anschließend sichtete, klassifizierte und bereinigte es die Bestände. So entstand eine strukturierte, vollständig durchsuchbare Datenbasis für alle Standorte, alle Dokumenttypen und alle Beteiligten.
 
 ### Strukturierte Migration, Standort für Standort
 
-Die Einführung erfolgte bewusst schrittweise pro Standort. So band das Projekt die Mitarbeitenden aktiv ein und schuf Akzeptanz. Während der Migration behielt das bestehende Dateisystem nur noch Leserechte, wodurch die Datenintegrität jederzeit gesichert blieb. Dubletten erkannte und entfernte die Plattform dabei automatisch.
+Die Einführung erfolgte bewusst schrittweise pro Standort. So band das Projekt die Mitarbeitenden aktiv ein und schuf Akzeptanz. Während der Migration behielt das bestehende Dateisystem nur noch Leserechte, wodurch die Datenintegrität jederzeit gesichert blieb. Duplikate erkannte und entfernte die Plattform dabei automatisch.
 
 Am Ende jedes Standort-Rollouts stand eine saubere, vollständig nutzbare Dokumentenbasis.
 

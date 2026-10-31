@@ -348,7 +348,7 @@ export const zielgruppen: Zielgruppe[] = [
     navLabel: 'Corporate Real Estate',
     kurz: 'Standorte, Mietverträge und Betreiberpflichten im Konzern zentral steuern.',
     titel: 'Corporate Real Estate mit einer Datenbasis für alle Standorte',
-    lead: 'Im Konzern liegen Immobiliendokumente verteilt über Standorte, Gesellschaften und Dienstleister. EVANA führt sie in einer Struktur zusammen, erkennt Dubletten und stellt die Daten Ihren Systemen bereit, von SAP RE-FX bis zum Reporting.',
+    lead: 'Im Konzern liegen Immobiliendokumente verteilt über Standorte, Gesellschaften und Dienstleister. EVANA führt sie in einer Struktur zusammen, erkennt Duplikate und stellt die Daten Ihren Systemen bereit, von SAP RE-FX bis zum Reporting.',
     seo: {
       title: 'KI-Dokumentenmanagement für Corporate Real Estate | EVANA',
       description: 'Standortdokumente im Konzern zentral strukturieren, Fristen steuern und Daten an SAP RE-FX und Reporting übergeben: EVANA für Corporate Real Estate.',
@@ -396,7 +396,7 @@ export const zielgruppen: Zielgruppe[] = [
       },
       {
         frage: 'Wie läuft die Einführung über viele Standorte?',
-        antwort: 'Bei einem globalen Technologiekonzern erfolgte die Einführung schrittweise pro Standort. Das Team sammelte die Dokumente zentral, EVANA klassifizierte und bereinigte sie und erkannte Dubletten automatisch.',
+        antwort: 'Bei einem globalen Technologiekonzern erfolgte die Einführung schrittweise pro Standort. Das Team sammelte die Dokumente zentral, EVANA klassifizierte und bereinigte sie und erkannte Duplikate automatisch.',
       },
       {
         frage: 'Können externe Dienstleister mit EVANA arbeiten?',
