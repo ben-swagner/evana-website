@@ -30,7 +30,7 @@ const ziele = [
 
 const schritte = [
   { titel: 'Eingang', text: 'Rechnungen, Protokolle und Nachträge kommen per Mail, Post und Portal. Der Router nimmt sie auf, E-Mail-Anhänge eingeschlossen.' },
-  { titel: 'Erkennen', text: `EVANA AI bestimmt den Dokumenttyp aus mehr als ${typen} Typen der Immobilienwirtschaft, mit einer Erkennungsrate von ${zahlen.erkennungsrate}.` },
+  { titel: 'Erkennen', text: `EVANA AI bestimmt den Dokumenttyp aus mehr als ${typen} Typen der Immobilienwirtschaft, mit einer Erkennungsrate von ${zahlen.erkennungsrate.replace(' ', '\u00A0')}.` },
   { titel: 'Zuordnen', text: 'Der Router erkennt, zu welchem Objekt das Dokument gehört, und wählt den passenden Ordner in der Akte.' },
   { titel: 'Benennen und ablegen', text: 'Die Datei bekommt einen sauberen Namen und liegt strukturiert am richtigen Ort, durchsuchbar und für EVA befragbar.' },
 ];
