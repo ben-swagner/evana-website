@@ -19,7 +19,12 @@ const siegel = sicherheit.slice(0, 6);
         <a href="/sicherheit/" class="btn btn-sekundaer">Sicherheit und Zertifizierungen</a>
       </div>
       <ul class="siegel">
-        {siegel.map((s) => <li>{s.titel}</li>)}
+        {siegel.map((s) => (
+          <li tabindex="0" aria-describedby={`siegel-${s.titel.replace(/\W+/g, '-')}`}>
+            {s.titel}
+            <span class="erklaerung" role="tooltip" id={`siegel-${s.titel.replace(/\W+/g, '-')}`}>{s.text}</span>
+          </li>
+        ))}
       </ul>
     </div>
   </div>
@@ -41,6 +46,15 @@ const siegel = sicherheit.slice(0, 6);
     display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 16px;
     background: rgba(255,255,255,.08); color: var(--weiss); font-weight: 600; font-size: .95rem; line-height: 1.25;
   }
+  .siegel li { position: relative; cursor: help; }
+  .siegel li:hover, .siegel li:focus-visible { background: rgba(255,255,255,.14); outline: none; }
+  .erklaerung {
+    position: absolute; left: 0; right: 0; bottom: calc(100% + 8px); z-index: 5;
+    padding: 12px 14px; border-radius: 14px; background: var(--weiss); color: var(--text);
+    font-weight: 400; font-size: .88rem; line-height: 1.45; box-shadow: var(--schatten);
+    opacity: 0; visibility: hidden; transform: translateY(4px); transition: opacity .15s, transform .15s, visibility .15s;
+  }
+  .siegel li:hover .erklaerung, .siegel li:focus .erklaerung { opacity: 1; visibility: visible; transform: none; }
   .siegel li::before { content: ''; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
   @media (max-width: 860px) { .karte { grid-template-columns: 1fr; } }
   @media (max-width: 420px) { .siegel { grid-template-columns: 1fr; } }
