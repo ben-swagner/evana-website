@@ -35,7 +35,7 @@ const jahr = new Date().getFullYear();
 
 <style>
   .fuss { padding-block: 72px 32px; font-size: .95rem; }
-  .raster { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; }
+  .raster { display: grid; grid-template-columns: minmax(240px, 340px) repeat(3, max-content); justify-content: space-between; gap: 40px; }
   .marke img { width: 150px; height: auto; margin-bottom: 18px; }
   .marke p { max-width: 30ch; margin-bottom: 18px; }
   .marke .name { color: #9fc3ca; letter-spacing: .02em; }
